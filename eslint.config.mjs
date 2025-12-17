@@ -13,11 +13,6 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-empty-object-type": "off",
-      "@typescript-eslint/no-unused-expressions": "off",
-      "prefer-const": "off"
     },
     ignores: [
       "node_modules/**",
@@ -29,4 +24,21 @@ const eslintConfig = [
   },
 ];
 
+// const eslintConfig = [
+//   ...compat.extends("next/core-web-vitals", "next/typescript"),
+//   {
+//     env: {
+//       browser: true, // 客户端环境
+//       node: true,    // 服务端/构建环境
+//       es2025: true,  // ES 版本统一
+//     },
+//     parserOptions: {
+//       ecmaVersion: "latest",
+//       sourceType: "module",
+//       project: "./tsconfig.json", // 绑定 tsconfig，统一类型校验
+//     },
+//     rules: { /* 你的规则 */ },
+//     ignores: [/* 忽略列表 */],
+//   },
+// ];
 export default eslintConfig;
