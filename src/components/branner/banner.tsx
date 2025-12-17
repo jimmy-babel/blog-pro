@@ -41,7 +41,7 @@ const Banner = (props: Props) => {
             <div className={`w-full max-w-[500px]`}>
               <div className='h-[230px] rounded-xl overflow-hidden box-shadow p-8'>
                 <div className='flex items-center '>
-                  <Avatar size={50} shape="square"></Avatar>
+                  <Avatar size={65} shape="square"></Avatar>
                   <div className='pl-4'>
                     <div className='text-2xl bold pb-1'>{bloggerInfo?.user_name || "--"}</div>
                     <div className='pb-2 text-gray-400'>{bloggerInfo?.introduce1 || ""}</div>

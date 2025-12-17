@@ -87,7 +87,7 @@ export default function Articles({ params }: Props) {
         <div className="font-bold text-3xl">文章列表</div>
         <div className="pl-4">
           <AntdSelect
-            extraClass="min-w-27"
+            extraClass="min-w-20"
             filterType={filterType}
             isRowSetAllAuto
             isApiAuto

@@ -2,7 +2,8 @@
 'use client';
 import React, { useState,useEffect, useRef } from "react";
 import { usePathname } from 'next/navigation';
-import {useJumpAction,useCheckUser} from "@/lib/use-helper/base-mixin";
+import {useJumpAction} from "@/lib/use-helper/base-mixin";
+import { useAuth } from "@/contexts/AuthContext";
 import Avatar from "@/components/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
 import { MoonOutlined,SunOutlined } from '@ant-design/icons';
@@ -18,10 +19,10 @@ const Nav = ({navList,isPlace,account}: Props) => {
   const [list , setList] = useState<NavItem[]>(navList||[]);
   const showBgRef = useRef(showBg);
   const {jumpAction} = useJumpAction();
-  const {checkUser} = useCheckUser();
   const { resolvedTheme, setTheme } = useTheme();
   const [selectedKeys, setSelectedKeys] = useState<string>(""); 
   const pathname = usePathname();
+  const { isLogin, isBlogger, updateAuth } = useAuth();
   useEffect(() => {
     console.log(pathname,'pathname');
     if (!pathname) return;
@@ -44,28 +45,22 @@ const Nav = ({navList,isPlace,account}: Props) => {
     showBgRef.current = showBg;
   }, [showBg]);
 
+  // 根据登录状态更新导航列表
   useEffect(() => {
-    const checkUserLogin = async () => {
-      // console.log('checkUserLogin',account||window.__NEXT_ACCOUNT__||'');
-      let extra = [];
-      try{
-        const {data} = await checkUser(account||window.__NEXT_ACCOUNT__||'');
-        console.log('checkUser',data);
-        if(!data?.isLogin){
-          extra.push({ key: "login", name: "登录", url: `/blog/auth`, type: "from" });
-        }
-        if(data?.isBlogger){
-          extra.push({ key: "admin", name: "后台管理", url: `admin` });
-        }
-        setList([...(navList || []),...extra]);
-      }catch(err){
-        extra.push({ key: "login", name: "登录", url: `/blog/auth`, type: "from" });
-        setList([...(navList || []),...extra]);
-        console.log('checkUserLogin',err);
-      }
+    let extra = [];
+    if(!isLogin){
+      extra.push({ key: "login", name: "登录", url: `/blog/auth`, type: "from" });
     }
-    checkUserLogin();
-  }, [navList]);
+    if(isBlogger){
+      extra.push({ key: "admin", name: "后台管理", url: `admin` });
+    }
+    setList([...(navList || []),...extra]);
+  }, [navList, isLogin, isBlogger]);
+  
+  // 初始化时检查登录状态 - 只在组件挂载时调用一次
+  useEffect(() => {
+    updateAuth();
+  }, []);
 
   // useEffect(() => {
   //   navList && setList(navList || []);
@@ -105,7 +100,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
             {list?.map((item, index) => (
               <div className="px-2.5" key={index}>
                 <div className={`transition-all duration-300 ${selectedKeys == item.key?'scale-[1.2]':''}`}>
-                  <div className="cursor-pointer anim-hover-y" onClick={()=>jumpAction(item.url||"",{type:item.type||"blog_auto"})}>{item.name}</div>
+                  <div className={`cursor-pointer anim-hover-y ${selectedKeys == item.key?'text-line':''}`} onClick={()=>jumpAction(item.url||"",{type:item.type||"blog_auto"})}>{item.name}</div>
                 </div>
               </div>
             ))}

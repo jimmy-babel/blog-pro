@@ -8,7 +8,7 @@ type Props = {
 }
 const App: React.FC<Props> = (props:Props) => {
   const {size="default",shape="circle"} = props;
-  return <Avatar size={size} shape={shape} src="/jimmy.jpeg" />
+  return <Avatar size={size} shape={shape} src="/avatar.png" />
 }
 
 export default App;

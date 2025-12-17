@@ -176,7 +176,7 @@ const App: React.FC<Props> = (props: Props) => {
   return (
     <Select
       className={extraClass}
-      placeholder="选择分组"
+      placeholder="全部"
       onChange={onChange}
       loading={loading}
       value={loading ? [] : selectData}

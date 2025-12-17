@@ -306,7 +306,7 @@ const MoodRecord = (props: Props) => {
   return (
     <>
       {isBlogger && (
-        <div className="w-full p-4 flex items-start gap-10">
+        <div className="w-full p-4 flex justify-center items-start gap-10">
           {/* <div className="text-center mb-6">
             <h2 className="text-2xl font-bold">心情记录日历</h2>
             <p className="text-gray-500">点击日期选择心情</p>
@@ -367,7 +367,7 @@ const MoodRecord = (props: Props) => {
                           : "bg-gray-100 text-gray-400 cursor-default"
                         }
                         ${isClickable ? "cursor-pointer" : ""}
-                        ${isSelected ? "ring-2 ring-yellow-400 scale-105" : ""}
+                        ${isSelected ? "ring-3 ring-yellow-400 scale-105" : ""}
                       `}
                   >
                     <div className="text-sm">{day.date}</div>
@@ -383,8 +383,8 @@ const MoodRecord = (props: Props) => {
           </div>
 
           {/* 显示选中日期的数据 */}
-          {curDayData?.date && (
-            <div className="recored-item bg-gray-800 rounded-3xl pl-4 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px]">
+          {(
+            <div className={`recored-item bg-gray-800 rounded-md pl-6 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px] ${curDayData?.date ? 'visible' : 'invisible'}`}>
               <div className="text-2xl mb-3 text-center">
                 {moment(curDayData?.date).format("YYYY-MM-DD")}{" "}
                 {curDayData?.emoji || ""}

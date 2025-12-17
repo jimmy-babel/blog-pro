@@ -6,6 +6,7 @@ import { ConfigProvider, message } from "antd";
 import "@ant-design/v5-patch-for-react-19";
 import React, { useEffect } from "react";
 import type { AliasToken } from "antd/es/theme/interface";
+import { AuthProvider } from "@/contexts/AuthContext";
 // const zIndexPopup: AliasToken["zIndexPopup"] = 9999;
 
 // 主题配置（可在服务端定义后传递，这里简化直接写在客户端）
@@ -41,7 +42,9 @@ export default function AntdClientWrapper({ children }: Props) {
   // }, []);
   return (
     <AntdRegistry>
-      <ConfigProvider theme={customTheme}>{children}</ConfigProvider>
+      <ConfigProvider theme={customTheme}>
+        <AuthProvider>{children}</AuthProvider>
+      </ConfigProvider>
     </AntdRegistry>
   );
 }
