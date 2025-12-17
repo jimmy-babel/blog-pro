@@ -53,8 +53,8 @@ export default function ArticleEdit({ params }: Props) {
   console.log("PAGE ADMIN ArticleDetail", article);
 
   const loadQuillEditor = async () => {
-    const module = await import("@/components/Quill");
-    setQuillEditor(module.default); // 假设组件默认导出
+    const quillModule = await import("@/components/Quill");
+    setQuillEditor(quillModule.default); // 假设组件默认导出
   };
 
   // 初始化
@@ -102,9 +102,11 @@ export default function ArticleEdit({ params }: Props) {
       if (response.ok) {
         let data = result.data;
         if (data) {
-          data.cover_img && setDefaultFileList([
-            { uid: data.id, url: data.cover_img, name: `name-${data.id}` },
-          ]);
+          if(data.cover_img){
+            setDefaultFileList([
+              { uid: data.id, url: data.cover_img, name: `name-${data.id}` },
+            ]);
+          }
           setSelectData(data.groupsId?.length > 0 ? data.groupsId : [0]);
           setArticle(data);
         }

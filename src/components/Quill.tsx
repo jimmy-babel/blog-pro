@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, forwardRef, useImperativeHandle, useState } from 'react';
+import { useEffect, useRef, forwardRef, useImperativeHandle, useState, memo } from 'react';
 import {useUploadTemp} from "@/lib/use-helper/base-mixin";
 import Quill from 'quill';
 import type { Blot } from 'parchment';
@@ -53,7 +53,10 @@ type UploadType = {
 }
 // export default function QuillImageEditor(props: Props) {
 const QuillEditor = forwardRef<QuillEditorRef, Props>(
-  ({ extraClass, customStyle, initialContent }, ref) => {
+  function QuillEditorContent( // 具名函数
+    { extraClass, customStyle, initialContent },
+    ref
+  ) {
   
     // const {extraClass,customStyle} = props;
   const editorRef = useRef<HTMLDivElement>(null)
@@ -216,4 +219,5 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
   )
   }
 );
-export default QuillEditor;
+QuillEditor.displayName = 'QuillEditor';
+export default memo(QuillEditor);

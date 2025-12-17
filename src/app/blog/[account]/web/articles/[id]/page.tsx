@@ -7,7 +7,7 @@ import RichTextRenderer from "@/components/richTextRenderer/richTextRenderer";
 import Loading from "@/components/loading-css/loading";
 import "./page.css";
 type Props = {
-  params: Promise<{ account: string,id:Number }>; //动态路由 [account] 对应的参数
+  params: Promise<{ account: string,id:number }>; //动态路由 [account] 对应的参数
 }
 export default function Article({params}:Props){
   

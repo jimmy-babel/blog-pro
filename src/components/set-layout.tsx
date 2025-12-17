@@ -9,7 +9,7 @@ interface RootLayoutProps {
   min100VH?: boolean;
   screenVH?:boolean;
   safeArea?: boolean;
-  direction?:String;
+  direction?:string;
   extraClass?: string;
   boxStyle?: React.CSSProperties;
 }

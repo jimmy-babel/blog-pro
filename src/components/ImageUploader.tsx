@@ -1,7 +1,7 @@
 'use client';
 import { Upload, Button, message, Image, GetProp, UploadFile, UploadProps } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useEffect, useState, useRef, useImperativeHandle, forwardRef } from 'react';
+import { useEffect, useState, useRef, useImperativeHandle, forwardRef, memo } from 'react';
 
 type Props = {
   defaultFileList?: Array<UploadFile>;
@@ -20,13 +20,10 @@ interface ImageUploaderRef {
 }
 
 const ImageUploader = forwardRef<ImageUploaderRef, Props>(
-  ({ 
-    defaultFileList = [], 
-    // onFinish = () => {}, 
-    multiple = false, 
-    maxCount = 1,
-    uploadBtnText = "上传图片"
-  }, ref) => {
+  function ImageUploaderContent( // 具名函数
+    { defaultFileList = [], multiple = false, maxCount = 1, uploadBtnText = "上传图片" },
+    ref
+  ) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -370,5 +367,5 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     );
   }
 );
-
-export default ImageUploader;
+ImageUploader.displayName = 'ImageUploader';
+export default memo(ImageUploader);

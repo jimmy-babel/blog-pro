@@ -12,7 +12,9 @@ export async function POST(req: Request) {
     // console.log('relations',relations);
     let getExcerpt = cleanHtmlTags(content);
     getExcerpt = getExcerpt?.slice(0, 200) || '';
-    getExcerpt?.length == 200 && (getExcerpt += '...')
+    if(getExcerpt?.length == 200){
+      getExcerpt += '...';
+    }
     if(!id || id === 0){
       const { data, error } = await supabase
         .from('articles')

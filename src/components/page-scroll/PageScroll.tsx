@@ -8,9 +8,25 @@ type Props = {
 const PageScroll = (props: Props) => {
   const { listElement, isEmpty, onScrollEnd } = props;
   // 创建节流函数
-  const throttle = useCallback((func: Function, delay: number) => {
+  // const throttle = useCallback((func: Function, delay: number) => {
+  //   let inThrottle: boolean = false;
+  //   return function (this: any, ...args: any[]) {
+  //     if (!inThrottle) {
+  //       func.apply(this, args);
+  //       inThrottle = true;
+  //       setTimeout(() => {
+  //         func.apply(this, args);
+  //         inThrottle = false;
+  //       }, delay);
+  //     }
+  //   };
+  // }, []);
+  const throttle = useCallback(<T extends (...args: any[]) => any>(
+    func: T, // 显式定义：func 是“任意参数+任意返回值”的函数
+    delay: number
+  ) => {
     let inThrottle: boolean = false;
-    return function (this: any, ...args: any[]) {
+    return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
       if (!inThrottle) {
         func.apply(this, args);
         inThrottle = true;
@@ -21,6 +37,7 @@ const PageScroll = (props: Props) => {
       }
     };
   }, []);
+
 
   // 监听页面滚动触底
   useEffect(() => {

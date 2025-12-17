@@ -54,7 +54,7 @@ const App: React.FC<Props> = (props:Props) => {
   const [loading, setLoading] = useState(true); // 新增加载状态
   useEffect(() => {
     console.log('setType',setType);
-    setType && init();
+    if(setType)init();
   }, [setType]);
   
   const init = async () => {

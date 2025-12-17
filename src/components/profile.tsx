@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Card } from "antd";
 import './profile.css'; // 导入自定义样式
 type Props = {
-  extraClass?:String,
+  extraClass?:string
 }
 
 const Profile = (props: Props) => {
