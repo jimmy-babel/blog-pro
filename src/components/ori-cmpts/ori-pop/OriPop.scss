@@ -1,0 +1,175 @@
+@scope (.ori-pop-scoped) {
+  :scope.ori-popup {
+    width: 100%;
+    position: relative;
+  
+    .mask {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 997;
+      opacity: 0;
+    }
+  
+    .popup {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 998;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .popup-bg-color {
+      background-color: var(--background,transparent);
+      color: var(--foreground,#000);
+    }
+  
+    .popup-border {
+      border: 1px solid var(--theme-color, #007aff);
+    }
+  
+    .popup-cont {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+  
+      .popup-cont-inner {
+        // flex: 1;
+        // width: 100%;
+        margin: 0 auto;
+      }
+  
+      .popup-scroll {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  
+    .popup-close {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 2;
+      border-radius: 50%;
+      padding: 3px;
+    }
+  
+    .content-loading {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    // 布局相关样式
+    &.left-popup {
+      .popup {
+        max-width: 80%;
+        height: 100%;
+        top: 0;
+        left: var(--popup-offset);
+        bottom: auto;
+        right: auto;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
+    }
+  
+    &.right-popup {
+      .popup {
+        max-width: 80%;
+        height: 100%;
+        top: 0;
+        right: var(--popup-offset);
+        bottom: auto;
+        left: auto;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+      }
+    }
+  
+    &.top-popup {
+      .popup {
+        height: auto;
+        max-height: 80vh;
+        width: 100%;
+        top: var(--popup-offset);
+        left: 0;
+        bottom: auto;
+        right: auto;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
+    }
+  
+    &.bottom-popup {
+      .popup {
+        height: auto;
+        max-height: 80vh;
+        width: 100%;
+        top: auto;
+        left: 0;
+        bottom: var(--popup-offset);
+        right: auto;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+      }
+    }
+  
+    &.center-popup {
+      width: 100%;
+  
+      // .popup-cont-inner {
+      // }
+  
+      .popup {
+        margin-top: var(--popup-offset);
+        top: 50%;
+        left: 50%;
+        // max-width: 90%;
+        // width: 100%;
+        transform: translate(-50%, -50%);
+        width: auto;
+        bottom: auto;
+        right: auto;
+        border-radius: 20px;
+      }
+    }
+  
+    // 通用样式（补充原 Uniapp 的快捷类）
+    .flex-b-c {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .f-shrink-0 {
+      flex-shrink: 0;
+    }
+  
+    .flex-1 {
+      flex: 1;
+    }
+  
+    .bold {
+      font-weight: bold;
+    }
+  
+    .p-20 {
+      padding: 10px;
+    }
+  
+    .text-c {
+      text-align: center;
+    }
+  }
+}

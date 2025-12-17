@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-color-reverse: rgba(0, 0, 0, 0.1);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --nav-bar-height: 75px;
+}
+
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-color-reverse: rgba(255, 255, 255, 0.1);
+  --border-color: rgba(0, 0, 0, 0.4);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dark .global-parse-light{
+  --background: #ffffff;
+  --foreground: #171717;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --border-color: rgba(0, 0, 0, 0.4);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.main-color-op-5 {
+  color: rgb(from var(--foreground) r g b / 50%); 
+}
+.main-bg-color-op-5 {
+  background-color: rgb(from var(--background) r g b / 50%); 
+}
+
+.box-shadow{
+  box-shadow: 0 0 20px 1px var(--shadow-color);
+}
+.box-shadow-reverse{
+  box-shadow: 0 0 20px 1px var(--shadow-color-reverse);
+}
+
+.border-color{
+  border-color: var(--border-color);
+}
+
+/* @theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+} */
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+
+.anim-op-hide{
+  opacity: 1;
+  animation: animOpHide 0.3s;
+}
+
+@keyframes animOpHide{
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
+.anim-op-show{
+  opacity: 0;
+  animation: animOpShow 0.3s linear 0.3s forwards;
+}
+@keyframes animOpShow{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+.anim-hover-scale{
+  transform: scale(1);
+  transition: all 0.3s;
+}
+.anim-hover-scale:hover{
+  transform: scale(1.1);
+}
+.anim-hover-scale-sm{
+  transform: scale(1);
+  transition: all 0.3s;
+}
+.anim-hover-scale-sm:hover{
+  transform: scale(1.03);
+}
+.anim-hover-y{
+  transform: translateY(0);
+  transition: all 0.3s;
+}
+.anim-hover-y:hover{
+  transform: translateY(-3px);
+}
+.anim-hover-x{
+  transform: translateX(0);
+  transition: all 0.3s;
+}
+.anim-hover-x:hover{
+  transform: translateX(10px);
+}
+.anim-hover-a:hover{
+  color: rgba(96, 165, 259, 1);
+  transition: all 0.3s;
+}
+.anim-op-y{
+  opacity: 0;
+  transform: translateY(10px);
+  animation: animOpY 0.3s ease-out 0.3s forwards;
+}
+@keyframes animOpY{
+  0%{
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.blog-background-top{
+  background: #14b8a6;
+  top: 200px;
+  left: 30%;
+  opacity: .2;
+}
+.blog-background-bottom{
+  background: #6366f1;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%);
+  opacity: .25;
+}
+.blog-background{
+  position: absolute;
+  width: 40vh;
+  height: 40vh;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: -1;
+}
