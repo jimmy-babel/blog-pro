@@ -1,6 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Card, Button } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Card, Button, UploadFile } from "antd";
+import ImageUploader from "@/components/ImageUploader";
 
 type Props = {};
 type Blogger = {
@@ -9,9 +10,21 @@ type Blogger = {
   introduce2?: string;
   motto1?: string;
   motto2?: string;
+  avatar_url?: string;
+};
+interface listItem {
+  uid: string;
+  name: string;
+  url?: string;
 }
+interface ImageUploaderRef {
+  uploadPendingFiles: () => Promise<Array<UploadFile>>;
+}
+
 const UserInfo = (props: Props) => {
   const [bloggerInfo, setBloggerInfo] = useState<Blogger>({});
+  const uploadAvatarRef = useRef<ImageUploaderRef>(null);
+  const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("提交表单数据:", bloggerInfo);
@@ -20,8 +33,8 @@ const UserInfo = (props: Props) => {
   useEffect(() => {
     getDetail();
   }, []);
-  async function getDetail(){
-    try{
+  async function getDetail() {
+    try {
       const res = await fetch(
         `/api/common/get-blogger-info?blogger=${window.__NEXT_ACCOUNT__}`,
         {
@@ -29,28 +42,37 @@ const UserInfo = (props: Props) => {
         }
       );
       const data = await res.json();
-      console.log('获取博主信息:', data);
+      let avatar_url = data?.data?.avatar_url || "";
+      if(avatar_url){
+        setDefaultFileList([
+          {
+            uid: "1",
+            name: "name-1",
+            url: avatar_url || "",
+          },
+        ]);
+      }
+      console.log("获取博主信息:", data);
       setBloggerInfo((data?.data || {}) as Blogger);
-    }catch(error){
-      console.error('获取博主信息时出错:', error);
+    } catch (error) {
+      console.error("获取博主信息时出错:", error);
     }
   }
-  async function updateInfo(){
-    try{
-      const res = await fetch(
-        `/api/admin/blogger-info-edit`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            ...bloggerInfo,
-            blogger: window.__NEXT_ACCOUNT__ || "",
-          }),
-        }
-      );
+  async function updateInfo() {
+    try {
+      const uploadAvatar = await uploadAvatarRef.current?.uploadPendingFiles();
+      const res = await fetch(`/api/admin/blogger-info-edit`, {
+        method: "POST",
+        body: JSON.stringify({
+          ...bloggerInfo,
+          avatar_url: uploadAvatar?.[0]?.url || "",
+          blogger: window.__NEXT_ACCOUNT__ || "",
+        }),
+      });
       const data = await res.json();
-      console.log('更新成功:', data);
-    }catch(error){
-      console.error('更新博主信息时出错:', error);
+      console.log("更新成功:", data);
+    } catch (error) {
+      console.error("更新博主信息时出错:", error);
     }
   }
   return (
@@ -65,8 +87,21 @@ const UserInfo = (props: Props) => {
             <div className="p-8">
               <div>
                 <label
-                  htmlFor="title"
+                  htmlFor="cover_img"
                   className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  头像
+                </label>
+                <ImageUploader
+                  uploadBtnText="上传头像"
+                  defaultFileList={defaultFileList}
+                  ref={uploadAvatarRef}
+                ></ImageUploader>
+              </div>
+              <div>
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700 mt-5 mb-2"
                 >
                   你的名字
                 </label>
@@ -131,7 +166,7 @@ const UserInfo = (props: Props) => {
               </div>
             </div>
           </Card>
-          
+
           <Card
             className="w-full rounded-[12px] overflow-hidden shadow-gray-400"
             variant="borderless"

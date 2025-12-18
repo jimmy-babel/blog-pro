@@ -22,7 +22,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
   const { resolvedTheme, setTheme } = useTheme();
   const [selectedKeys, setSelectedKeys] = useState<string>(""); 
   const pathname = usePathname();
-  const { isLogin, isBlogger, updateAuth } = useAuth();
+  const { isLogin, isBlogger, bloggerInfo, updateAuth } = useAuth();
   useEffect(() => {
     console.log(pathname,'pathname');
     if (!pathname) return;
@@ -47,6 +47,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
 
   // 根据登录状态更新导航列表
   useEffect(() => {
+    console.log('useEffect isLogin',isLogin,'isBlogger',isBlogger,'bloggerInfo',bloggerInfo);
     let extra = [];
     if(!isLogin){
       extra.push({ key: "login", name: "登录", url: `/blog/auth`, type: "from" });
@@ -55,7 +56,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
       extra.push({ key: "admin", name: "后台管理", url: `admin` });
     }
     setList([...(navList || []),...extra]);
-  }, [navList, isLogin, isBlogger]);
+  }, [navList, isLogin, bloggerInfo, isBlogger]);
   
   // 初始化时检查登录状态 - 只在组件挂载时调用一次
   useEffect(() => {
@@ -92,7 +93,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
     <>
       <div className={`nav-box sticky z-[10] left-0 top-0 w-full h-[var(--nav-bar-height)]`}>
         <div className="anim-op-y flex justify-between items-center relative h-full w-full pl-5 pr-5 z-[2]">
-          <Avatar size={40}></Avatar>
+          <Avatar size={40} blogger={window.__NEXT_ACCOUNT__ || ""}></Avatar>
           {/* {curAccount.toUpperCase()?<div>
             {userProfile?.full_name.toUpperCase() != curAccount.toUpperCase() ? <div>WELCOME {curAccount.toUpperCase()} BLOG</div> : <div>Hello,{userProfile.full_name}</div>}
           </div>:null} */}

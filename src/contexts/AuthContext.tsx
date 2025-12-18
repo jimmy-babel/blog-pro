@@ -7,6 +7,7 @@ type AuthContextType = {
   isLogin: boolean;
   isBlogger: boolean;
   userInfo: any;
+  bloggerInfo: any;
   updateAuth: () => Promise<void>;
   clearAuth: () => void;
 };
@@ -19,6 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLogin, setIsLogin] = useState(false);
   const [isBlogger, setIsBlogger] = useState(false);
   const [userInfo, setUserInfo] = useState<any>(null);
+  const [bloggerInfo, setBloggerInfo] = useState<any>(null);
   const { checkUser } = useCheckUser();
 
   // 更新认证状态 - 使用useCallback确保引用稳定
@@ -28,10 +30,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLogin(data?.isLogin || false);
       setIsBlogger(data?.isBlogger || false);
       setUserInfo(data?.userInfo || null);
+      setBloggerInfo(data?.bloggerInfo || null);
     } catch (error) {
       setIsLogin(false);
       setIsBlogger(false);
       setUserInfo(null);
+      setBloggerInfo(null);
     }
   }, [checkUser]);
 
@@ -40,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLogin(false);
     setIsBlogger(false);
     setUserInfo(null);
+    setBloggerInfo(null);
   };
 
   // 初始化时检查认证状态
@@ -48,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLogin, isBlogger, userInfo, updateAuth, clearAuth }}>
+    <AuthContext.Provider value={{ isLogin, isBlogger, userInfo, bloggerInfo, updateAuth, clearAuth }}>
       {children}
     </AuthContext.Provider>
   );

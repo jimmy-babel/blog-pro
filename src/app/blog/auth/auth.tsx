@@ -3,6 +3,7 @@ import { useState,useEffect,Suspense  } from 'react'
 import { useRouter,useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import HeaderContent from '@/components/header-content';
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Auth() {
   const searchParams = useSearchParams(); // 获取 URL 查询参数
@@ -16,6 +17,8 @@ export default function Auth() {
   const [inited, setInited] = useState(false);
   const router = useRouter()
   const [fromPath, setFromPath] = useState('');
+  const { updateAuth } = useAuth();
+  
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setFromPath(searchParams.get('from') || '');
@@ -55,6 +58,8 @@ export default function Auth() {
             setLoading(false);
           } else {
             setMessage('登录成功！');
+            setIsLogin(true);
+            updateAuth();
             console.log('登录成功',data);
             router.push(`${fromPath}`||`/blog/${account}/web`)
           }
@@ -118,15 +123,13 @@ export default function Auth() {
   // };
   }
 
-  // const imgBg = '/blog-bg.webp';
+  const imgBg = '/auth-bg.webp';
   
   return (
     <>
-      <HeaderContent></HeaderContent>
-      {/* <HeaderContent imgBg={imgBg}></HeaderContent> */}
+      <HeaderContent imgBg={imgBg}></HeaderContent>
       {
-        inited && !account ? <div className='h-[50vh] flex justify-center items-center'>博主信息已丢失，请重新访问新网址</div> :
-        // <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        inited && !account ? <div className='h-[50vh] flex justify-center items-center'>博主信息丢失，请重新访问正确网址</div> :
         <div className="min-h-[calc(100vh-30vh)] bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <div className="text-center">
@@ -164,7 +167,7 @@ export default function Auth() {
                         required={!isLogin}
                         value={username}
                         onChange={(e) => setUserName(e.target.value)}
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        className="appearance-none text-black block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         placeholder="请输入您的姓名"
                       />
                     </div>
@@ -184,7 +187,7 @@ export default function Auth() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      className="appearance-none text-black block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       placeholder="请输入邮箱地址"
                     />
                   </div>
@@ -203,7 +206,7 @@ export default function Auth() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      className="appearance-none text-black block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       placeholder="请输入密码"
                       minLength={6}
                     />

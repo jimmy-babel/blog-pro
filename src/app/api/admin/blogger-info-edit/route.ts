@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
-    const {user_name="",introduce1="",introduce2="",motto1="",motto2="",blogger} = await req.json();
+    const {user_name="",introduce1="",introduce2="",motto1="",motto2="",blogger="",avatar_url=""} = await req.json();
     if(!blogger){
       return NextResponse.json({ error: '参数缺失' }, { status: 400 });
     }
@@ -14,6 +14,7 @@ export async function POST(req: Request) {
         introduce2,
         motto1,
         motto2,
+        avatar_url,
       })
       .eq('domain', blogger);
     if (error) {

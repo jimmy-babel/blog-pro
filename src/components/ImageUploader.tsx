@@ -11,6 +11,9 @@ type Props = {
   uploadBtnText?:string
 };
 
+// 默认值移到组件外部，避免每次渲染创建新数组
+const DEFAULT_FILE_LIST: Array<UploadFile> = [];
+
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 interface ImageUploaderRef {
@@ -21,7 +24,7 @@ interface ImageUploaderRef {
 
 const ImageUploader = forwardRef<ImageUploaderRef, Props>(
   function ImageUploaderContent( // 具名函数
-    { defaultFileList = [], multiple = false, maxCount = 1, uploadBtnText = "上传图片" },
+    { defaultFileList = DEFAULT_FILE_LIST, multiple = false, maxCount = 1, uploadBtnText = "上传图片" },
     ref
   ) {
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -38,10 +41,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
         status: 'done' as const,
         percent: 100,
       }));
-      console.log('initializedFiles', initializedFiles);
       setFileList(initializedFiles);
-      // // onFinish && onFinish(initializedFiles);
-      // }, [defaultFileList, onFinish]);
     }, [defaultFileList]);
 
     // 检查是否达到最大文件数量
@@ -148,36 +148,25 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     const handleChange: UploadProps['onChange'] = ({ file, fileList }) => {
       const curFile = fileList.find(item => item.uid === file.uid);
       const originFile = curFile?.originFileObj as File | undefined;
-      console.log('进来 handleChange',file.status,originFile,file,fileList);
+      
       if (file.status === 'removed') {
         pendingFilesRef.current.delete(file.uid);
         setFileList(fileList);
-        console.log('进来1',fileList);
       }else{
         if(!originFile){
-          console.log('进来2',fileList);
           return;
         }
         else if (!validateFile(originFile)) {
           // 从 fileList 中移除校验失败的文件
           const filteredList = fileList.filter(f => f.uid !== file.uid);
-          console.log('进来3',filteredList);
           setFileList(filteredList);
-          // onFinish(trimData(filteredList));
           return;
         }else{
           pendingFilesRef.current.set(file.uid, originFile);
           const previewUrl = URL.createObjectURL(originFile);
           // 更新文件列表（添加预览 URL 等信息）
-          // const updatedList = fileList.find(item => item.uid === file.uid)||{};
           setFileList(n=>n.concat([{uid:file.uid,url:previewUrl,name:file.name,percent:0,preview: previewUrl, status: 'done'}]));
-          // setFileList(n=>n.filter(i=>i.uid!==file.uid).concat([{...updatedList as any,percent:0,preview: previewUrl, status: 'done'},]));
-          // setFileList(n=>n.map(item=>{
-          //   console.log('进来咯',item.uid,file.uid,item);
-          //   return (item.uid === file.uid ? {...item,percent:0,preview: previewUrl, status: 'done'} : item);
-          // }));
         }
-        console.log('进来5', fileList,pendingFilesRef.current);
       }
 
       // 场景1：文件刚被添加（status 为 'uploading' 且未被上传过）
@@ -255,7 +244,6 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     const uploadPendingFiles = async (): Promise<Array<UploadFile>> => {
       const pendingFiles = Array.from(pendingFilesRef.current.entries());
       if (pendingFiles.length === 0) {
-        console.log('看看1',pendingFilesRef.current);
         return fileList;
       }
 
@@ -284,16 +272,13 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       try {
         const uploadedFiles = await Promise.all(uploadPromises);
         
-        console.log('看看2',uploadedFiles);
         const updatedFileList = fileList.map(file => {
           const uploaded = uploadedFiles.find(f => f.uid === file.uid);
           return uploaded || file;
         });
-        console.log('看看3',updatedFileList);
+        
         setFileList(updatedFileList);
         pendingFilesRef.current.clear();
-        // onFinish(updatedFileList);
-        // message.success(`成功上传 ${uploadedFiles.length} 个文件`);
         return updatedFileList;
       } catch (error) {
         console.error('上传失败：', error);
