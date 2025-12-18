@@ -23,6 +23,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
   const [selectedKeys, setSelectedKeys] = useState<string>(""); 
   const pathname = usePathname();
   const { isLogin, isBlogger, bloggerInfo, updateAuth } = useAuth();
+  const [blogger,setBlogger] = useState<string>("");
   useEffect(() => {
     console.log(pathname,'pathname');
     if (!pathname) return;
@@ -40,6 +41,10 @@ const Nav = ({navList,isPlace,account}: Props) => {
     )?.key) as string | undefined;
     setSelectedKeys(matchedKey || "");
   }, [pathname,list]);
+
+  useEffect(() => {
+    setBlogger(window.__NEXT_ACCOUNT__ || "");
+  }, []);
   // 给scroll闭包函数使用showBgRef.current
   useEffect(() => {
     showBgRef.current = showBg;
@@ -58,14 +63,9 @@ const Nav = ({navList,isPlace,account}: Props) => {
     setList([...(navList || []),...extra]);
   }, [navList, isLogin, bloggerInfo, isBlogger]);
   
-  // 初始化时检查登录状态 - 只在组件挂载时调用一次
   useEffect(() => {
     updateAuth();
   }, []);
-
-  // useEffect(() => {
-  //   navList && setList(navList || []);
-  // }, [navList]);
 
   
   useEffect(() => {
@@ -93,7 +93,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
     <>
       <div className={`nav-box sticky z-[10] left-0 top-0 w-full h-[var(--nav-bar-height)]`}>
         <div className="anim-op-y flex justify-between items-center relative h-full w-full pl-5 pr-5 z-[2]">
-          <Avatar size={40} blogger={window.__NEXT_ACCOUNT__ || ""}></Avatar>
+          <Avatar size={40} blogger={blogger || ""}></Avatar>
           {/* {curAccount.toUpperCase()?<div>
             {userProfile?.full_name.toUpperCase() != curAccount.toUpperCase() ? <div>WELCOME {curAccount.toUpperCase()} BLOG</div> : <div>Hello,{userProfile.full_name}</div>}
           </div>:null} */}
