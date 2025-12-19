@@ -2,7 +2,7 @@
 'use client';
 import React, { useState,useEffect, useRef } from "react";
 import { usePathname } from 'next/navigation';
-import {useJumpAction} from "@/lib/use-helper/base-mixin";
+import {useJumpAction,useCheckUser} from "@/lib/use-helper/base-mixin";
 import { useAuth } from "@/contexts/AuthContext";
 import Avatar from "@/components/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
@@ -19,17 +19,20 @@ const Nav = ({navList}: Props) => {
   const [list , setList] = useState<NavItem[]>(navList||[]);
   const showBgRef = useRef(showBg);
   const {jumpAction} = useJumpAction();
+  const {checkUser} = useCheckUser();
   const { resolvedTheme, setTheme } = useTheme();
   const [selectedKeys, setSelectedKeys] = useState<string>(""); 
   const pathname = usePathname();
   const { isLogin, isBlogger, bloggerInfo, updateAuth } = useAuth();
   const [blogger,setBlogger] = useState<string>("");
+  // const [userInfo,setUserInfo] = useState<any>({});
   useEffect(() => {
-    //console.log(pathname,'pathname');
+    console.log(pathname,'pathname');
     if (!pathname) return;
     const matchedKey = (list.find((item:NavItem) => 
       {
-        if(item.key == 'home' && pathname?.split('/').length == 2){
+        console.log('item.url',item.url,pathname,);
+        if(item.key == 'home' && pathname != '/auth' && pathname?.split('/').length == 2){
           return true;
         }else if(item.key != 'home' && pathname.indexOf('admin') > -1 && item.key == 'admin'){
           return true;
@@ -46,6 +49,14 @@ const Nav = ({navList}: Props) => {
   useEffect(() => {
     setBlogger(window.__NEXT_ACCOUNT__ || "");
   }, []);
+
+  // 拿用户信息
+  // useEffect(() => {
+  //   checkUser().then(res=>{
+  //     setUserInfo(res?.data?.userInfo);
+  //   })
+  // }, [checkUser]);
+
   // 给scroll闭包函数使用showBgRef.current
   useEffect(() => {
     showBgRef.current = showBg;
