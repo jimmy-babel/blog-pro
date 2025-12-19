@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { Card, Button, UploadFile } from "antd";
+import { Card, Button, UploadFile, message } from "antd";
 import ImageUploader from "@/components/ImageUploader";
 
 type Props = {};
@@ -69,10 +69,12 @@ const UserInfo = (props: Props) => {
           blogger: window.__NEXT_ACCOUNT__ || "",
         }),
       });
-      const data = await res.json();
+      const {msg} = await res.json();
       //console.log("更新成功:", data);
+      message.success(msg || "更新成功");
     } catch (error) {
       //console.error("更新博主信息时出错:", error);
+      message.error("更新失败");
     }
   }
   return (
