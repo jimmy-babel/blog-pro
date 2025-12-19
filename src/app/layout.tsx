@@ -10,8 +10,10 @@ import "./globals.css";
 // };
 
 export default function RootLayout({
+  params,
   children,
 }: Readonly<{
+  params: { account?: string };
   children: React.ReactNode;
 }>) {
   // 服务端组件仅负责输出根结构，客户端逻辑交给AntdClientWrapper
@@ -22,7 +24,7 @@ export default function RootLayout({
         <AntdClientWrapper>
           <ThemeProvider>
             {/* 使用服务端导航组件（内部包含客户端动态逻辑） */}
-            <ServerNav /> 
+            <ServerNav/> 
             {children}
           </ThemeProvider>
         </AntdClientWrapper>

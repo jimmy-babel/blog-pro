@@ -1,4 +1,5 @@
-import { useRouter,useParams,usePathname} from "next/navigation"; // 公开路径导入
+'use client';
+import { useRouter,usePathname} from "next/navigation"; // 公开路径导入
 import { useRef } from "react";
 interface ExtraType {
   type?:string
@@ -10,7 +11,7 @@ export function useJumpAction(){
     const account = window.__NEXT_ACCOUNT__||localStorage.getItem('account') || ""
     console.log('jumpAction',url,fromPath,extra,account);
     if(extra?.type == 'blog_auto'){
-      router.push(`/blog/${account}/${(url.startsWith('/')?url.slice(1):url)}`);
+      router.push(`/${account}/${(url.startsWith('/')?url.slice(1):url)}`);
     }
     else if(extra?.type == 'from'){
       router.push(`${url}?from=${encodeURIComponent(fromPath)}`);

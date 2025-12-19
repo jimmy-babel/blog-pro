@@ -40,6 +40,7 @@ CREATE TABLE bloggers (
 CREATE TABLE articles (
   id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, -- 强制自增，不允许手动插入id
   title TEXT NOT NULL,
+  excerpt TEXT NOT NULL DEFAULT '',
   content TEXT NOT NULL DEFAULT '',
   delta_data TEXT NOT NULL DEFAULT '',
   published BOOLEAN DEFAULT false,

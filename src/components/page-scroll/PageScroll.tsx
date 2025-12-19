@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useCallback, useRef } from "react";
 type Props = {
   listElement: React.ReactNode;

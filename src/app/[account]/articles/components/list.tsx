@@ -1,9 +1,11 @@
+'use client'
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import {article} from '@/lib/supabase';
 import {useJumpAction} from "@/lib/use-helper/base-mixin"
 import PageScroll from "@/components/page-scroll/PageScroll";
+import { ArticlesInfo } from "@/types";
 type Props = {
-  listData: Array<article>,
+  listData: Array<ArticlesInfo>,
   onScrollEnd?: () => void; // 滚动到底部的回调函数
 }
 
@@ -16,7 +18,7 @@ const List = (props: Props) => {
        (
         <div className='list-box'>
           {listData.map(item =>(
-            <div onClick={()=>jumpAction(`web/articles/${item.id}`)} key={item.id} className='pt-7 pb-7 anim-hover-x cursor-pointer anim-hover-a border-b border-b-[rgba(127,127,127,0.1)]'>
+            <div onClick={()=>jumpAction(`/articles/${item.id}`)} key={item.id} className='pt-7 pb-7 anim-hover-x cursor-pointer anim-hover-a border-b border-b-[rgba(127,127,127,0.1)]'>
               <div className='text-xl font-bold'>{item.title}</div>
               <div className='pt-4 pb-4 text-gray-400'>{item.excerpt||""}</div>
               <div className='flex text-gray-400 gap-2'>

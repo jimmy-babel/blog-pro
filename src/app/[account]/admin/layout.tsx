@@ -1,5 +1,5 @@
 import SetLayout from "@/components/set-layout";
-import Nav from "@/app/blog/[account]/admin/components/nav"
+import Nav from "@/app/[account]/admin/components/nav"
 export default function AdminLayout({
   children,
 }: Readonly<{

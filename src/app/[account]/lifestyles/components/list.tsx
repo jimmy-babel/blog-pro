@@ -1,11 +1,13 @@
+"use client"
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { life_styles } from "@/lib/supabase";
 import { useJumpAction } from "@/lib/use-helper/base-mixin";
 import PageScroll from "@/components/page-scroll/PageScroll";
 import Image from "next/image";
+import {LifeStylesInfo,ResData} from "@/types"
 
 type Props = {
-  listData: Array<life_styles>;
+  listData: Array<LifeStylesInfo>;
   onScrollEnd?: () => void; // 滚动到底部的回调函数
 };
 
@@ -40,7 +42,7 @@ const List = (props: Props) => {
             <div className="list anim-hover-scale-sm rounded-xl overflow-hidden text-2xs w-full cursor-pointer box-shadow">
               <div
                 className="album-box"
-                onClick={() => jumpAction(`web/lifestyles/${item.id}`)}
+                onClick={() => jumpAction(`/lifestyles/${item.id}`)}
               >
                 <div className="cover-box aspect-square relative">
                   {item.cover_img && (

@@ -14,7 +14,7 @@ type Props = {
   account?:string,
   navList?:NavItem[],
 };
-const Nav = ({navList,isPlace,account}: Props) => {
+const Nav = ({navList}: Props) => {
   const [showBg,setShowBg] = useState(false);
   const [list , setList] = useState<NavItem[]>(navList||[]);
   const showBgRef = useRef(showBg);
@@ -30,7 +30,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
     const matchedKey = (list.find((item:NavItem) => 
       {
         let index = pathname.indexOf((item && item.url) as string);
-        if(item.key == 'home' && pathname?.slice(index) == 'web'){
+        if(item.key == 'home' && pathname?.slice(index) == '/'){
           return true;
         }else if(item.key != 'home' &&index > -1){
           return true;
@@ -55,7 +55,7 @@ const Nav = ({navList,isPlace,account}: Props) => {
     console.log('useEffect isLogin',isLogin,'isBlogger',isBlogger,'bloggerInfo',bloggerInfo);
     let extra = [];
     if(!isLogin){
-      extra.push({ key: "login", name: "登录", url: `/blog/auth`, type: "from" });
+      extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
     }
     if(isBlogger){
       extra.push({ key: "admin", name: "后台管理", url: `admin` });

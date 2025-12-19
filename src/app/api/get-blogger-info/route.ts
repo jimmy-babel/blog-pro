@@ -1,7 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { getBloggerInfo } from '@/app/api/apis/common/blogger-info';
-import { ApiCode } from '@/types';
+
 export async function GET(req: Request) {
   try {
     
@@ -11,11 +10,19 @@ export async function GET(req: Request) {
       return NextResponse.json({ msg: '缺少传参' }, { status: 400 });
     }
     // 获取userId
-    const {code,data} = await getBloggerInfo(blogger);
-    if(code === ApiCode.FAIL){
+    const { data: bloggerInfo, error: bloggerError } = await supabase
+      .from('bloggers')
+      .select('*')
+      .eq('domain', blogger)
+      .limit(1)
+
+    if (bloggerError) {
+      return NextResponse.json({ msg: '获取博主信息出错', error: bloggerError }, { status: 500 });
+    }
+    if(!bloggerInfo?.[0]){
       return NextResponse.json({ msg: '博主不存在' }, { status: 400 });
     }
-    return NextResponse.json({ data: data || {} }, { status: 200 });
+    return NextResponse.json({ data: bloggerInfo?.[0] || {} }, { status: 200 });
   } catch (error) {
     console.error('获取文章时出错:', error);
     return NextResponse.json({ error: '服务器内部错误' }, { status: 500 });

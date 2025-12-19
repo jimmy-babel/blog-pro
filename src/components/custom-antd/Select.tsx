@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Divider, Input, Select, Space } from "antd";
 import type { InputRef } from "antd";
