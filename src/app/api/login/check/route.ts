@@ -55,8 +55,8 @@ export async function GET(req: Request) {
 
 
     const { data, error: supabaseError } = await supabase.auth.getUser(); //通过cookie获取当前登录的用户信息
-    console.log('getUser 返回数据:', data, '错误:', supabaseError);
-    // console.log('Cookies:', cookieStore.getAll()); // 打印所有 cookies 以便调试
+    //console.log('getUser 返回数据:', data, '错误:', supabaseError);
+    // //console.log('Cookies:', cookieStore.getAll()); // 打印所有 cookies 以便调试
     // if(supabaseError){
     //   return NextResponse.json({ msg: 'supabase.auth.getUser出错',error:supabaseError }, { status: 500 });
     // }
@@ -79,11 +79,11 @@ export async function GET(req: Request) {
       }
       return NextResponse.json({ data: { isLogin: true, isBlogger:!!(blogger == bloggerInfo?.domain),userInfo,bloggerInfo } }, { status: 200 });
     } else {
-      console.log('getUser 没有登录');
+      //console.log('getUser 没有登录');
       return NextResponse.json({ data: { isLogin: false }, error:supabaseError }, { status: 200 });
     }
   } catch (error) {
-    console.error('服务器内部错误:', error);
+    //console.error('服务器内部错误:', error);
     return NextResponse.json({ msg: '服务器内部错误',error }, { status: 500 });
   }
 }

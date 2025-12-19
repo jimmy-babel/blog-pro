@@ -12,8 +12,8 @@ export async function POST(req: Request) {
       user_id,
       labelIds,
     } = await req.json();
-    // console.log('photos',photos);
-    console.log('labelIds',labelIds);
+    // //console.log('photos',photos);
+    //console.log('labelIds',labelIds);
     let [relationsIds, sub_relationsIds] = [[] as number[], [] as number[]];
     labelIds.forEach((item: any, index: number) => {
       if (Array.isArray(item)) {
@@ -34,8 +34,8 @@ export async function POST(req: Request) {
         }
       }
     });
-    console.log('relationsIds',relationsIds);
-    console.log('sub_relationsIds',sub_relationsIds);
+    //console.log('relationsIds',relationsIds);
+    //console.log('sub_relationsIds',sub_relationsIds);
     if (!id || id === 0) { //新增
       const { data, error } = await supabase
         .from("life_styles")
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
           life_styles_id: newArticleId,
           label_id,
         }));
-        console.log('relations',relations);
+        //console.log('relations',relations);
         const { error: relationError } = await supabase
           .from("life_styles_to_label")
           .insert(relations);
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
           life_styles_id: newArticleId,
           sub_label_id,
         }));
-        console.log('sub_relations',sub_relations);
+        //console.log('sub_relations',sub_relations);
         const { error: relationError } = await supabase
           .from("life_styles_to_sub_label")
           .insert(sub_relations);
@@ -208,7 +208,7 @@ export async function POST(req: Request) {
       );
     }
   } catch (error) {
-    console.error("获取生活手记时出错:", error);
+    //console.error("获取生活手记时出错:", error);
     return NextResponse.json({ error: "服务器内部错误" }, { status: 500 });
   }
 }

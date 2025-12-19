@@ -67,7 +67,7 @@ export async function GET(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("获取文章详情时出错:", error);
+    //console.error("获取文章详情时出错:", error);
     return NextResponse.json({ error: "服务器内部错误" }, { status: 500 });
   }
 }

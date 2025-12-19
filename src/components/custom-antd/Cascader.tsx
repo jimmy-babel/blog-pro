@@ -54,7 +54,7 @@ const App: React.FC<Props> = (props:Props) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState(true); // 新增加载状态
   useEffect(() => {
-    console.log('setType',setType);
+    //console.log('setType',setType);
     if(setType)init();
   }, [setType]);
   
@@ -78,7 +78,7 @@ const App: React.FC<Props> = (props:Props) => {
         idKey?: string;
         nameKey?: string;
       })) as FilterApiResponse;
-      console.log("resres", res);
+      //console.log("resres", res);
       // return res?.data||[];
 
       let _list = res.data || [];
@@ -129,7 +129,7 @@ const App: React.FC<Props> = (props:Props) => {
   };
 
   const onChange: CascaderProps<Option>['onChange'] = (value) => {
-    console.log('onChange',value);
+    //console.log('onChange',value);
     setSelectData && setSelectData((value as number[]) || []);
   };
 

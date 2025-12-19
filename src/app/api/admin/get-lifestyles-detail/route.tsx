@@ -87,8 +87,8 @@ export async function GET(req: Request) {
         { status: 500 }
       );
     }
-    console.log("life_styles_to_label", life_styles_to_label);
-    console.log("life_styles_to_sub_label", life_styles_to_sub_label);
+    //console.log("life_styles_to_label", life_styles_to_label);
+    //console.log("life_styles_to_sub_label", life_styles_to_sub_label);
     let labelIds =
       life_styles_to_label?.[0] && life_styles_to_sub_label?.[0]
         ? [
@@ -119,7 +119,7 @@ export async function GET(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("获取生活手记详情时出错:", error);
+    //console.error("获取生活手记详情时出错:", error);
     return NextResponse.json({ error: "服务器内部错误" }, { status: 500 });
   }
 }

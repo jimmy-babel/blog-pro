@@ -9,7 +9,7 @@ export function useJumpAction(){
   const fromPath = usePathname();
   const jumpAction = (url:string,extra:ExtraType={type:"blog_auto"})=>{
     const account = window.__NEXT_ACCOUNT__||localStorage.getItem('account') || ""
-    console.log('jumpAction',url,fromPath,extra,account);
+    //console.log('jumpAction',url,fromPath,extra,account);
     if(extra?.type == 'blog_auto'){
       router.push(`/${account}/${(url.startsWith('/')?url.slice(1):url)}`);
     }
@@ -75,11 +75,11 @@ export function useUpload(props:UploadType){
   // 选择文件后调用上传 API
   const _onFileSelect = async (e: Event) => {
     const input = e.target as HTMLInputElement;
-    console.log('input',input);
+    //console.log('input',input);
     if (!input.files || input.files.length === 0) return;
-    console.log('files',input.files);
+    //console.log('files',input.files);
     const file = input.files[0];
-    console.log('file',file);
+    //console.log('file',file);
     // 1. 校验文件
     // if (!file.type.startsWith('image/')) {
     //   alert('仅支持图片格式');
@@ -93,7 +93,7 @@ export function useUpload(props:UploadType){
     // 2. 构造 FormData，调用你的上传 API
     const formData = new FormData();
     formData.append('file', file);
-    console.log('formData',formData);
+    //console.log('formData',formData);
     onChange && onChange(formData)
     if(isUploadAuto){
       try {
@@ -104,7 +104,7 @@ export function useUpload(props:UploadType){
   
         if (!response.ok) throw new Error('上传失败');
         const result = await response.json();
-        console.log('上传成功，返回数据：', result);
+        //console.log('上传成功，返回数据：', result);
         onUpload && onUpload(result);
         // 3. 上传成功后，将图片 URL 插入到 Quill 编辑器
         // const quill = quillInstance.current;
@@ -117,7 +117,7 @@ export function useUpload(props:UploadType){
         // }
   
       } catch (error) {
-        console.error('图片上传失败：', error);
+        //console.error('图片上传失败：', error);
         // alert('图片上传失败，请重试');
       } finally {
         // 重置 input，允许重复选择同一文件
@@ -163,7 +163,7 @@ export function useUploadTemp(){
     const validEntries = blobUrls
       .map(blobUrl => ({ blobUrl, file: tempFileMap.current.get(blobUrl) }))
       .filter(({ file }) => !!file);
-    console.log('uploadTempImages validEntries',validEntries);
+    //console.log('uploadTempImages validEntries',validEntries);
     if (validEntries.length === 0) return {};
 
     // 批量上传
@@ -182,7 +182,7 @@ export function useUploadTemp(){
     });
 
     const results = await Promise.all(uploadPromises);
-    console.log('uploadTempImages results',results);
+    //console.log('uploadTempImages results',results);
     const urlMap: Record<string,string> = {};
     results.forEach(({ blobUrl, realUrl }) => {
       urlMap[blobUrl] = realUrl;

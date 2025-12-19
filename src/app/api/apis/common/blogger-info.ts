@@ -12,7 +12,7 @@ export async function getBloggerInfo(blogger: string): Promise<ResData<BloggerIn
     .eq('domain', blogger)
     .limit(1);
   if (error) {
-    console.error('数据库查询博主信息出错:', error);
+    //console.error('数据库查询博主信息出错:', error);
     return FAILRES.OBJECT
   }
   return {...SUCCESSRES.OBJECT,data:bloggerInfo?.[0] || {}}

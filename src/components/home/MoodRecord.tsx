@@ -108,8 +108,8 @@ const MoodRecord = (props: Props) => {
   const {checkUser} = useCheckUser();
   const [isBlogger,setIsBlogger] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
-  console.log("currentDate", currentDate);
-  console.log("selectedDate", selectedDate);
+  //console.log("currentDate", currentDate);
+  //console.log("selectedDate", selectedDate);
 
   // 生成日历数据
   const calendarData = useMemo(() => {
@@ -125,12 +125,12 @@ const MoodRecord = (props: Props) => {
     // 获取上月有多少天
     const daysInPrevMonth = moment([year, prevMonth, 1]).daysInMonth(); //获取上月有多少天
     const calendar = []; // 存储日历数据的数组
-    console.log(
-      "日历显示跨月份天数：",
-      firstDayOfMonth,
-      daysInMonth,
-      42 - daysInMonth - firstDayOfMonth
-    );
+    // console.log(
+    //   "日历显示跨月份天数：",
+    //   firstDayOfMonth,
+    //   daysInMonth,
+    //   42 - daysInMonth - firstDayOfMonth
+    // );
     // 添加上月的日期
     for (let i = firstDayOfMonth - 1; i >= 0; i--) {
       const date = daysInPrevMonth - i;
@@ -161,7 +161,7 @@ const MoodRecord = (props: Props) => {
         fullDate: moment([year, month + 1, date]).format("YYYY-MM-DD"),
       });
     }
-    console.log("日历数据calendar", calendar);
+    //console.log("日历数据calendar", calendar);
     return calendar;
   }, [currentDate]);
 
@@ -244,7 +244,7 @@ const MoodRecord = (props: Props) => {
       date: selectedDate,
       blogger: window.__NEXT_ACCOUNT__,
     };
-    console.log('params',params);
+    //console.log('params',params);
     setIsLoading(true);
     setMoodRecordsApi(params).then((res) => {
       if(res>0){
@@ -255,7 +255,7 @@ const MoodRecord = (props: Props) => {
         getMoodRecords().then((records) => setMoodRecords(records))
         setShowMoodPicker(false);
       }else{
-        console.log('提交失败');
+        //console.log('提交失败');
       }
       setIsLoading(false);
     });
@@ -299,7 +299,7 @@ const MoodRecord = (props: Props) => {
       const result = await response.json();
       return result?.data||0;
     }catch (error) {
-      console.error('提交心情记录失败:', error);
+      //console.error('提交心情记录失败:', error);
       return 0;
     }
   }
@@ -308,12 +308,12 @@ const MoodRecord = (props: Props) => {
     <>
       {isBlogger && (
         <div className="w-full p-4 flex justify-center items-start gap-10">
-          {/* <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold">心情记录日历</h2>
-            <p className="text-gray-500">点击日期选择心情</p>
-          </div> */}
 
           <div className="calendar min-w-[448px]">
+            <div className="text-center h-12">
+              <h2 className="text-2xl font-bold">每日小记(仅自己可见)</h2>
+            </div>
+            
             {/* 日历头部 */}
             <div className="flex justify-between items-center mb-4 bg-gray-800 text-white p-3 rounded-lg">
               <button
@@ -385,7 +385,7 @@ const MoodRecord = (props: Props) => {
 
           {/* 显示选中日期的数据 */}
           {(
-            <div className={`recored-item bg-gray-800 rounded-md pl-6 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px] ${curDayData?.date ? 'visible' : 'invisible'}`}>
+            <div className={`recored-item mt-12 bg-gray-800 rounded-md pl-6 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px] ${curDayData?.date ? 'visible' : 'invisible'}`}>
               <div className="text-2xl mb-3 text-center">
                 {moment(curDayData?.date).format("YYYY-MM-DD")}{" "}
                 {curDayData?.emoji || ""}

@@ -6,7 +6,7 @@ import Loading from "@/components/loading-css/loading";
 
 export default function Articles(){
   const [loading, setLoading] = useState(true)
-  console.log('PAGE ADMIN 首页');
+  //console.log('PAGE ADMIN 首页');
   const {checkUser} = useCheckUser({loginJump:true});
 
   useEffect(() => {
@@ -15,9 +15,9 @@ export default function Articles(){
       try {
         const res = await checkUser();
         if(!mounted)return;
-        console.log('checkuser then ',res);
+        //console.log('checkuser then ',res);
       } catch (error) {
-        console.error('初始化时出错:', error)
+        //console.error('初始化时出错:', error)
       } finally {
         setLoading(false)
       }

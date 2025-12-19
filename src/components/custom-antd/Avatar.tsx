@@ -29,11 +29,11 @@ const App: React.FC<Props> = (props:Props) => {
         );
         const data = await res.json();
         setLoading(false);
-        console.log('获取博主信息2:', data);
+        //console.log('获取博主信息2:', data);
         setBloggerInfo((data?.data || {}) as Blogger);
       }catch(error){
         setLoading(false);
-        console.error('获取博主信息时出错2:', error);
+        //console.error('获取博主信息时出错2:', error);
       }
     }
   return <Avatar size={size} shape={shape} src={src || bloggerInfo?.avatar_url || (!loading&&"/avatar.png")} />

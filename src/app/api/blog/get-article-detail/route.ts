@@ -29,7 +29,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: '博主不存在' }, { status: 400 });
     }
     // 获取文章数据
-    // console.log('supabase select from articles');
+    // //console.log('supabase select from articles');
     const { data: articlesData, error: articlesError } = await supabase
       .from("articles")
       .select("*,articles_content(*)")
@@ -38,7 +38,7 @@ export async function GET(req: Request) {
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .single();
-    // console.log('supabase select from articles then:',articlesData,articlesError);
+    // //console.log('supabase select from articles then:',articlesData,articlesError);
     if (articlesError) {
       return NextResponse.json(
         { msg: "获取文章详情时出错1", error: articlesError },
@@ -93,7 +93,7 @@ export async function GET(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("获取文章详情时出错2:", error);
+    //console.error("获取文章详情时出错2:", error);
     return NextResponse.json({ error: "服务器内部错误" }, { status: 500 });
   }
 }

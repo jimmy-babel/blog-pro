@@ -9,7 +9,7 @@ export async function POST(req: Request) {
       article_id: id,
       group_id: groupId
     }));
-    // console.log('relations',relations);
+    // //console.log('relations',relations);
     let getExcerpt = cleanHtmlTags(content);
     getExcerpt = getExcerpt?.slice(0, 200) || '';
     if(getExcerpt?.length == 200){
@@ -97,7 +97,7 @@ export async function POST(req: Request) {
         //   .select('content_id')
         //   .eq('content_id', id)
         //   .limit(1)
-        //   console.log('articlesContent',articlesContent,articlesContent?.length);
+        //   //console.log('articlesContent',articlesContent,articlesContent?.length);
         // if(articlesContentError){
         //   return NextResponse.json({ msg: '编辑文章内容时出错',articlesContentError }, { status: 500 });
         // }
@@ -106,7 +106,7 @@ export async function POST(req: Request) {
           .update({content,delta_data})
           .eq('content_id', id)
           .select()
-          // console.log('articles_content update',data,error);
+          // //console.log('articles_content update',data,error);
         if(error){
           return NextResponse.json({ msg: '编辑文章内容时出错',error }, { status: 500 });
         }
@@ -118,7 +118,7 @@ export async function POST(req: Request) {
 
 
   } catch (error) {
-    console.error('获取文章时出错:', error);
+    //console.error('获取文章时出错:', error);
     return NextResponse.json({ error: '服务器内部错误' }, { status: 500 });
   }
 }

@@ -31,7 +31,7 @@ type Props = {
 // 客户端组件：专门处理Antd的Registry和ConfigProvider（依赖客户端环境）
 export default function AntdClientWrapper({ children }: Props) {
   // useEffect(() => {
-  //   console.log('message.config');
+  //   //console.log('message.config');
   //   message.config({
   //     top: 300,
   //     duration: 2,

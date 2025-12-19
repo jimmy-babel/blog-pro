@@ -1,8 +1,5 @@
-// "use client";
 import React from "react";
-// import { useEffect, useState } from "react";
 import List from "@/app/[account]/articles/components/list";
-// import { article } from "@/lib/supabase";
 // import Loading from "@/components/loading-css/loading";
 import AntdSelect from "@/components/custom-antd/Select";
 import { getArticlesList } from "@/app/api/apis/articles/articles";
@@ -14,21 +11,14 @@ export default async function Articles({ params }: Props) {
   // const { account } = React.use(params);
   const { account } = await params;
   const res : ResData<ArticlesInfo[]> = await getArticlesList({ blogger: account });
-  // const [articles, setArticles] = useState<article[]>([] as article[]);
-  // const [selectData, setSelectData] = useState<number>(0);
-  // const [apiParams, setApiParams] = useState<any>(null);
-  // const [filterType, setFilterType] = useState<"articles" | undefined>(
-  //   undefined
-  // );
   const filterType = "articles";
   const apiParams = `?blogger=${account}`;
   const articles = res.data || [];
   // const [loading, setLoading] = useState(true);
-  console.log("PAGE--Articles", account,articles);
+  //console.log("PAGE--Articles", account,articles);
 
   // useEffect(() => {
   //   let mounted = true;
-
   //   // 初始化应用，检查用户状态 -> 获取文章数据z
   //   const init = async () => {
   //     try {
@@ -39,7 +29,7 @@ export default async function Articles({ params }: Props) {
   //       // 然后获取文章数据
   //       await fetchArticleList();
   //     } catch (error) {
-  //       console.error("初始化应用时出错:", error);
+  //       //console.error("初始化应用时出错:", error);
   //     } finally {
   //       setLoading(false);
   //     }
@@ -51,7 +41,7 @@ export default async function Articles({ params }: Props) {
   // }, []);
 
   // useEffect(() => {
-  //   console.log('selectData onchange',selectData);
+  //   //console.log('selectData onchange',selectData);
   //   if (!isNaN(selectData)) {
   //     fetchArticleList();
   //   }
@@ -60,28 +50,28 @@ export default async function Articles({ params }: Props) {
   // 获取文章数据并关联作者信息
   // const fetchArticleList = async () => {
   //   try {
-  //     console.log("api: get-article-list");
+  //     //console.log("api: get-article-list");
   //     // let groupsId = selectData?.join(',') || "";
   //     const response = await fetch(
   //       `/api/blog/get-article-list?blogger=${account}&groupsId=${selectData}`
   //     );
   //     const result = await response.json();
-  //     console.log("api: /blog/get-article-list then", result, response);
+  //     //console.log("api: /blog/get-article-list then", result, response);
   //     if (response.ok) {
   //       setArticles(result.data);
   //     } else {
-  //       console.error("获取文章时出错:", result.error);
+  //       //console.error("获取文章时出错:", result.error);
   //       setArticles([]);
   //     }
   //   } catch (error) {
-  //     console.error("获取文章时出错:", error);
+  //     //console.error("获取文章时出错:", error);
   //     setArticles([]);
   //   } finally {
   //     setLoading(false);
   //   }
   // };
   const onScrollEnd = () => {
-    console.log('onScrollEnd');
+    //console.log('onScrollEnd');
   }
   // if (loading) {
   //   return <Loading></Loading>;
@@ -92,7 +82,7 @@ export default async function Articles({ params }: Props) {
       <div className="flex items-center min-h-[50px] sticky top-[var(--nav-bar-height)] z-[1]">
         <div className="font-bold text-3xl">文章列表</div>
         <div className="pl-4">
-          <AntdSelect
+          {/* <AntdSelect
             extraClass="min-w-20"
             filterType={filterType}
             isRowSetAllAuto
@@ -102,7 +92,7 @@ export default async function Articles({ params }: Props) {
             apiParams={apiParams}
             // selectData={selectData}
             // setSelectData={(data: number | number[]) => setSelectData(data as number)}
-          ></AntdSelect>
+          ></AntdSelect> */}
         </div>
       </div>
       <div className="pl-1">

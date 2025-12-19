@@ -50,7 +50,7 @@ export default function ArticleEdit({ params }: Props) {
   const [selectData, setSelectData] = useState<number[]>([]);
   const uploadCoverRef = useRef<ImageUploaderRef>(null);
 
-  console.log("PAGE ADMIN ArticleDetail", article);
+  //console.log("PAGE ADMIN ArticleDetail", article);
 
   const loadQuillEditor = async () => {
     const quillModule = await import("@/components/Quill");
@@ -67,7 +67,7 @@ export default function ArticleEdit({ params }: Props) {
         if (!mounted) return;
         setUserInfo(res?.data?.userInfo);
       } catch (error) {
-        console.error("初始化时出错:", error);
+        //console.error("初始化时出错:", error);
       } finally {
         setLoading(false);
       }
@@ -93,12 +93,12 @@ export default function ArticleEdit({ params }: Props) {
   const loadData = async () => {
     try {
       if (id == "0") return;
-      console.log("api: get-article-detail");
+      //console.log("api: get-article-detail");
       const response = await fetch(
         `/api/admin/get-article-detail?userId=${userInfo?.id}&id=${Number(id)}`
       );
       const result = await response.json();
-      console.log("api: /blog/get-article-detail then", result);
+      //console.log("api: /blog/get-article-detail then", result);
       if (response.ok) {
         let data = result.data;
         if (data) {
@@ -111,10 +111,10 @@ export default function ArticleEdit({ params }: Props) {
           setArticle(data);
         }
       } else {
-        console.error("获取文章时出错:", result.error);
+        //console.error("获取文章时出错:", result.error);
       }
     } catch (error) {
-      console.error("获取文章时出错:", error);
+      //console.error("获取文章时出错:", error);
     }
   };
 
@@ -125,9 +125,9 @@ export default function ArticleEdit({ params }: Props) {
     const deltaContent = editorRef.current?.getDeltaContent();
     const htmlContent = editorRef.current?.getHtmlContent();
     // const uploadCover = await uploadCoverRef.current?.uploadPendingFiles();
-    // console.log("uploadCover", uploadCover);
-    console.log("deltaContent", deltaContent);
-    console.log("handleSubmit", htmlContent);
+    // //console.log("uploadCover", uploadCover);
+    //console.log("deltaContent", deltaContent);
+    //console.log("handleSubmit", htmlContent);
     if (!userInfo?.id) return;
     setMessage("");
     try {
@@ -144,7 +144,7 @@ export default function ArticleEdit({ params }: Props) {
         // cover_img: uploadCover?.[0]?.url || article.cover_img || "",
         groupsId: selectData || [],
       };
-      console.log("api: admin/article-edit", params);
+      //console.log("api: admin/article-edit", params);
       const response = await fetch(`/api/admin/article-edit`, {
         body: JSON.stringify(params),
         method: "POST",
@@ -153,7 +153,7 @@ export default function ArticleEdit({ params }: Props) {
         },
       });
       const { data, msg, error } = await response.json();
-      console.log("api: admin/article-edit then", data, msg, error);
+      //console.log("api: admin/article-edit then", data, msg, error);
       setMessage(msg);
       if (data > 0) {
         setTimeout(() => {

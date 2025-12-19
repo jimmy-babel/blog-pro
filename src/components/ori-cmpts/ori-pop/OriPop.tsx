@@ -81,7 +81,7 @@ const OriPop = (props: Props) => {
         // transform = `translateY(${isShow ? -offsetPx : 100}%)`;
         break;
     }
-    console.log('initAnimate', transform, opacity);
+    //console.log('initAnimate', transform, opacity);
 
     setPopupStyle({
       transition: `all ${200}ms ${timing}`,
@@ -128,7 +128,7 @@ const OriPop = (props: Props) => {
 
   // 监听 visible 变化（对应原 watch modelValue）
   useEffect(() => {
-    console.log('watch modelValue', visible, showPopup);
+    //console.log('watch modelValue', visible, showPopup);
     if (visible !== showPopup) {
       visible ? show() : dismiss();
     }

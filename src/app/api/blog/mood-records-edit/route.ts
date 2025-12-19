@@ -56,7 +56,7 @@ export async function POST(req: Request) {
         .select('id');
 
       if (error) {
-        console.error('新增心情记录失败:', error);
+        //console.error('新增心情记录失败:', error);
         return NextResponse.json({ msg: '新增心情记录失败', error }, { status: 500 });
       }
 
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
         .select('id');
 
       if (error) {
-        console.error('更新心情记录失败:', error);
+        //console.error('更新心情记录失败:', error);
         return NextResponse.json({ msg: '更新心情记录失败', error }, { status: 500 });
       }
 
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ data: result, msg: '操作成功' }, { status: 200 });
 
   } catch (error) {
-    console.error('处理心情记录时出错:', error);
+    //console.error('处理心情记录时出错:', error);
     return NextResponse.json({ error: '服务器内部错误' }, { status: 500 });
   }
 }

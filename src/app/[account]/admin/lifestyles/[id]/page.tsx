@@ -38,7 +38,7 @@ export default function LifeStylesEdit({ params }: Props) {
   const uploadCoverRef = useRef<ImageUploaderRef>(null);
   const uploadPhotosRef = useRef<ImageUploaderRef>(null);
 
-  console.log("PAGE ADMIN LifeStylesEdit", lifestyles);
+  //console.log("PAGE ADMIN LifeStylesEdit", lifestyles);
 
    useEffect(() => {
       let mounted = true
@@ -47,14 +47,14 @@ export default function LifeStylesEdit({ params }: Props) {
           const res = await checkUser();
           if(!mounted)return;
           setUserInfo(res.data?.userInfo);
-          console.log('checkuser then',res);
+          //console.log('checkuser then',res);
         } catch (error) {
-          console.error('初始化时出错:', error)
+          //console.error('初始化时出错:', error)
         }
       }
       init();
       return () => {
-        console.log('销毁');
+        //console.log('销毁');
         mounted = false
       }
     }, [])
@@ -73,12 +73,12 @@ export default function LifeStylesEdit({ params }: Props) {
   const getDetail = async () => {
     try {
       if (id == "0") return;
-      console.log("api: get-lifestyles-detail");
+      //console.log("api: get-lifestyles-detail");
       const response = await fetch(
         `/api/admin/get-lifestyles-detail?blogger=${account}&userId=${userInfo?.id}&id=${Number(id)}`
       );
       const result = await response.json();
-      console.log("api: /blog/get-lifestyles-detail then", result);
+      //console.log("api: /blog/get-lifestyles-detail then", result);
       if (response.ok) {
         let data = result.data;
         if (data) {
@@ -90,12 +90,12 @@ export default function LifeStylesEdit({ params }: Props) {
           setLifeStyles(data);
         }
       } else {
-        console.error("获取手记时出错:", result.error);
+        //console.error("获取手记时出错:", result.error);
       }
     } catch (error) {
-      console.error("获取手记时出错:", error);
+      //console.error("获取手记时出错:", error);
     } finally {
-      console.log('finally');
+      //console.log('finally');
       setLoading(false);
     }
   };
@@ -105,8 +105,8 @@ export default function LifeStylesEdit({ params }: Props) {
     e.preventDefault();
     const uploadCover = await uploadCoverRef.current?.uploadPendingFiles();
     const uploadPhotos = await uploadPhotosRef.current?.uploadPendingFiles();
-    console.log("uploadCover", uploadCover);
-    console.log("uploadPhotos", uploadPhotos);
+    //console.log("uploadCover", uploadCover);
+    //console.log("uploadPhotos", uploadPhotos);
     if (!userInfo?.id) return;
     setMessage("");
     try {
@@ -121,7 +121,7 @@ export default function LifeStylesEdit({ params }: Props) {
         photos: uploadPhotos || [],
         labelIds: selectData || [],
       };
-      console.log("api: admin/lifestyles-edit", params);
+      //console.log("api: admin/lifestyles-edit", params);
       const response = await fetch(`/api/admin/lifestyles-edit`, {
         body: JSON.stringify(params),
         method: "POST",
@@ -130,7 +130,7 @@ export default function LifeStylesEdit({ params }: Props) {
         },
       });
       const { data, msg, error } = await response.json();
-      console.log("api: admin/lifestyles-edit then", data, msg, error);
+      //console.log("api: admin/lifestyles-edit then", data, msg, error);
       setMessage(msg);
       if (data > 0) {
         setTimeout(() => {

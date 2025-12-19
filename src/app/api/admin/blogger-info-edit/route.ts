@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
 
   } catch (error) {
-    console.error('更新博主信息时出错:', error);
+    //console.error('更新博主信息时出错:', error);
     return NextResponse.json({ msg: '服务器内部错误',error }, { status: 500 });
   }
 }

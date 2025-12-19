@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     if(error){
       let msg = error.code;
       if(error.code==='email_not_confirmed'){
-        msg = '邮箱未确认授权，请前往确认';
+        msg = '邮箱已发送，请前往邮箱确认授权';
       }
       return NextResponse.json({ msg,error }, { status: 500 });
     }

@@ -90,10 +90,10 @@ export async function getArticlesList(
           updated_at: dayjs(rest.updated_at).format("YYYY-MM-DD HH:mm:ss"),
         };
       }) || [];
-    console.log("API getArticlesList", result);
+    //console.log("API getArticlesList", result);
     return { ...SUCCESSRES.ARRAY, data: result || [] };
   } catch (error) {
-    console.error("API getArticlesList", error);
+    //console.error("API getArticlesList", error);
     return FAILRES.ARRAY;
   }
 }

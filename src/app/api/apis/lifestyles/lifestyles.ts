@@ -81,7 +81,7 @@ export async function getLifeStylesList(
 
     return { ...SUCCESSRES.ARRAY, data: result || [] };
   } catch (error) {
-    console.error("API getLifeStylesList", error);
+    //console.error("API getLifeStylesList", error);
     return FAILRES.ARRAY;
   }
 }

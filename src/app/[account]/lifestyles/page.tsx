@@ -37,7 +37,7 @@ const LifeStyles = async ({ params }: Props) => {
   //       // 然后获取文章数据
   //       await loadData();
   //     } catch (error) {
-  //       console.error("初始化应用时出错:", error);
+  //       //console.error("初始化应用时出错:", error);
   //     } finally {
   //       setLoading(false);
   //     }
@@ -51,20 +51,20 @@ const LifeStyles = async ({ params }: Props) => {
   // 获取文章数据并关联作者信息
   // const loadData = async () => {
   //   try {
-  //     console.log("api: get-lifestyles-list");
+  //     //console.log("api: get-lifestyles-list");
   //     const response = await fetch(
   //       `/api/blog/get-lifestyles-list?blogger=${account}&labelId=${selectData.join(',')}`
   //     );
   //     const result = await response.json();
-  //     console.log("api: /blog/get-lifestyles-list then", result, response);
+  //     //console.log("api: /blog/get-lifestyles-list then", result, response);
   //     if (response.ok) {
   //       setLifeStyles(result.data);
   //     } else {
-  //       console.error("获取文章时出错:", result.error);
+  //       //console.error("获取文章时出错:", result.error);
   //       setLifeStyles([]);
   //     }
   //   } catch (error) {
-  //     console.error("获取文章时出错:", error);
+  //     //console.error("获取文章时出错:", error);
   //     setLifeStyles([]);
   //   } finally {
   //     setLoading(false);
@@ -76,7 +76,7 @@ const LifeStyles = async ({ params }: Props) => {
   // }, [selectData]);
 
   // const onScrollEnd = () => {
-  //   console.log("onScrollEnd");
+  //   //console.log("onScrollEnd");
   // };
 
   // if (loading) {
@@ -87,7 +87,7 @@ const LifeStyles = async ({ params }: Props) => {
       <div className="flex items-center min-h-[50px] sticky top-[var(--nav-bar-height)] z-[1] backdrop-filter backdrop-blur-[10px]">
         <div className="font-bold text-3xl mr-4">手记列表</div>
         <div className="w-35">
-          <Cascader 
+          {/* <Cascader 
             isApiAuto
             changeOnSelect
             setType={setType}
@@ -97,7 +97,7 @@ const LifeStyles = async ({ params }: Props) => {
             apiParams={apiParams}
             // selectData={selectData}
             // setSelectData={setSelectData}
-          ></Cascader>
+          ></Cascader> */}
         </div>
       </div>
 

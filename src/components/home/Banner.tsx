@@ -13,21 +13,21 @@ const Banner = (props: Props) => {
         <div className='flex-1 flex-col flex justify-center h-[inherit] anim-op-y text-center'>
           <div className='text-5xl'>{bloggerInfo?.user_name+"'s Blog"}</div>
           <div className='text-2xl pl-6 pt-5 italic'>{bloggerInfo?.motto1 || ""}</div>
-          <div className='pl-6 pt-3 text-gray-400'>{bloggerInfo?.motto2 || ""}</div>
+          <div className='pl-6 pt-3 text-gray-400 italic'>{bloggerInfo?.motto2 || ""}</div>
         </div>
         <div className='flex-1 anim-op-y h-[inherit] flex-col flex justify-center pl-10'>
           <div className='anim-hover-scale-sm w-full'>
             <div className={`w-full max-w-[500px]`}>
               <div className='h-[230px] rounded-xl overflow-hidden box-shadow p-8'>
-                <div className='flex items-center '>
+                <div className='flex'>
                   {/* <Avatar size={65} shape="square" blogger={window.__NEXT_ACCOUNT__}></Avatar> */}
-                  <Avatar size={65} shape="square" src={bloggerInfo?.avatar_url || ""}></Avatar>
+                  <Avatar size={120} shape="square" src={bloggerInfo?.avatar_url || ""}></Avatar>
                   <div className='pl-4'>
-                    <div className='text-2xl bold pb-1'>{bloggerInfo?.user_name || "--"}</div>
-                    <div className='pb-2 text-gray-400'>{bloggerInfo?.introduce1 || ""}</div>
+                    <div className='text-2xl bold pt-1 pb-2'>{bloggerInfo?.user_name || "--"}</div>
+                    <span className='pb-2'>{bloggerInfo?.introduce1 || ""}</span>
                   </div>
                 </div>
-                <div className='text-[18px] text-gray-400 pt-4'>🔥{bloggerInfo?.introduce2 || ""}</div>
+                <div className='text-[18px] text-gray-500 pt-5'>🔥{bloggerInfo?.introduce2 || ""}</div>
               </div>
             </div>
           </div>

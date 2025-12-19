@@ -29,13 +29,13 @@ export function AccountProvider({
   // 客户端初始化时，将account存入全局变量
   useEffect(() => {
     try{
-      console.log('AccountProvider',account);
+      //console.log('AccountProvider',account);
       window.__NEXT_ACCOUNT__ = account;
       if (account !== localStorage.getItem('account')) {
         localStorage.setItem('account', account);
       }
     }catch(e){
-      console.error('AccountProvider useEffect error',e);
+      //console.error('AccountProvider useEffect error',e);
     }
   }, [account]);
 

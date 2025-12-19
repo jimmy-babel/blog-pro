@@ -108,8 +108,8 @@ const MoodRecord = (props: Props) => {
   const {checkUser} = useCheckUser();
   const [isBlogger,setIsBlogger] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
-  console.log("currentDate", currentDate);
-  console.log("selectedDate", selectedDate);
+  //console.log("currentDate", currentDate);
+  //console.log("selectedDate", selectedDate);
 
   // 生成日历数据
   const calendarData = useMemo(() => {
@@ -125,12 +125,12 @@ const MoodRecord = (props: Props) => {
     // 获取上月有多少天
     const daysInPrevMonth = moment([year, prevMonth, 1]).daysInMonth(); //获取上月有多少天
     const calendar = []; // 存储日历数据的数组
-    console.log(
-      "日历显示跨月份天数：",
-      firstDayOfMonth,
-      daysInMonth,
-      42 - daysInMonth - firstDayOfMonth
-    );
+    //console.log(
+    //   "日历显示跨月份天数：",
+    //   firstDayOfMonth,
+    //   daysInMonth,
+    //   42 - daysInMonth - firstDayOfMonth
+    // );
     // 添加上月的日期
     for (let i = firstDayOfMonth - 1; i >= 0; i--) {
       const date = daysInPrevMonth - i;
@@ -161,7 +161,7 @@ const MoodRecord = (props: Props) => {
         fullDate: moment([year, month + 1, date]).format("YYYY-MM-DD"),
       });
     }
-    console.log("日历数据calendar", calendar);
+    //console.log("日历数据calendar", calendar);
     return calendar;
   }, [currentDate]);
 
@@ -244,7 +244,7 @@ const MoodRecord = (props: Props) => {
       date: selectedDate,
       blogger: window.__NEXT_ACCOUNT__,
     };
-    console.log('params',params);
+    //console.log('params',params);
     setIsLoading(true);
     setMoodRecordsApi(params).then((res) => {
       if(res>0){
@@ -255,7 +255,7 @@ const MoodRecord = (props: Props) => {
         getMoodRecords().then((records) => setMoodRecords(records))
         setShowMoodPicker(false);
       }else{
-        console.log('提交失败');
+        //console.log('提交失败');
       }
       setIsLoading(false);
     });
@@ -299,7 +299,7 @@ const MoodRecord = (props: Props) => {
       const result = await response.json();
       return result?.data||0;
     }catch (error) {
-      console.error('提交心情记录失败:', error);
+      //console.error('提交心情记录失败:', error);
       return 0;
     }
   }

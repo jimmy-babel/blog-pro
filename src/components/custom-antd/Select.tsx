@@ -97,7 +97,7 @@ const App: React.FC<Props> = (props: Props) => {
         idKey?: string;
         nameKey?: string;
       })) as FilterApiResponse;
-      console.log("resres", res);
+      //console.log("resres", res);
       // return res?.data||[];
 
       let _list = res.data || [];
@@ -161,7 +161,7 @@ const App: React.FC<Props> = (props: Props) => {
   };
 
   const onChange = (value: any, option: any) => {
-    console.log("onChange", value, option);
+    //console.log("onChange", value, option);
     if (mode == "multiple") {
       if (value[value.length - 1] == 0) {
         value = [0];

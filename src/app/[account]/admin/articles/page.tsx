@@ -27,9 +27,9 @@ export default function Articles({params}:Props){
   const [filterType, setFilterType] = useState<"articles" | undefined>(
     undefined
   );
-  console.log('PAGE ADMIN Articles',account,articles,searchText);
+  //console.log('PAGE ADMIN Articles',account,articles,searchText);
   const onChange = (id: number,checked: boolean) => {
-    console.log(`switch to ${checked}`);
+    //console.log(`switch to ${checked}`);
     updateInfo(id,checked);
   };
   
@@ -58,11 +58,11 @@ export default function Articles({params}:Props){
       );
       const data = await res.json();
       if(data?.data){
-        console.log('更新成功:', data);
+        //console.log('更新成功:', data);
         fetchArticleList();
       }
     }catch(error){
-      console.error('更新状态时出错:', error);
+      //console.error('更新状态时出错:', error);
     }
   }
   const columns: TableColumnsType<article> = [
@@ -114,7 +114,7 @@ export default function Articles({params}:Props){
       render: (row: article) => <div className='flex justify-center items-center'><Button style={{marginLeft:0}} size="small" type="primary" onClick={()=>jumpAction(`admin/articles/${row.id}`)}>编辑</Button></div>,
     },
   ];
-  console.log('PAGE ADMIN Articles',account);
+  //console.log('PAGE ADMIN Articles',account);
 
   // 监听容器高度变化，更新表格高度
   const updateTableHeight = () => {
@@ -162,13 +162,13 @@ export default function Articles({params}:Props){
       try {
         const res = await checkUser();
         if(!mounted)return;
-        console.log('checkuser then2',res);
+        //console.log('checkuser then2',res);
         setUserInfo(res?.data?.userInfo);
         // setApiParams(`?userId=${res?.data?.id}&search=`);
         // setFilterType("articles");
         // await fetchArticleList()
       } catch (error) {
-        console.error('初始化时出错:', error)
+        //console.error('初始化时出错:', error)
         setLoading(false)
       }
     }
@@ -192,19 +192,19 @@ export default function Articles({params}:Props){
   const fetchArticleList = async () => {
     if(!userInfo?.id) return;
     try {
-      console.log('api: get-article-list',searchText);
+      //console.log('api: get-article-list',searchText);
       // let groupsId = selectData?.join(',') || "";
       const response = await fetch(`/api/admin/get-article-list?userId=${userInfo?.id}&search=${searchText}&groupsId=${selectData}`);
       const result = await response.json();
-      console.log('api: /blog/get-article-list then',result,response);
+      //console.log('api: /blog/get-article-list then',result,response);
       if (response.ok) {
         setArticles(result.data);
       } else {
-        console.error('获取文章时出错:', result.error);
+        //console.error('获取文章时出错:', result.error);
         setArticles([]);
       }
     } catch (error) {
-      console.error('获取文章时出错:', error);
+      //console.error('获取文章时出错:', error);
       setArticles([]);
     } finally {
       setLoading(false);

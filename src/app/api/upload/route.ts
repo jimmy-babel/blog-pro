@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       resource_type: resourceType,
       preset: preset,
     });
-    console.log('服务器上传',uploadResult);
+    //console.log('服务器上传',uploadResult);
     // 4. 返回结果（此时 uploadResult 包含 secure_url）
     return NextResponse.json({
       success: true,
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     // });
 
   } catch (error) {
-    console.error('上传失败：', error);
+    //console.error('上传失败：', error);
     return NextResponse.json({ error: '服务器上传失败' }, { status: 500 });
   }
 }

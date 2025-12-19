@@ -58,7 +58,7 @@ export async function GET(req: Request) {
     );
 
   } catch (error) {
-    console.error('获取心情记录时出错:', error);
+    //console.error('获取心情记录时出错:', error);
     return NextResponse.json({ error: '服务器内部错误' }, { status: 500 });
   }
 }

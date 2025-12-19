@@ -13,7 +13,7 @@ export default async function Home({ params }: Props) {
   const { account } = await params;
   const res: ResData<BloggerInfo> = await getBloggerInfo(account);
   const bloggerInfo = res.data || {};
-  console.log("PAGE--Home", account, bloggerInfo);
+  //console.log("PAGE--Home", account, bloggerInfo);
   return (
     <div className="content-box">
       <div className="flex justify-between flex-wrap pl-20 pr-20">

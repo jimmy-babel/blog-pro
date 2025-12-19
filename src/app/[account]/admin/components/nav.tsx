@@ -27,13 +27,13 @@ export default function Nav(props: Props){
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const pathname = usePathname();
   useEffect(() => {
-    console.log(pathname,'pathname');
+    //console.log(pathname,'pathname');
     if (!pathname) return;
     // 匹配规则：路由包含Menu的key（处理路由带后缀的情况，如 /admin/articles/1 也高亮 admin/articles）
     const matchedKey = (items.find((item:MenuItem) => 
       pathname.includes((item && item.key) as string)
     )?.key) as string | undefined;
-    console.log('matchedKey',matchedKey);
+    //console.log('matchedKey',matchedKey);
     setSelectedKeys(matchedKey ? [matchedKey] : []);
   }, [pathname]);
   // const toggleCollapsed = () => {
@@ -41,7 +41,7 @@ export default function Nav(props: Props){
   // };
    // 正确定义事件处理函数：参数为 MenuInfo 类型的 info
   const menuItemOnClick: MenuProps['onClick'] = (e) => {
-    console.log('click ', e);
+    //console.log('click ', e);
     jumpAction(e.key);
   };
   return (

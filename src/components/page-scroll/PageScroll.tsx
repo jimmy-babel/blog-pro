@@ -56,17 +56,17 @@ const PageScroll = (props: Props) => {
 
       // 设置触底阈值（这里设置为距离底部50px时触发）
       const threshold = 50;
-      console.log("滚动 滚动位置 window.pageYOffset", window.pageYOffset);
-      console.log("滚动 视口高度 window.innerHeight", windowHeight);
-      console.log(
-        "滚动 文档总高度 document.documentElement.scrollHeight",
-        documentHeight
-      );
+      //console.log("滚动 滚动位置 window.pageYOffset", window.pageYOffset);
+      //console.log("滚动 视口高度 window.innerHeight", windowHeight);
+      // console.log(
+      //   "滚动 文档总高度 document.documentElement.scrollHeight",
+      //   documentHeight
+      // );
       // 判断是否触底
       if (scrollTop + windowHeight >= documentHeight - threshold) {
         if (!inBottom) {
           // 避免重复触发触底
-          console.log("触底", window, document.documentElement, document);
+          //console.log("触底", window, document.documentElement, document);
           inBottom = true;
           // 触发回调函数（如果有）
           if (onScrollEnd) {
@@ -74,7 +74,7 @@ const PageScroll = (props: Props) => {
           }
         }
       } else {
-        // console.log('未触底');
+        // //console.log('未触底');
         inBottom = false;
       }
     };

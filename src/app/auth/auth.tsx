@@ -29,7 +29,7 @@ export default function Auth() {
   }, [searchParams]); 
 
   useEffect(() => {
-    console.log('PAGE Auth', isLogin, account, email, username, password, message);
+    //console.log('PAGE Auth', isLogin, account, email, username, password, message);
   }, [isLogin, account, email, username, password, message]);
 
   // 处理登录或注册
@@ -43,7 +43,7 @@ export default function Auth() {
             email,
             password,
           };
-          console.log("api: login/sign-in", params);
+          //console.log("api: login/sign-in", params);
           const response = await fetch(`/api/login/register/sign-in`, {
             body: JSON.stringify(params),
             method: "POST",
@@ -52,7 +52,7 @@ export default function Auth() {
             },
           });
           const { data, msg, error } = await response.json();
-          console.log("api: login/sign-in then", data, msg, error);
+          //console.log("api: login/sign-in then", data, msg, error);
           if (error) {
             setMessage(`登录失败: ${msg}`);
             setLoading(false);
@@ -60,7 +60,7 @@ export default function Auth() {
             setMessage('登录成功！');
             setIsLogin(true);
             updateAuth();
-            console.log('登录成功',data);
+            //console.log('登录成功',data);
             router.push(`${fromPath}`||`/blog/${account}/web`)
           }
         } 
@@ -76,7 +76,7 @@ export default function Auth() {
           password,
           username
         };
-        console.log("api: login/register/sign-up", params);
+        //console.log("api: login/register/sign-up", params);
         const response = await fetch(`/api/login/register/sign-up`, {
           body: JSON.stringify(params),
           method: "POST",
@@ -85,7 +85,7 @@ export default function Auth() {
           },
         });
         const { data, msg, error, code } = await response.json();
-        console.log("api: login/register/sign-up then", data, msg, error);
+        //console.log("api: login/register/sign-up then", data, msg, error);
         if (error) {
           setMessage(`注册失败: ${msg}`)
           setLoading(false);
@@ -99,7 +99,7 @@ export default function Auth() {
           setMessage('注册成功！还需前往邮箱验证授权后再登录');
           setIsLogin(true);
           setLoading(false);
-          console.log('注册成功',data);
+          //console.log('注册成功',data);
         }
       } catch (error) {
         setMessage(`注册失败: ${error}`)
@@ -119,7 +119,7 @@ export default function Auth() {
   //       redirectTo: 'http://localhost:3000/blog/auth' // 授权后最终跳转的页面
   //     }
   //   });
-  //   if (error) console.error('GitHub 登录失败:', error);
+  //   if (error) //console.error('GitHub 登录失败:', error);
   // };
   }
 

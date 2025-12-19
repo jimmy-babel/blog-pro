@@ -16,20 +16,20 @@ export default function Article({params}:Props){
   const [userInfo, setUserInfo] = useState<Blogger>({} as Blogger)
   const [loading, setLoading] = useState(true)
 
-  console.log('PAGE BLOG Article DETAIL',account);
+  //console.log('PAGE BLOG Article DETAIL',account);
   
   useEffect(() => {
     let mounted = true
 
     // 初始化应用，检查用户状态 -> 获取文章数据
     const init = async () => {
-      console.log('init');
+      //console.log('init');
       try {
         if (!mounted)return
         // 然后获取文章数据
         await fetchArticleDetail()
       } catch (error) {
-        console.error('初始化应用时出错:', error)
+        //console.error('初始化应用时出错:', error)
       } finally {
         setLoading(false)
       }
@@ -43,19 +43,19 @@ export default function Article({params}:Props){
   // 获取文章数据并关联作者信息
   const fetchArticleDetail = async () => {
     try {
-      console.log('api: get-article-detail');
+      //console.log('api: get-article-detail');
       const response = await fetch(`/api/blog/get-article-detail?blogger=${account}&id=${Number(id)}`);
       const result = await response.json();
-      console.log('api: /blog/get-article-detail then',result,response);
+      //console.log('api: /blog/get-article-detail then',result,response);
       if (response.ok) {
         setArticle(result.data);
         setUserInfo(result.bloggerInfo);
       } else {
-        console.error('获取文章时出错:', result.error);
+        //console.error('获取文章时出错:', result.error);
         setArticle([] as any);
       }
     } catch (error) {
-      console.error('获取文章时出错:', error);
+      //console.error('获取文章时出错:', error);
       setArticle([] as any);
     } finally {
       setLoading(false);

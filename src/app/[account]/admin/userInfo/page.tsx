@@ -27,7 +27,7 @@ const UserInfo = (props: Props) => {
   const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("提交表单数据:", bloggerInfo);
+    //console.log("提交表单数据:", bloggerInfo);
     updateInfo();
   };
   useEffect(() => {
@@ -52,10 +52,10 @@ const UserInfo = (props: Props) => {
           },
         ]);
       }
-      console.log("获取博主信息:", data);
+      //console.log("获取博主信息:", data);
       setBloggerInfo((data?.data || {}) as Blogger);
     } catch (error) {
-      console.error("获取博主信息时出错:", error);
+      //console.error("获取博主信息时出错:", error);
     }
   }
   async function updateInfo() {
@@ -70,9 +70,9 @@ const UserInfo = (props: Props) => {
         }),
       });
       const data = await res.json();
-      console.log("更新成功:", data);
+      //console.log("更新成功:", data);
     } catch (error) {
-      console.error("更新博主信息时出错:", error);
+      //console.error("更新博主信息时出错:", error);
     }
   }
   return (

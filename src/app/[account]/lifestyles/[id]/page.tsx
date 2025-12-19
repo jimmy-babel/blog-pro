@@ -27,7 +27,7 @@ const LifeStyles = (props: Props) => {
         // 然后获取文章数据
         await loadData();
       } catch (error) {
-        console.error("初始化应用时出错:", error);
+        //console.error("初始化应用时出错:", error);
       } finally {
         setLoading(false);
       }
@@ -41,20 +41,20 @@ const LifeStyles = (props: Props) => {
   // 获取文章数据并关联作者信息
   const loadData = async () => {
     try {
-      console.log("api: get-lifestyles-detail");
+      //console.log("api: get-lifestyles-detail");
       const response = await fetch(
         `/api/blog/get-lifestyles-detail?blogger=${account}&id=${Number(id)}`
       );
       const result = await response.json();
-      console.log("api: /blog/get-lifestyles-detail then", result, response);
+      //console.log("api: /blog/get-lifestyles-detail then", result, response);
       if (response.ok) {
         setLifeStyles(result.data);
         setUserInfo(result.bloggerInfo);
       } else {
-        console.error("获取文章时出错:", result.error);
+        //console.error("获取文章时出错:", result.error);
       }
     } catch (error) {
-      console.error("获取文章时出错:", error);
+      //console.error("获取文章时出错:", error);
     } finally {
       setLoading(false);
     }

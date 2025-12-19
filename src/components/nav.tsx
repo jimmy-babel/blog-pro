@@ -25,14 +25,15 @@ const Nav = ({navList}: Props) => {
   const { isLogin, isBlogger, bloggerInfo, updateAuth } = useAuth();
   const [blogger,setBlogger] = useState<string>("");
   useEffect(() => {
-    console.log(pathname,'pathname');
+    //console.log(pathname,'pathname');
     if (!pathname) return;
     const matchedKey = (list.find((item:NavItem) => 
       {
-        let index = pathname.indexOf((item && item.url) as string);
-        if(item.key == 'home' && pathname?.slice(index) == '/'){
+        if(item.key == 'home' && pathname?.split('/').length == 2){
           return true;
-        }else if(item.key != 'home' &&index > -1){
+        }else if(item.key != 'home' && pathname.indexOf('admin') > -1 && item.key == 'admin'){
+          return true;
+        }else if(pathname.indexOf('admin') == -1 && item.key != 'home' && pathname.indexOf(item.url || "") > -1){
           return true;
         }else{
           return false;
@@ -52,7 +53,7 @@ const Nav = ({navList}: Props) => {
 
   // 根据登录状态更新导航列表
   useEffect(() => {
-    console.log('useEffect isLogin',isLogin,'isBlogger',isBlogger,'bloggerInfo',bloggerInfo);
+    //console.log('useEffect isLogin',isLogin,'isBlogger',isBlogger,'bloggerInfo',bloggerInfo);
     let extra = [];
     if(!isLogin){
       extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
@@ -86,7 +87,7 @@ const Nav = ({navList}: Props) => {
   }, [showBg]);
   
   const toggleTheme = (curType:string)=>{
-    console.log('toggleTheme',curType,resolvedTheme);
+    //console.log('toggleTheme',curType,resolvedTheme);
     setTheme(curType == 'dark' ? 'light':'dark');
   }
   return (

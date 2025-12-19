@@ -29,9 +29,9 @@ export default function LifeStyles({ params }: Props) {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [tableHeight, setTableHeight] = useState(400);
 
-  console.log("PAGE ADMIN LifeStyles", account, lifestyles, searchText);
+  //console.log("PAGE ADMIN LifeStyles", account, lifestyles, searchText);
   const onChange = (id:number,checked: boolean) => {
-    console.log(`switch to ${checked}`);
+    //console.log(`switch to ${checked}`);
     updateInfo(id,checked);
   };
   // 自定义Cloudinary Loader
@@ -66,11 +66,11 @@ export default function LifeStyles({ params }: Props) {
       );
       const data = await res.json();
       if(data?.data){
-        console.log('更新成功:', data);
+        //console.log('更新成功:', data);
         fetchlifeStylesList();
       }
     }catch(error){
-      console.error('更新状态时出错:', error);
+      //console.error('更新状态时出错:', error);
     }
   }
 
@@ -152,7 +152,7 @@ export default function LifeStyles({ params }: Props) {
       ),
     },
   ];
-  console.log("PAGE ADMIN lifestyles", account);
+  //console.log("PAGE ADMIN lifestyles", account);
 
   // 查询登录状态+拿生活手记列表数据
   useEffect(() => {
@@ -163,12 +163,12 @@ export default function LifeStyles({ params }: Props) {
         if (!mounted) return;
         setUserInfo(res.data?.userInfo);
       } catch (error) {
-        console.error("初始化时出错:", error);
+        //console.error("初始化时出错:", error);
       }
     };
     init();
     return () => {
-      console.log("销毁");
+      //console.log("销毁");
       mounted = false;
     };
   }, []);
@@ -224,7 +224,7 @@ export default function LifeStyles({ params }: Props) {
   const fetchlifeStylesList = async () => {
     if(!userInfo?.id) return;
     try {
-      console.log("api: get-life_styles-list", searchText, userInfo.id);
+      //console.log("api: get-life_styles-list", searchText, userInfo.id);
       const response = await fetch(
         `/api/admin/get-lifestyles-list?blogger=${account}&userId=${
           userInfo.id
@@ -232,18 +232,18 @@ export default function LifeStyles({ params }: Props) {
       );
 
       const result = await response.json();
-      console.log("api: /blog/get-lifestyles-list then", result, response);
+      //console.log("api: /blog/get-lifestyles-list then", result, response);
       if (response.ok) {
         setLifestyles(result.data);
       } else {
-        console.error("获取生活手记时出错:", result.error);
+        //console.error("获取生活手记时出错:", result.error);
         setLifestyles([]);
       }
     } catch (error) {
-      console.error("获取生活手记时出错:", error);
+      //console.error("获取生活手记时出错:", error);
       setLifestyles([]);
     } finally {
-      console.log("finally");
+      //console.log("finally");
       setLoading(false);
     }
   };

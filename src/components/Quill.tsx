@@ -62,11 +62,11 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
   const editorRef = useRef<HTMLDivElement>(null)
   const quillRef = useRef<Quill | null>(null)
   // const onChange:UploadType['onChangeType'] = (res:any)=>{
-  //   console.log('外层onChange',res);
+  //   //console.log('外层onChange',res);
 
   // };
   // const onUpload:UploadType['onUploadType'] = (res:any)=>{
-  //   console.log('外层onUpload',res);
+  //   //console.log('外层onUpload',res);
   //   if (quillRef.current) {
   //     const range = quillRef.current.getSelection(); // 获取当前光标位置
   //     if (range) {
@@ -99,15 +99,15 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
 
     // 监听图片上传按钮点击（可选，用于自定义交互）
     // const toolbar = quillRef.current.getModule('toolbar') as Toolbar
-    // console.log('toolbar',toolbar);
+    // //console.log('toolbar',toolbar);
     // toolbar.addHandler('image', (res)=>{
-    //   console.log('image addhandler 测试',res);
+    //   //console.log('image addhandler 测试',res);
     //   handleUpload()
     // });
     const toolbar = quillRef.current.getModule('toolbar') as Toolbar;
     toolbar.addHandler('image', async () => {
       const { blobUrls } = await selectFiles(); // 获取临时URL
-      console.log('外面 获取临时URL',blobUrls);
+      //console.log('外面 获取临时URL',blobUrls);
       const quill = quillRef.current;
       if (!quill) return;
 
@@ -115,10 +115,10 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
       if (range) {
         // 插入所有选中的图片（临时URL）
         blobUrls.forEach((blobUrl:any) => {
-          console.log('blobUrl',blobUrl);
+          //console.log('blobUrl',blobUrl);
           quill.insertEmbed(range.index, 'image', blobUrl);
         });
-        console.log('插入',quillRef.current?.getContents());
+        //console.log('插入',quillRef.current?.getContents());
         quill.setSelection(range.index + blobUrls.length);
       }
     });
@@ -136,7 +136,7 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
     const content = quill.getContents();
     const tempUrls: string[] = [];
     // 遍历Delta内容，收集所有blob:开头的图片URL
-    console.log('getTempImageUrls 遍历Delta内容，收集所有blob:开头的图片URL',content.ops);
+    //console.log('getTempImageUrls 遍历Delta内容，收集所有blob:开头的图片URL',content.ops);
     content.ops.forEach(op => {
       if (op.insert && typeof op.insert === 'object' && op.insert.image) {
         const url = op.insert.image as string;
@@ -152,7 +152,7 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
   const replaceTempUrls = (urlMap: Record<string, string>) => {
     const quill = quillRef.current;
     if (!quill) return null;
-    console.log('替换编辑器中的临时URL为实际URL',urlMap);
+    //console.log('替换编辑器中的临时URL为实际URL',urlMap);
     const content = quill.getContents();
     content.ops.forEach(op => {
       if (op.insert && typeof op.insert === 'object' && op.insert.image) {
@@ -169,12 +169,12 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
 
   const tempUrlsUpload = async (): Promise<Delta | null> => {
     const tempUrls = getTempImageUrls();
-    console.log('拿到tempUrls:',tempUrls);
+    //console.log('拿到tempUrls:',tempUrls);
     if (tempUrls.length > 0) {
       const urlMap = await uploadTempImages(tempUrls);
-      console.log('拿到urlMap:',urlMap);
+      //console.log('拿到urlMap:',urlMap);
       const content = replaceTempUrls(urlMap);
-      console.log('拿到content:',content);
+      //console.log('拿到content:',content);
       return content; // content 是 Delta 类型
     } else {
       return quillRef.current?.getContents() || null; // 无图片时返回当前内容
@@ -202,7 +202,7 @@ const QuillEditor = forwardRef<QuillEditorRef, Props>(
 
   // 初始内容赋值（当 initialContent 存在时）
   useEffect(() => {
-    console.log('useEffect initialContent',initialContent);
+    //console.log('useEffect initialContent',initialContent);
     if (quillRef.current && initialContent) {
       // 使用 Delta 格式设置内容（推荐）
       quillRef.current.setContents(JSON.parse(initialContent));

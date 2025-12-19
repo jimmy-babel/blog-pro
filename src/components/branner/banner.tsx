@@ -24,7 +24,8 @@ const Banner = (props: Props) => {
                   <Avatar size={65} shape="square" src={bloggerInfo?.avatar_url || ""}></Avatar>
                   <div className='pl-4'>
                     <div className='text-2xl bold pb-1'>{bloggerInfo?.user_name || "--"}</div>
-                    <div className='pb-2 text-gray-400'>{bloggerInfo?.introduce1 || ""}</div>
+                    <div className='pb-2 text-[unset]'>{bloggerInfo?.introduce1 || ""}</div>
+                    {/* <div className='pb-2 text-gray-400'>{bloggerInfo?.introduce1 || ""}</div> */}
                   </div>
                 </div>
                 <div className='text-[18px] text-gray-400 pt-4'>🔥{bloggerInfo?.introduce2 || ""}</div>

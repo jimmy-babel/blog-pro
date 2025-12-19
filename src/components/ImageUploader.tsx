@@ -52,7 +52,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
 
     // 处理文件选择（支持单选/多选）
     // const beforeUpload = (file: File) => {
-    //   console.log('进来 beforeUpload',file);
+    //   //console.log('进来 beforeUpload',file);
     //   // 校验文件类型
     //   // const isImage = file.type.startsWith('image/');
     //   // if (!isImage) {
@@ -99,7 +99,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
 
     // // 处理文件状态变化（删除/新增）
     // const handleChange: UploadProps['onChange'] = ({ file, fileList }) => {
-    //   console.log('进来 handleChange', file, fileList);
+    //   //console.log('进来 handleChange', file, fileList);
     //   // 处理删除
     //   if (file.status === 'removed') {
     //     pendingFilesRef.current.delete(file.uid);
@@ -118,7 +118,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     //   }
     //   // onFinish(trimData(fileList));
     //   setFileList(fileList);
-    //   console.log('pendingFilesRef',pendingFilesRef);
+    //   //console.log('pendingFilesRef',pendingFilesRef);
     // };
 
     // 新逻辑
@@ -281,7 +281,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
         pendingFilesRef.current.clear();
         return updatedFileList;
       } catch (error) {
-        console.error('上传失败：', error);
+        //console.error('上传失败：', error);
         message.error('文件上传失败，请重试');
         throw error;
       }
