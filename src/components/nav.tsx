@@ -1,8 +1,7 @@
-//ClientNav
 'use client';
 import React, { useState,useEffect, useRef } from "react";
 import { usePathname } from 'next/navigation';
-import {useJumpAction,useCheckUser} from "@/lib/use-helper/base-mixin";
+import {useJumpAction} from "@/lib/use-helper/base-mixin";
 import { useAuth } from "@/contexts/AuthContext";
 import Avatar from "@/components/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
@@ -19,19 +18,16 @@ const Nav = ({navList}: Props) => {
   const [list , setList] = useState<NavItem[]>(navList||[]);
   const showBgRef = useRef(showBg);
   const {jumpAction} = useJumpAction();
-  const {checkUser} = useCheckUser();
   const { resolvedTheme, setTheme } = useTheme();
   const [selectedKeys, setSelectedKeys] = useState<string>(""); 
   const pathname = usePathname();
-  const { isLogin, isBlogger, bloggerInfo, updateAuth } = useAuth();
+  const { isLogin, isBlogger, updateAuth } = useAuth();
   const [blogger,setBlogger] = useState<string>("");
-  // const [userInfo,setUserInfo] = useState<any>({});
   useEffect(() => {
-    console.log(pathname,'pathname');
+    // console.log(pathname,'pathname');
     if (!pathname) return;
     const matchedKey = (list.find((item:NavItem) => 
       {
-        console.log('item.url',item.url,pathname,);
         if(item.key == 'home' && pathname != '/auth' && pathname?.split('/').length == 2){
           return true;
         }else if(item.key != 'home' && pathname.indexOf('admin') > -1 && item.key == 'admin'){
@@ -50,13 +46,6 @@ const Nav = ({navList}: Props) => {
     setBlogger(window.__NEXT_ACCOUNT__ || "");
   }, []);
 
-  // 拿用户信息
-  // useEffect(() => {
-  //   checkUser().then(res=>{
-  //     setUserInfo(res?.data?.userInfo);
-  //   })
-  // }, [checkUser]);
-
   // 给scroll闭包函数使用showBgRef.current
   useEffect(() => {
     showBgRef.current = showBg;
@@ -64,7 +53,7 @@ const Nav = ({navList}: Props) => {
 
   // 根据登录状态更新导航列表
   useEffect(() => {
-    //console.log('useEffect isLogin',isLogin,'isBlogger',isBlogger,'bloggerInfo',bloggerInfo);
+    //console.log('useAuth watch',isLogin,'isBlogger',isBlogger);
     let extra = [];
     if(!isLogin){
       extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
@@ -73,7 +62,7 @@ const Nav = ({navList}: Props) => {
       extra.push({ key: "admin", name: "后台管理", url: `admin` });
     }
     setList([...(navList || []),...extra]);
-  }, [navList, isLogin, bloggerInfo, isBlogger]);
+  }, [navList, isLogin, isBlogger]);
   
   useEffect(() => {
     updateAuth();

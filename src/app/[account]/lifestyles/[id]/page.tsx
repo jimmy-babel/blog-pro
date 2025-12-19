@@ -63,7 +63,7 @@ const LifeStyles = (props: Props) => {
   const cloudinaryLoader = ({
     src = "",
     width = 110,
-    quality = 100,
+    quality = 85,
   }: {
     src: string;
     width: number;
@@ -95,8 +95,8 @@ const LifeStyles = (props: Props) => {
           </div>
           {/* <div className='flex items-center gap-2 leading-15'>
           </div> */}
-          {lifeStyles.labelIds?.map((item) => (
-            <div className='flex items-center leading-15' key={item.id}>
+          {lifeStyles.labelIds?.map((item,index) => (
+            <div className='flex items-center leading-15' key={'id_label_'+index+item.id}>
               <div className=''>#{item.name}</div>
             </div>
           ))}
@@ -118,7 +118,7 @@ const LifeStyles = (props: Props) => {
             >
               {lifeStyles.photos &&
                 lifeStyles.photos?.map((item) => (
-                  <div className="anim-op-y" key={item.id}>
+                  <div className="anim-op-y" key={'id_photos_'+item.id}>
                     <div className="list anim-hover-scale-sm rounded-2xl box-shadow-reverse text-2xs  cursor-pointer">
                       <div className="album-box">
                         <div className="cover-box aspect-square relative">
@@ -128,6 +128,7 @@ const LifeStyles = (props: Props) => {
                               src={item.url || ""}
                               alt=""
                               fill
+                              sizes="160px"
                               className="w-full h-full object-cover rounded-xl"
                             />
                           </PhotoView>

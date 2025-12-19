@@ -14,7 +14,7 @@ type Props = {
 const cloudinaryLoader = ({
   src = "",
   width = 110,
-  quality = 100,
+  quality = 85,
 }: {
   src: string;
   width: number;
@@ -38,7 +38,7 @@ const List = (props: Props) => {
       // <div className={`grid grid-cols-[repeat(auto-fit,minmax(180px,${listData.length >= 3 ? '1fr' : '200px'}))] gap-x-15 gap-y-12 w-full pt-8 pb-8`}>
       <div className={`grid ${listData.length>=4?'grid-cols-[repeat(auto-fit,minmax(180px,1fr))]':'grid-cols-[repeat(auto-fit,minmax(180px,200px))]'} gap-x-15 gap-y-12 w-full pt-8 pb-8`}>
         {listData.map((item) => (
-          <div className="anim-op-y" key={item.id}>
+          <div className="anim-op-y" key={'id_'+item.id}>
             <div className="list anim-hover-scale-sm rounded-xl overflow-hidden text-2xs w-full cursor-pointer box-shadow">
               <div
                 className="album-box"
@@ -51,6 +51,7 @@ const List = (props: Props) => {
                       src={item.cover_img || ""}
                       alt=""
                       fill
+                      sizes="200px"
                       className="w-full h-full object-cover"
                     />
                   )}
