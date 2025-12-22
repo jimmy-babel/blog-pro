@@ -20,7 +20,7 @@ export interface article {
   user_id: string
   created_at: string
   updated_at: string
-  labels?: article_groups[]
+  groupsId?: article_groups[]
   article_groups_relation?: article_groups_relation[]
   articles_content?: articles_content
 }

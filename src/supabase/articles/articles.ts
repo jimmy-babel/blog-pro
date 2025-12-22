@@ -5,12 +5,13 @@ interface Props {
   blogger: string;
   search?: string;
   groupsId?: string;
+  platform?: string;
 }
 export async function getArticlesList(
   props: Props
 ): Promise<ResData<ArticlesInfo[]>> {
   try {
-    const { blogger, search, groupsId } = props;
+    const { blogger, search, groupsId, platform } = props;
     // 获取userId
     const { data: bloggerInfo, error: bloggerError } = await supabase
       .from("bloggers")
@@ -64,9 +65,11 @@ export async function getArticlesList(
 
     // 4. 执行筛选逻辑（eq、ilike 等，需在 select 之后）
     query = query
-      .eq("user_id", userId) // 筛选博主的文章
-      .eq("published", true) // 筛选已发布的文章
-      .ilike("title", `%${search || ""}%`); // 搜索关键词
+      .eq("user_id", userId); // 筛选博主的文章
+      if(platform == 'web'){
+        query = query.eq("published", true);
+      };
+      query.ilike("title", `%${search || ""}%`); // 搜索关键词
 
     // 6. 排序（最后执行排序）
     query = query.order("created_at", { ascending: false });
@@ -81,16 +84,13 @@ export async function getArticlesList(
     // 提取纯文章数据（过滤关联表的冗余字段）
     const result =
       articlesData?.map((article: any) => {
-        // 删除关联表的嵌套字段，只保留文章本身的字段
-        const { article_groups_relation, ...rest } = article;
         return {
-          ...rest,
-          article_groups_relation,
-          created_at: dayjs(rest.created_at).format("YYYY-MM-DD HH:mm:ss"),
-          updated_at: dayjs(rest.updated_at).format("YYYY-MM-DD HH:mm:ss"),
+          ...article,
+          created_at: dayjs(article.created_at).format("YYYY-MM-DD HH:mm:ss"),
+          updated_at: dayjs(article.updated_at).format("YYYY-MM-DD HH:mm:ss"),
         };
       }) || [];
-    //console.log("API getArticlesList", result);
+    console.log("-----------API getArticlesList", result);
     return { ...SUCCESSRES.ARRAY, data: result || [] };
   } catch (error) {
     //console.error("API getArticlesList", error);

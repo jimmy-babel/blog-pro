@@ -44,7 +44,7 @@ export default function Article({params}:Props){
   const fetchArticleDetail = async () => {
     try {
       //console.log('api: get-article-detail');
-      const response = await fetch(`/api/blog/get-article-detail?blogger=${account}&id=${Number(id)}`);
+      const response = await fetch(`/api/articles/get-article-detail?blogger=${account}&id=${Number(id)}`);
       const result = await response.json();
       //console.log('api: /blog/get-article-detail then',result,response);
       if (response.ok) {
@@ -86,7 +86,7 @@ export default function Article({params}:Props){
                 <EyeOutlined />
                 <div>{'1'} views</div>
               </div>
-              {article.labels?.map((item) => (
+              {article.groupsId?.map((item) => (
                 <div className='flex items-center gap-2 leading-15 pb-5' key={item.id}>
                   <div className=''>#{item.name}</div>
                 </div>

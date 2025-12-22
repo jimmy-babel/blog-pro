@@ -36,7 +36,7 @@ const UserInfo = (props: Props) => {
   async function getDetail() {
     try {
       const res = await fetch(
-        `/api/common/get-blogger-info?blogger=${window.__NEXT_ACCOUNT__}`,
+        `/api/blogger/get-blogger-info?blogger=${window.__NEXT_ACCOUNT__}`,
         {
           method: "GET",
         }
@@ -61,7 +61,7 @@ const UserInfo = (props: Props) => {
   async function updateInfo() {
     try {
       const uploadAvatar = await uploadAvatarRef.current?.uploadPendingFiles();
-      const res = await fetch(`/api/admin/blogger-info-edit`, {
+      const res = await fetch(`/api/blogger/blogger-info-edit`, {
         method: "POST",
         body: JSON.stringify({
           ...bloggerInfo,

@@ -6,13 +6,14 @@ interface Props {
   blogger: string;
   search?: string;
   labelId?: string;
+  platform?: string;
 }
 
 export async function getLifeStylesList(
   props: Props
 ): Promise<ResData<LifeStylesInfo[]>> {
   try {
-    const { blogger, search, labelId } = props;
+    const { blogger, search, labelId, platform } = props;
 
     if (!blogger) {
       return FAILRES.ARRAY;
@@ -61,7 +62,9 @@ export async function getLifeStylesList(
     } else {
       query = query.select("*", { count: "exact" });
     }
-
+    if(platform == 'web'){
+      query = query.eq("published", true);
+    }
     query = query
       .eq("user_id", userId) // 筛选博主的文章
       .ilike("title", `%${search || ""}%`)

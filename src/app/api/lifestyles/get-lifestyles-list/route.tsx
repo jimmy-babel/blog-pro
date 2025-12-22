@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getLifeStylesList } from '@/apis/lifestyles/lifestyles';
+import { getLifeStylesList } from '@/supabase/lifestyles/lifestyles';
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);

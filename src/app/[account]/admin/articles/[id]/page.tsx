@@ -81,7 +81,8 @@ export default function ArticleEdit({ params }: Props) {
     
   useEffect(() => {
     if (!userInfo) return;
-    setApiParams(`?userId=${userInfo?.id}&search=`);
+    // setApiParams(`?userId=${userInfo?.id}&search=`);
+    setApiParams(`?blogger=${window.__NEXT_ACCOUNT__}&id=${Number(id)}`);
     setFilterType("articles");
     const init = async () => {
       await loadData();
@@ -95,7 +96,7 @@ export default function ArticleEdit({ params }: Props) {
       if (id == "0") return;
       //console.log("api: get-article-detail");
       const response = await fetch(
-        `/api/admin/get-article-detail?userId=${userInfo?.id}&id=${Number(id)}`
+        `/api/articles/get-article-detail?blogger=${window.__NEXT_ACCOUNT__}&id=${Number(id)}`
       );
       const result = await response.json();
       //console.log("api: /blog/get-article-detail then", result);
@@ -107,7 +108,7 @@ export default function ArticleEdit({ params }: Props) {
               { uid: data.id, url: data.cover_img, name: `name-${data.id}` },
             ]);
           }
-          setSelectData(data.groupsId?.length > 0 ? data.groupsId : [0]);
+          setSelectData(data.groupsId?.length > 0 ? data.groupsId.map((item:any)=>item.id) : [0]);
           setArticle(data);
         }
       } else {
@@ -144,8 +145,8 @@ export default function ArticleEdit({ params }: Props) {
         // cover_img: uploadCover?.[0]?.url || article.cover_img || "",
         groupsId: selectData || [],
       };
-      //console.log("api: admin/article-edit", params);
-      const response = await fetch(`/api/admin/article-edit`, {
+      //console.log("api: articles/article-edit", params);
+      const response = await fetch(`/api/articles/article-edit`, {
         body: JSON.stringify(params),
         method: "POST",
         headers: {
@@ -153,7 +154,7 @@ export default function ArticleEdit({ params }: Props) {
         },
       });
       const { data, msg, error } = await response.json();
-      //console.log("api: admin/article-edit then", data, msg, error);
+      //console.log("api: articles/article-edit then", data, msg, error);
       setMessage(msg);
       if (data > 0) {
         setTimeout(() => {

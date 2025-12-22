@@ -22,7 +22,7 @@ const App: React.FC<Props> = (props:Props) => {
       try{
         setLoading(true);
         const res = await fetch(
-          `/api/common/get-blogger-info?blogger=${blogger}`,
+          `/api/blogger/get-blogger-info?blogger=${blogger}`,
           {
             method: "GET",
           }

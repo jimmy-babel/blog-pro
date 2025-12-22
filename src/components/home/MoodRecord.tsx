@@ -278,7 +278,7 @@ const MoodRecord = (props: Props) => {
 
   async function getMoodRecords() {
     const response = await fetch(
-      `/api/blog/get-mood-records?blogger=${window.__NEXT_ACCOUNT__}`
+      `/api/mood-records/get-mood-records?blogger=${window.__NEXT_ACCOUNT__}`
     );
     const result = await response.json();
     return result?.data||[];
@@ -287,7 +287,7 @@ const MoodRecord = (props: Props) => {
   async function setMoodRecordsApi(params: MoodRecordType) {
     try{
       const response = await fetch(
-        `/api/blog/mood-records-edit`,
+        `/api/mood-records/mood-records-edit`,
         {
           body: JSON.stringify(params),
           method: "POST",
@@ -307,7 +307,7 @@ const MoodRecord = (props: Props) => {
   return (
     <>
       {isBlogger && (
-        <div className="w-full p-4 flex justify-center items-start gap-10">
+        <div className="anim-op-y w-full p-4 flex justify-center items-start gap-10">
 
           <div className="calendar min-w-[448px]">
             <div className="text-center h-12">

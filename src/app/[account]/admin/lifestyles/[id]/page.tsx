@@ -75,7 +75,7 @@ export default function LifeStylesEdit({ params }: Props) {
       if (id == "0") return;
       //console.log("api: get-lifestyles-detail");
       const response = await fetch(
-        `/api/admin/get-lifestyles-detail?blogger=${account}&userId=${userInfo?.id}&id=${Number(id)}`
+        `/api/lifestyles/get-lifestyles-detail?blogger=${account}&id=${Number(id)}`
       );
       const result = await response.json();
       //console.log("api: /blog/get-lifestyles-detail then", result);
@@ -86,7 +86,7 @@ export default function LifeStylesEdit({ params }: Props) {
             { uid: data.id, url: data.cover_img, name: `name-${data.id}` },
           ]);
           data.photos?.length>0 && setDefaultPhotosList(data.photos?.map((item:any)=>({uid: `${item.id}`, url: item.url, name: `name-${item.id}`}))||[]);
-          data.labelIds?.length > 0 && setSelectData(data.labelIds);
+          data.labelIds?.length > 0 && setSelectData(data.labelIds.map((item:any)=>item.id));
           setLifeStyles(data);
         }
       } else {
@@ -122,7 +122,7 @@ export default function LifeStylesEdit({ params }: Props) {
         labelIds: selectData || [],
       };
       //console.log("api: admin/lifestyles-edit", params);
-      const response = await fetch(`/api/admin/lifestyles-edit`, {
+      const response = await fetch(`/api/lifestyles/lifestyles-edit`, {
         body: JSON.stringify(params),
         method: "POST",
         headers: {
@@ -216,7 +216,7 @@ export default function LifeStylesEdit({ params }: Props) {
                   isApiAuto
                   expandTrigger="hover"
                   setType={setType}
-                  apiName="/api/common/get-lifestyles-label"
+                  apiName="/api/lifestyles/get-lifestyles-label"
                   apiMethods="GET"
                   apiParams={apiParams}
                   selectData={selectData}

@@ -7,6 +7,7 @@ export async function GET(req: Request) {
     const url = new URL(req.url); //GET请求获取URL
     const blogger = url.searchParams.get("blogger"); // GET获取查询参数中的blogger
     const id = url.searchParams.get("id"); // GET获取查询参数中的id
+    const platform = url.searchParams.get("platform"); // GET获取查询参数中的platform
 
     // 检查 blogger 是否存在（避免后续调用 toUpperCase/toLowerCase 时报错）
     if (!blogger || !id) {
@@ -29,16 +30,16 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: '博主不存在' }, { status: 400 });
     }
     // 获取文章数据
-    // //console.log('supabase select from articles');
-    const { data: articlesData, error: articlesError } = await supabase
-      .from("articles")
-      .select("*,articles_content(*)")
-      .eq("published", true)
-      .eq("id", id)
+    let query;
+    query = supabase.from("articles").select("*,articles_content(*)");
+    if(platform == 'web'){
+      query = query.eq("published", true);
+    }
+    query = query.eq("id", id)
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .single();
-    // //console.log('supabase select from articles then:',articlesData,articlesError);
+    const { data: articlesData, error: articlesError } = await query;
     if (articlesError) {
       return NextResponse.json(
         { msg: "获取文章详情时出错1", error: articlesError },
@@ -47,7 +48,7 @@ export async function GET(req: Request) {
     }
 
     // 获取文章标签
-    const { data: labelsData, error: labelsError } = await supabase
+    const { data: groupsData, error: labelsError } = await supabase
       .from("article_groups_relation")
       .select("group_id")
       .eq("article_id", id);
@@ -64,7 +65,7 @@ export async function GET(req: Request) {
       .select("id,name")
       .in(
         "id",
-        labelsData?.map((item) => item.group_id)
+        groupsData?.map((item) => item.group_id)
       );
 
     if (article_groupsError) {
@@ -86,7 +87,7 @@ export async function GET(req: Request) {
             (articlesData?.updated_at &&
               dayjs(articlesData?.updated_at).format("YYYY-MM-DD HH:mm:ss")) ||
             "",
-          labels: article_groups,
+          groupsId: article_groups,
         },
         bloggerInfo:users,
       },

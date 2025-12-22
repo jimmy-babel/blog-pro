@@ -4,7 +4,7 @@ import { life_styles } from "@/lib/supabase";
 import Loading from "@/components/common/loading/loading";
 import Cascader from "@/components/common/custom-antd/Cascader";
 import List from "@/app/[account]/lifestyles/components/list";
-import { getLifeStylesList } from "@/apis/lifestyles/lifestyles";
+import { getLifeStylesList } from "@/supabase/lifestyles/lifestyles";
 import {LifeStylesInfo,ResData} from "@/types"
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
@@ -13,7 +13,7 @@ const LifeStyles = async ({ params }: Props) => {
   // const { params } = props;
   // const { account } = React.use(params);
   const { account } = await params;
-  const res : ResData<LifeStylesInfo[]> = await getLifeStylesList({ blogger: account });
+  const res : ResData<LifeStylesInfo[]> = await getLifeStylesList({ blogger: account, platform: 'web' });
   const lifeStyles = res.data || [];
   const setType = "lifestyles"
   const apiParams = `?blogger=${account}`;
@@ -91,7 +91,7 @@ const LifeStyles = async ({ params }: Props) => {
             isApiAuto
             changeOnSelect
             setType={setType}
-            apiName="/api/common/get-lifestyles-label"
+            apiName="/api/lifestyles/get-lifestyles-label"
             apiMethods="GET"
             expandTrigger="hover"
             apiParams={apiParams}

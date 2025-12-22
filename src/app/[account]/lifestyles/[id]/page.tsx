@@ -43,10 +43,10 @@ const LifeStyles = (props: Props) => {
     try {
       //console.log("api: get-lifestyles-detail");
       const response = await fetch(
-        `/api/blog/get-lifestyles-detail?blogger=${account}&id=${Number(id)}`
+        `/api/lifestyles/get-lifestyles-detail?blogger=${account}&id=${Number(id)}`
       );
       const result = await response.json();
-      //console.log("api: /blog/get-lifestyles-detail then", result, response);
+      //console.log("api: /lifestyles/get-lifestyles-detail then", result, response);
       if (response.ok) {
         setLifeStyles(result.data);
         setUserInfo(result.bloggerInfo);

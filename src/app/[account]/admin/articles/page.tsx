@@ -47,7 +47,7 @@ export default function Articles({params}:Props){
   async function updateInfo(id:number,published:boolean){
     try{
       const res = await fetch(
-        `/api/admin/article-publish-edit`,
+        `/api/articles/article-publish-edit`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -180,7 +180,8 @@ export default function Articles({params}:Props){
   
   useEffect(() => {
     if (!userInfo) return;
-    setApiParams(`?userId=${userInfo?.id}&search=${searchText}`);
+    // setApiParams(`?userId=${userInfo?.id}&search=${searchText}`);
+    setApiParams(`?blogger=${window.__NEXT_ACCOUNT__}&search=${searchText}`);
     setFilterType("articles");
     const loadData = async () => {
       await fetchArticleList();
@@ -194,7 +195,7 @@ export default function Articles({params}:Props){
     try {
       //console.log('api: get-article-list',searchText);
       // let groupsId = selectData?.join(',') || "";
-      const response = await fetch(`/api/admin/get-article-list?userId=${userInfo?.id}&search=${searchText}&groupsId=${selectData}`);
+      const response = await fetch(`/api/articles/get-article-list?blogger=${window.__NEXT_ACCOUNT__}&search=${searchText}&groupsId=${selectData}`);
       const result = await response.json();
       //console.log('api: /blog/get-article-list then',result,response);
       if (response.ok) {

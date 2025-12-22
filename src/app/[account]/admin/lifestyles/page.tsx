@@ -55,7 +55,7 @@ export default function LifeStyles({ params }: Props) {
   async function updateInfo(id:number,published:boolean){
     try{
       const res = await fetch(
-        `/api/admin/lifestyles-publish-edit`,
+        `/api/lifestyles/lifestyles-publish-edit`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -226,7 +226,7 @@ export default function LifeStyles({ params }: Props) {
     try {
       //console.log("api: get-life_styles-list", searchText, userInfo.id);
       const response = await fetch(
-        `/api/admin/get-lifestyles-list?blogger=${account}&userId=${
+        `/api/lifestyles/get-lifestyles-list?blogger=${account}&userId=${
           userInfo.id
         }&search=${searchText}&labelId=${selectData.join(",")}`
       );
@@ -269,7 +269,7 @@ export default function LifeStyles({ params }: Props) {
                 isApiAuto
                 changeOnSelect
                 setType={setType}
-                apiName="/api/common/get-lifestyles-label"
+                apiName="/api/lifestyles/get-lifestyles-label"
                 apiMethods="GET"
                 expandTrigger="hover"
                 apiParams={apiParams}

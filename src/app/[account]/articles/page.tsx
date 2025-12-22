@@ -1,7 +1,7 @@
 import React from "react";
 import List from "@/app/[account]/articles/components/list";
 import AntdSelect from "@/components/common/custom-antd/Select";
-import { getArticlesList } from "@/apis/articles/articles";
+import { getArticlesList } from "@/supabase/articles/articles";
 import { ResData,ArticlesInfo } from "@/types";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
@@ -9,7 +9,7 @@ type Props = {
 export default async function Articles({ params }: Props) {
   // const { account } = React.use(params);
   const { account } = await params;
-  const res : ResData<ArticlesInfo[]> = await getArticlesList({ blogger: account });
+  const res : ResData<ArticlesInfo[]> = await getArticlesList({ blogger: account, platform: 'web' });
   const filterType = "articles";
   const apiParams = `?blogger=${account}`;
   const articles = res.data || [];
@@ -86,7 +86,7 @@ export default async function Articles({ params }: Props) {
             filterType={filterType}
             isRowSetAllAuto
             isApiAuto
-            apiName="/api/common/get-article-groups"
+            apiName="/api/articles/get-article-groups"
             apiMethods="GET"
             apiParams={apiParams}
             // selectData={selectData}

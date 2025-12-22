@@ -7,6 +7,7 @@ export async function GET(req: Request) {
     const url = new URL(req.url); //GET请求获取URL
     const blogger = url.searchParams.get("blogger"); // GET获取查询参数中的blogger
     const id = url.searchParams.get("id"); // GET获取查询参数中的id
+    const platform = url.searchParams.get("platform"); // GET获取查询参数中的platform
     // 检查 blogger 是否存在（避免后续调用 toUpperCase/toLowerCase 时报错）
     if (!blogger || !id) {
       return NextResponse.json({ error: "缺少传参" }, { status: 400 });
@@ -28,12 +29,17 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: '博主不存在' }, { status: 400 });
     }
     // 获取生活手记数据
-    const { data: lifeStylesData, error: lifeStylesError } = await supabase
-      .from("life_styles")
-      .select("*,photos:life_styles_photos(id,url,excerpt,sort,created_at)")
+    
+    let query;
+    query = supabase.from("life_styles").select("*,photos:life_styles_photos(id,url,excerpt,sort,created_at)");
+    if(platform == 'web'){
+      query = query.eq("published", true);
+    }
+    query = query.eq("id", id)
       .eq("user_id", userId)
-      .eq("id", id)
+      .order("created_at", { ascending: false })
       .single();
+    const { data: lifeStylesData, error: lifeStylesError } = await query;
     // 等价于:
     // SELECT
     //   life_styles.id,
