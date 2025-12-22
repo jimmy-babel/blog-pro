@@ -6,9 +6,9 @@ import { useJumpAction, useCheckUser } from "@/lib/use-helper/base-mixin";
 import type { TableColumnsType, TableProps } from "antd";
 import Image from "next/image";
 import { Table, Switch, Button, Space } from "antd";
-import SearchBox from "@/components/SearchBox";
-import Loading from "@/components/loading-css/loading";
-import Cascader from "@/components/custom-antd/Cascader";
+import SearchBox from "@/components/common/search-box/SearchBox";
+import Loading from "@/components/common/loading/loading";
+import Cascader from "@/components/common/custom-antd/Cascader";
 
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数

@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import {article} from '@/lib/supabase';
 import {useJumpAction} from "@/lib/use-helper/base-mixin"
-import PageScroll from "@/components/page-scroll/PageScroll";
+import PageScroll from "@/components/common/page-scroll/PageScroll";
 import { ArticlesInfo } from "@/types";
 type Props = {
   listData: Array<ArticlesInfo>,

@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
-import { getBloggerInfo } from '@/app/api/apis/common/blogger-info';
+import { getBloggerInfo } from '@/apis/common/blogger-info';
 import { ApiCode } from '@/types';
 export async function GET(req: Request) {
   try {

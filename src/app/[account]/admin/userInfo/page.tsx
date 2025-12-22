@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { Card, Button, UploadFile, message } from "antd";
-import ImageUploader from "@/components/ImageUploader";
+import ImageUploader from "@/components/common/image-upload/ImageUpload";
 
 type Props = {};
 type Blogger = {

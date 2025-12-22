@@ -1,10 +1,10 @@
 // "use client";
 // import React, { useEffect, useState } from "react";
 import { life_styles } from "@/lib/supabase";
-import Loading from "@/components/loading-css/loading";
-import Cascader from "@/components/custom-antd/Cascader";
+import Loading from "@/components/common/loading/loading";
+import Cascader from "@/components/common/custom-antd/Cascader";
 import List from "@/app/[account]/lifestyles/components/list";
-import { getLifeStylesList } from "@/app/api/apis/lifestyles/lifestyles";
+import { getLifeStylesList } from "@/apis/lifestyles/lifestyles";
 import {LifeStylesInfo,ResData} from "@/types"
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react'
 import {useCheckUser} from "@/lib/use-helper/base-mixin"
-import Loading from "@/components/loading-css/loading";
+import Loading from "@/components/common/loading/loading";
 
 export default function Articles(){
   const [loading, setLoading] = useState(true)

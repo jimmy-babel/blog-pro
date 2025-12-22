@@ -3,8 +3,8 @@ import React from 'react';
 import { useEffect, useState } from 'react'
 import {article,Blogger} from '@/lib/supabase';
 import {UserOutlined,CalendarOutlined,EyeOutlined} from '@ant-design/icons';
-import RichTextRenderer from "@/components/richTextRenderer/richTextRenderer";
-import Loading from "@/components/loading-css/loading";
+import RichTextRender from "@/components/common/rich-text-render/RichTextRender";
+import Loading from "@/components/common/loading/loading";
 import "./page.css";
 type Props = {
   params: Promise<{ account: string,id:number }>; //动态路由 [account] 对应的参数
@@ -94,7 +94,7 @@ export default function Article({params}:Props){
             </div>
           </div>
           <div className='content-box w-full pl-12 pr-12' style={{whiteSpace: 'pre-wrap' }}>
-            <RichTextRenderer htmlContent={article?.articles_content?.content||""}></RichTextRenderer>
+            <RichTextRender htmlContent={article?.articles_content?.content||""}></RichTextRender>
           </div>
         </div>
       </div>

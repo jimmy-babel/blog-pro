@@ -6,7 +6,7 @@ import { useJumpAction } from "@/lib/use-helper/base-mixin";
 import Image from "next/image";
 import { UserOutlined, CalendarOutlined, EyeOutlined } from "@ant-design/icons";
 import { PhotoView, PhotoProvider } from "react-photo-view";
-import Loading from "@/components/loading-css/loading";
+import Loading from "@/components/common/loading/loading";
 import "react-photo-view/dist/react-photo-view.css";
 type Props = {
   params: Promise<{ account: string; id: string }>; //动态路由 [account] 对应的参数

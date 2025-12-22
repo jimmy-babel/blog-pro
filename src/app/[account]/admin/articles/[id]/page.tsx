@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { Button,UploadFile } from "antd";
 import { useJumpAction, useCheckUser } from "@/lib/use-helper/base-mixin";
 import { article } from "@/lib/supabase";
-import ImageUploader from "@/components/ImageUploader";
-import AntdSelect from "@/components/custom-antd/Select";
-import Loading from "@/components/loading-css/loading";
+import ImageUploader from "@/components/common/image-upload/ImageUpload";
+import AntdSelect from "@/components/common/custom-antd/Select";
+import Loading from "@/components/common/loading/loading";
 import type { Delta } from "quill";
 interface ImageUploaderRef {
   uploadPendingFiles: () => Promise<Array<UploadFile>>;
@@ -53,7 +53,7 @@ export default function ArticleEdit({ params }: Props) {
   //console.log("PAGE ADMIN ArticleDetail", article);
 
   const loadQuillEditor = async () => {
-    const quillModule = await import("@/components/Quill");
+    const quillModule = await import("@/components/common/quill/Quill");
     setQuillEditor(quillModule.default); // 假设组件默认导出
   };
 
@@ -240,7 +240,7 @@ export default function ArticleEdit({ params }: Props) {
                 isRowSetAllAuto
                 isApiAuto
                 mode="multiple"
-                apiName="/api/admin/get-article-groups"
+                apiName="/api/articles/get-article-groups"
                 apiMethods="GET"
                 apiParams={apiParams}
                 selectData={selectData}

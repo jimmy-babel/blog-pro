@@ -1,6 +1,6 @@
 'use client';
 import React from 'react'
-import Avatar from "@/components/custom-antd/Avatar";
+import Avatar from "@/components/common/custom-antd/Avatar";
 import { BloggerInfo } from "@/types";
 type Props = {
   bloggerInfo: BloggerInfo; 

@@ -1,8 +1,7 @@
 import React from "react";
 import List from "@/app/[account]/articles/components/list";
-// import Loading from "@/components/loading-css/loading";
-import AntdSelect from "@/components/custom-antd/Select";
-import { getArticlesList } from "@/app/api/apis/articles/articles";
+import AntdSelect from "@/components/common/custom-antd/Select";
+import { getArticlesList } from "@/apis/articles/articles";
 import { ResData,ArticlesInfo } from "@/types";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数

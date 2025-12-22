@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useMemo, useEffect } from "react";
 import moment, { Moment } from "moment";
-import OriPop from "@/components/ori-cmpts/ori-pop/OriPop";
+import OriPop from "@/components/common/ori-cmpts/ori-pop/OriPop";
 import { Button,message} from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import {useCheckUser} from "@/lib/use-helper/base-mixin";

@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { Button,UploadFile } from "antd";
 import { useJumpAction,useCheckUser } from "@/lib/use-helper/base-mixin";
 import { life_styles } from "@/lib/supabase";
-import ImageUploader from "@/components/ImageUploader";
-import Cascader from "@/components/custom-antd/Cascader"
-import Loading from "@/components/loading-css/loading";
+import ImageUploader from "@/components/common/image-upload/ImageUpload";
+import Cascader from "@/components/common/custom-antd/Cascader"
+import Loading from "@/components/common/loading/loading";
 
 interface listItem {
   uid: string;

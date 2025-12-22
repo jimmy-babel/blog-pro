@@ -1,9 +1,8 @@
 import React from "react";
 import Banner from "@/components/home/Banner";
 import MoodRecord from "@/components/home/MoodRecord";
-// import Loading from "@/components/loading-css/loading";
 import { ResData, BloggerInfo } from "@/types";
-import { getBloggerInfo } from "@/app/api/apis/common/blogger-info";
+import { getBloggerInfo } from "@/apis/common/blogger-info";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
 };

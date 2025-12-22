@@ -5,9 +5,9 @@ import {useJumpAction,useCheckUser} from "@/lib/use-helper/base-mixin"
 import type { TableColumnsType, TableProps } from 'antd';
 import Image from 'next/image';
 import { Table,Switch,Button,Space } from 'antd';
-import SearchBox from "@/components/SearchBox";
-import AntdSelect from "@/components/custom-antd/Select";
-import Loading from "@/components/loading-css/loading";
+import SearchBox from "@/components/common/search-box/SearchBox";
+import AntdSelect from "@/components/common/custom-antd/Select";
+import Loading from "@/components/common/loading/loading";
 
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
@@ -227,7 +227,7 @@ export default function Articles({params}:Props){
               filterType={filterType}
               isRowSetAllAuto
               isApiAuto
-              apiName="/api/admin/get-article-groups"
+              apiName="/api/articles/get-article-groups"
               apiMethods="GET"
               apiParams={apiParams}
               selectData={selectData}

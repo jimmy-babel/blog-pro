@@ -1,5 +1,5 @@
 // app/components/ServerNav.tsx
-import ClientNav from '@/components/nav';
+import ClientNav from '@/components/common/nav/nav';
 
 // 静态导航列表（服务端预定义，无需客户端计算）
 const staticNavList = [

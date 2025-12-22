@@ -2,7 +2,7 @@
 import { useState,useEffect,Suspense  } from 'react'
 import { useRouter,useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import HeaderContent from '@/components/header-content';
+import HeaderContent from '@/components/auth/header-content';
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Auth() {

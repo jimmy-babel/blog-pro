@@ -1,6 +1,6 @@
-import AntdClientWrapper from "@/components/AntdClientWrapper";
-import ThemeProvider from "@/components/themeProvider/ThemeProvider";
-import ServerNav from "@/components/ServerNav"; // 使用服务端导航组件
+import AntdClientWrapper from "@/components/common/antd-client-wrapper/AntdClientWrapper";
+import ThemeProvider from "@/components/common/theme-provider/ThemeProvider";
+import ServerNav from "@/components/common/server-nav/ServerNav"; // 使用服务端导航组件
 import "./globals.css";
 
 // 如需定义元数据，可在这里添加（服务端组件支持）

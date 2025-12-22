@@ -1,6 +1,5 @@
 import React from "react";
-// import HeaderContent from '@/components/header-content';
-import SetLayout from "@/components/set-layout";
+import SetLayout from "@/components/common/set-layout/set-layout";
 import { AccountProvider } from "@/contexts/AccountContext";
 
 type Props = {

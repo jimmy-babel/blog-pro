@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { life_styles } from "@/lib/supabase";
 import { useJumpAction } from "@/lib/use-helper/base-mixin";
-import PageScroll from "@/components/page-scroll/PageScroll";
+import PageScroll from "@/components/common/page-scroll/PageScroll";
 import Image from "next/image";
 import {LifeStylesInfo,ResData} from "@/types"
 

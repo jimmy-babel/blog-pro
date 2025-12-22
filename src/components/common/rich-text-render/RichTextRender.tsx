@@ -9,7 +9,7 @@ type Props = {
   customStyle?: React.CSSProperties; // 自定义展示样式（如宽度、间距）
 };
 
-export default function RichTextRenderer({ htmlContent, customStyle }: Props) {
+export default function RichTextRender({ htmlContent, customStyle }: Props) {
   // 1. 净化 HTML（核心：过滤恶意脚本、危险属性）
   const sanitizedHtml = DOMPurify.sanitize(htmlContent, {
     // 配置允许的标签（按需调整，仅保留博客展示需要的标签）

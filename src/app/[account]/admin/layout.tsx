@@ -1,4 +1,4 @@
-import SetLayout from "@/components/set-layout";
+import SetLayout from "@/components/common/set-layout/set-layout";
 import Nav from "@/app/[account]/admin/components/nav"
 export default function AdminLayout({
   children,

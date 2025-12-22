@@ -3,7 +3,7 @@ import React, { useState,useEffect, useRef } from "react";
 import { usePathname } from 'next/navigation';
 import {useJumpAction} from "@/lib/use-helper/base-mixin";
 import { useAuth } from "@/contexts/AuthContext";
-import Avatar from "@/components/custom-antd/Avatar";
+import Avatar from "@/components/common/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
 import { MoonOutlined,SunOutlined } from '@ant-design/icons';
 import './nav.css';
