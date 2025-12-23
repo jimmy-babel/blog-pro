@@ -3,7 +3,9 @@ import { useState,useEffect,Suspense  } from 'react'
 import { useRouter,useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import HeaderContent from '@/components/auth/header-content';
-import { useAuth } from "@/contexts/AuthContext";
+// import { useAuth } from "@/contexts/AuthContext";
+import {cookieGet, cookieSet, cookieRemove} from '@/utils/cookies-set';
+import {useAppDispatch} from '@/redux/hooks';
 
 export default function Auth() {
   const searchParams = useSearchParams(); // 获取 URL 查询参数
@@ -17,8 +19,8 @@ export default function Auth() {
   const [inited, setInited] = useState(false);
   const router = useRouter()
   const [fromPath, setFromPath] = useState('');
-  const { updateAuth } = useAuth();
-  
+  // const { updateAuth } = useAuth();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setFromPath(searchParams.get('from') || '');
@@ -42,6 +44,7 @@ export default function Auth() {
           let params = {
             email,
             password,
+            blogger:account
           };
           //console.log("api: login/sign-in", params);
           const response = await fetch(`/api/login/register/sign-in`, {
@@ -52,15 +55,25 @@ export default function Auth() {
             },
           });
           const { data, msg, error } = await response.json();
-          //console.log("api: login/sign-in then", data, msg, error);
+          console.log("api: login/sign-in then", data, msg, error);
           if (error) {
             setMessage(`登录失败: ${msg}`);
             setLoading(false);
           } else {
+            const customData = data?.customData;
+            if(customData){
+              cookieSet("token",customData?.userInfo?.user_token||"");
+              cookieSet("userInfo",customData);
+              dispatch({ type: "user/init", payload:customData||null});
+              // dispatch({ type: "user/setUserInfo", payload:customData?.userInfo||{}});
+              // dispatch({ type: 'user/changeLoginStatus', payload: !!customData?.isLogin });
+              // dispatch({ type: "user/setBloggerInfo", payload:customData?.bloggerInfo||{}});
+              // dispatch({ type: 'user/changeBloggerStatus', payload: !!customData?.isBlogger });
+            }
             setMessage('登录成功！');
             setIsLogin(true);
-            updateAuth();
-            //console.log('登录成功',data);
+            // updateAuth();
+            // console.log('登录成功',data);
             router.push(`${fromPath}`||`/blog/${account}/web`)
           }
         } 

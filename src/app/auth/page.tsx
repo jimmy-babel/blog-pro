@@ -6,11 +6,11 @@ import Auth from './auth';
 const AuthLoading = () => (
   <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50">
     <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mb-4"></div>
-    <p className="text-gray-600">加载登录页面...</p>
+    <p className="text-gray-600">加载中...</p>
   </div>
 );
 
-// 页面主组件（服务器组件，包裹Suspense）
+// PAGE 登录页（服务器组件，包裹Suspense）
 export default function AuthPage() {
   return (
     <Suspense fallback={<AuthLoading />}>

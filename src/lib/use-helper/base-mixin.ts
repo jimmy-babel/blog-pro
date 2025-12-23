@@ -1,31 +1,35 @@
 'use client';
 import { useRouter,usePathname} from "next/navigation"; // 公开路径导入
 import { useRef } from "react";
+
 interface ExtraType {
   type?:string
 }
+// 封装 跳转方法
 export function useJumpAction(){
   const router = useRouter();
   const fromPath = usePathname();
   const jumpAction = (url:string,extra:ExtraType={type:"blog_auto"})=>{
     const account = window.__NEXT_ACCOUNT__||localStorage.getItem('account') || ""
     //console.log('jumpAction',url,fromPath,extra,account);
-    if(extra?.type == 'blog_auto'){
-      router.push(`/${account}/${(url.startsWith('/')?url.slice(1):url)}`);
+    if(extra?.type == 'blog_auto'){ // 跳转自动添加博主前缀
+      router.push(`/${account}${(url.startsWith('/')? url : '/'+url )}`);
     }
-    else if(extra?.type == 'from'){
+    else if(extra?.type == 'from'){ // 跳转并添加来源路径
       router.push(`${url}?from=${encodeURIComponent(fromPath)}`);
     }
-    else{
+    else{ //直接跳转
       router.push(`${url}`);
     }
   }
+  // 封装返回方法
   const backAction = ()=>{
     router.back();
   }
-  return {jumpAction,backAction}
+  return {jumpAction,backAction} //返回:跳转方法、返回方法
 }
 
+// 封装 检测登录状态+返回用户信息
 export function useCheckUser({loginJump=false}:{loginJump?:boolean} = {}){
   const {jumpAction} = useJumpAction();
   const checkUser = async (blogger?:string) => {
@@ -33,12 +37,12 @@ export function useCheckUser({loginJump=false}:{loginJump?:boolean} = {}){
       const account = window.__NEXT_ACCOUNT__||localStorage.getItem('account') || ""
       const response = await fetch(`/api/login/check?blogger=${blogger||account||''}`);
       const {data,msg,error} = await response.json();
-      if (response.ok) {
+      if (response.ok) { // 已登陆
         if(data?.isLogin){
           return {data,msg,error};
         }
       }
-      if(loginJump){
+      if(loginJump){ // 未登录，跳转登录页
         jumpAction('/blog/auth',{type:"from"})
       }
       return Promise.reject({data,msg,error})
@@ -46,7 +50,7 @@ export function useCheckUser({loginJump=false}:{loginJump?:boolean} = {}){
       return Promise.reject(e)
     }
   }
-  return {checkUser};
+  return {checkUser}; //返回:检测登录方法
 }
 
 type UploadType = {
@@ -54,6 +58,7 @@ type UploadType = {
   onUpload?: (props:any)=>void,
   isUploadAuto?: boolean,
 }
+// 封装 选择文件(单文件上传)
 export function useUpload(props:UploadType){
   const {onChange = ()=>{},onUpload = ()=>{},isUploadAuto = false} = props;
   const fileInputRef = useRef<HTMLInputElement>(null); // 用于触发文件选择
@@ -78,7 +83,7 @@ export function useUpload(props:UploadType){
     //console.log('input',input);
     if (!input.files || input.files.length === 0) return;
     //console.log('files',input.files);
-    const file = input.files[0];
+    const file = input.files[0]; // 仅支持单文件上传
     //console.log('file',file);
     // 1. 校验文件
     // if (!file.type.startsWith('image/')) {
@@ -94,7 +99,7 @@ export function useUpload(props:UploadType){
     const formData = new FormData();
     formData.append('file', file);
     //console.log('formData',formData);
-    onChange && onChange(formData)
+    onChange && onChange(formData); //返回FormData出去
     if(isUploadAuto){
       try {
         const response = await fetch('/api/upload', {
@@ -125,10 +130,10 @@ export function useUpload(props:UploadType){
       }
     }
   };
-  return {handleUpload};
+  return {handleUpload}; //返回:选择文件方法
 }
 
-
+// 封装 选择文件(每个文件对应生成临时URL) (多文件上传)
 export function useUploadTemp(){
 // 存储临时URL与File的映射：{ blobUrl: File }
   const tempFileMap = useRef<Map<string, File>>(new Map());
@@ -161,10 +166,10 @@ export function useUploadTemp(){
 
     // 过滤出仍存在映射的临时URL（避免用户删除后仍上传）
     const validEntries = blobUrls
-      .map(blobUrl => ({ blobUrl, file: tempFileMap.current.get(blobUrl) }))
+      .map(blobUrl => ({ blobUrl, file: tempFileMap.current.get(blobUrl) })) // 临时URL 映射 File
       .filter(({ file }) => !!file);
     //console.log('uploadTempImages validEntries',validEntries);
-    if (validEntries.length === 0) return {};
+    if (validEntries.length === 0) return {}; //file列表
 
     // 批量上传
     const uploadPromises = validEntries.map(async ({ blobUrl, file }) => {
@@ -185,6 +190,7 @@ export function useUploadTemp(){
     //console.log('uploadTempImages results',results);
     const urlMap: Record<string,string> = {};
     results.forEach(({ blobUrl, realUrl }) => {
+      //blobUrl 映射 实际URL
       urlMap[blobUrl] = realUrl;
       // 清理映射和临时URL资源
       tempFileMap.current.delete(blobUrl);
@@ -194,5 +200,5 @@ export function useUploadTemp(){
     return urlMap;
   };
 
-  return { selectFiles, uploadTempImages };
+  return { selectFiles, uploadTempImages }; //返回:选择文件方法、将临时图片上传到服务器的方法
 }

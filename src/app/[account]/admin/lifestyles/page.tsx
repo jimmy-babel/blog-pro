@@ -13,6 +13,7 @@ import Cascader from "@/components/common/custom-antd/Cascader";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
 };
+// PAGE ADMIN 生活手记列表
 export default function LifeStyles({ params }: Props) {
   const { account } = React.use(params);
   const [lifestyles, setLifestyles] = useState<life_styles[]>(

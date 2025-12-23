@@ -6,6 +6,7 @@ import { ResData,ArticlesInfo } from "@/types";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
 };
+// PAGE 文章列表
 export default async function Articles({ params }: Props) {
   // const { account } = React.use(params);
   const { account } = await params;

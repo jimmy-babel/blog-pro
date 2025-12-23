@@ -1,6 +1,7 @@
 import AntdClientWrapper from "@/components/common/antd-client-wrapper/AntdClientWrapper";
 import ThemeProvider from "@/components/common/theme-provider/ThemeProvider";
 import ServerNav from "@/components/common/server-nav/ServerNav"; // 使用服务端导航组件
+import ReduxProvider from "@/redux/Provider"; // Redux Provider
 import "./globals.css";
 
 // 如需定义元数据，可在这里添加（服务端组件支持）
@@ -21,13 +22,15 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         {/* 引入客户端组件处理Antd和动态逻辑，服务端仅渲染静态容器 */}
-        <AntdClientWrapper>
-          <ThemeProvider>
-            {/* 使用服务端导航组件（内部包含客户端动态逻辑） */}
-            <ServerNav/> 
-            {children}
-          </ThemeProvider>
-        </AntdClientWrapper>
+        <ReduxProvider>
+          <AntdClientWrapper>
+            <ThemeProvider>
+              {/* 使用服务端导航组件（内部包含客户端动态逻辑） */}
+              <ServerNav/> 
+              {children}
+            </ThemeProvider>
+          </AntdClientWrapper>
+        </ReduxProvider>
       </body>
     </html>
   );

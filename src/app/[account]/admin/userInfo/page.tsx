@@ -21,6 +21,7 @@ interface ImageUploaderRef {
   uploadPendingFiles: () => Promise<Array<UploadFile>>;
 }
 
+// PAGE ADMIN 用户信息
 const UserInfo = (props: Props) => {
   const [bloggerInfo, setBloggerInfo] = useState<Blogger>({});
   const uploadAvatarRef = useRef<ImageUploaderRef>(null);

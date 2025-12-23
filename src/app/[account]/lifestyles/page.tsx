@@ -9,6 +9,7 @@ import {LifeStylesInfo,ResData} from "@/types"
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
 };
+// PAGE 生活手记
 const LifeStyles = async ({ params }: Props) => {
   // const { params } = props;
   // const { account } = React.use(params);

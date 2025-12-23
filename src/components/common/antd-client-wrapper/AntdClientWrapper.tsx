@@ -5,7 +5,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, message } from "antd";
 import "@ant-design/v5-patch-for-react-19";
 import React, { useEffect } from "react";
-import { AuthProvider } from "@/contexts/AuthContext";
+// import { AuthProvider } from "@/contexts/AuthContext";
 // import type { AliasToken } from "antd/es/theme/interface";
 // const zIndexPopup: AliasToken["zIndexPopup"] = 9999;
 
@@ -43,7 +43,9 @@ export default function AntdClientWrapper({ children }: Props) {
   return (
     <AntdRegistry>
       <ConfigProvider theme={customTheme}>
-        <AuthProvider>{children}</AuthProvider>
+          {children}
+        {/* <AuthProvider>
+        </AuthProvider> */}
       </ConfigProvider>
     </AntdRegistry>
   );

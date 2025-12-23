@@ -4,7 +4,8 @@ import moment, { Moment } from "moment";
 import OriPop from "@/components/common/ori-cmpts/ori-pop/OriPop";
 import { Button,message} from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import {useCheckUser} from "@/lib/use-helper/base-mixin";
+// import {useCheckUser} from "@/lib/use-helper/base-mixin";
+import { useAppSelector } from "@/redux/hooks";
 type Props = {};
 
 // 心情类型定义
@@ -105,7 +106,8 @@ const MoodRecord = (props: Props) => {
   const [showMoodPicker, setShowMoodPicker] = useState(false);
   const [curDayData, setCurDayData] = useState<any>({});
   const [moodData, setMoodData] = useState<MoodRecordType>({});
-  const {checkUser} = useCheckUser();
+  // const {checkUser} = useCheckUser();
+  const user = useAppSelector((state) => state.user);
   const [isBlogger,setIsBlogger] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   //console.log("currentDate", currentDate);
@@ -165,15 +167,24 @@ const MoodRecord = (props: Props) => {
     return calendar;
   }, [currentDate]);
 
-  useEffect(() => {
-    checkUser().then((res:any) => {
-      if(res?.data?.isBlogger){
-        setIsBlogger(true);
-        getMoodRecords().then((records) => setMoodRecords(records))
-        // setMoodRecords(sampleMoodRecords);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   checkUser().then((res:any) => {
+  //     if(res?.data?.isBlogger){
+  //       setIsBlogger(true);
+  //       getMoodRecords().then((records) => setMoodRecords(records))
+  //       // setMoodRecords(sampleMoodRecords);
+  //     }
+  //   });
+  // }, []);
+
+  useEffect(()=>{
+    console.log('watch user moodRecord',user);
+    if(user?.isBlogger){
+      setIsBlogger(true);
+      getMoodRecords().then((records) => setMoodRecords(records))
+    }
+  },[user])
+
 
   // 获取某天的心情记录
   const getMoodForDate = (date: string): MoodRecordType | null => {

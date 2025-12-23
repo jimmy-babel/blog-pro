@@ -2,7 +2,8 @@
 import React, { useState,useEffect, useRef } from "react";
 import { usePathname } from 'next/navigation';
 import {useJumpAction} from "@/lib/use-helper/base-mixin";
-import { useAuth } from "@/contexts/AuthContext";
+// import { useAuth } from "@/contexts/AuthContext";
+import { useAppSelector } from "@/redux/hooks";
 import Avatar from "@/components/common/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
 import { MoonOutlined,SunOutlined } from '@ant-design/icons';
@@ -21,7 +22,8 @@ const Nav = ({navList}: Props) => {
   const { resolvedTheme, setTheme } = useTheme();
   const [selectedKeys, setSelectedKeys] = useState<string>(""); 
   const pathname = usePathname();
-  const { isLogin, isBlogger, updateAuth } = useAuth();
+  // const { isLogin, isBlogger, updateAuth } = useAuth();
+  const user = useAppSelector((state) => state.user);
   const [blogger,setBlogger] = useState<string>("");
   useEffect(() => {
     // console.log(pathname,'pathname');
@@ -52,22 +54,33 @@ const Nav = ({navList}: Props) => {
   }, [showBg]);
 
   // 根据登录状态更新导航列表
-  useEffect(() => {
-    //console.log('useAuth watch',isLogin,'isBlogger',isBlogger);
+  // useEffect(() => {
+  //   //console.log('useAuth watch',isLogin,'isBlogger',isBlogger);
+  //   let extra = [];
+  //   if(!isLogin){
+  //     extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
+  //   }
+  //   if(isBlogger){
+  //     extra.push({ key: "admin", name: "后台管理", url: `admin` });
+  //   }
+  //   setList([...(navList || []),...extra]);
+  // }, [navList, isLogin, isBlogger]);
+  
+  // useEffect(() => {
+  //   updateAuth();
+  // }, []);
+
+  useEffect(()=>{
+    console.log('useAppSelector watch',user);
     let extra = [];
-    if(!isLogin){
+    if(!user?.isLogin){
       extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
     }
-    if(isBlogger){
+    if(user?.isBlogger){
       extra.push({ key: "admin", name: "后台管理", url: `admin` });
     }
     setList([...(navList || []),...extra]);
-  }, [navList, isLogin, isBlogger]);
-  
-  useEffect(() => {
-    updateAuth();
-  }, []);
-
+  },[user])
   
   useEffect(() => {
     const handleScroll = () => {

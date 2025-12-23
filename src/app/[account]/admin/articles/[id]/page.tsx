@@ -30,6 +30,7 @@ interface listItem {
 type Props = {
   params: Promise<{ account: string; id: string }>; //动态路由 [account] 对应的参数
 };
+// PAGE ADMIN 文章详情
 export default function ArticleEdit({ params }: Props) {
   const { account, id } = React.use(params);
   const { jumpAction } = useJumpAction();

@@ -88,6 +88,17 @@ export interface ResData<T> {
   msg?: string;
 }
 
+// 请求
+export interface ListResData<T> {
+  code?: number;
+  data?: {
+    list:T[],
+    total:number,
+    hasMore:boolean,
+  };
+  msg?: string;
+}
+
 export enum ApiCode {
   SUCCESS = 1,
   FAIL = -1,

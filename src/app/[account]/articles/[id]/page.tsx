@@ -9,8 +9,8 @@ import "./page.css";
 type Props = {
   params: Promise<{ account: string,id:number }>; //动态路由 [account] 对应的参数
 }
+// PAGE 文章详情
 export default function Article({params}:Props){
-  
   const { account,id } = React.use(params);
   const [article, setArticle] = useState<article>({} as article)
   const [userInfo, setUserInfo] = useState<Blogger>({} as Blogger)

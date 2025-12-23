@@ -11,6 +11,7 @@ import "react-photo-view/dist/react-photo-view.css";
 type Props = {
   params: Promise<{ account: string; id: string }>; //动态路由 [account] 对应的参数
 };
+// PAGE 生活手记详情
 const LifeStyles = (props: Props) => {
   const { params } = props;
   const { account, id } = React.use(params);

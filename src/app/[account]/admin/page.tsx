@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import {useCheckUser} from "@/lib/use-helper/base-mixin"
 import Loading from "@/components/common/loading/loading";
 
-export default function Articles(){
+// PAGE ADMIN 首页
+export default function Admin(){
   const [loading, setLoading] = useState(true)
   //console.log('PAGE ADMIN 首页');
   const {checkUser} = useCheckUser({loginJump:true});

@@ -20,6 +20,7 @@ type Props = {
 interface ImageUploaderRef {
   uploadPendingFiles: () => Promise<Array<UploadFile>>;
 }
+// PAGE ADMIN 生活手记详情
 export default function LifeStylesEdit({ params }: Props) {
   const { account, id } = React.use(params);
   const { jumpAction,backAction } = useJumpAction();

@@ -12,6 +12,7 @@ import Loading from "@/components/common/loading/loading";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
 }
+// PAGE ADMIN 文章列表
 export default function Articles({params}:Props){
   const {account} = React.use(params);
   const [articles, setArticles] = useState<article[]>([] as article[])
