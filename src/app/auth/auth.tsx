@@ -64,6 +64,7 @@ export default function Auth() {
             if(customData){
               cookieSet("token",customData?.userInfo?.user_token||"");
               cookieSet("userInfo",customData);
+              cookieSet("lastDomain",account);
               dispatch({ type: "user/init", payload:customData||null});
               // dispatch({ type: "user/setUserInfo", payload:customData?.userInfo||{}});
               // dispatch({ type: 'user/changeLoginStatus', payload: !!customData?.isLogin });
@@ -73,8 +74,9 @@ export default function Auth() {
             setMessage('登录成功！');
             setIsLogin(true);
             // updateAuth();
-            // console.log('登录成功',data);
-            router.push(`${fromPath}`||`/blog/${account}/web`)
+            
+            // router.push(`${fromPath}`||`/blog/${account}/web`) //返回上一页
+            router.push(`/${account}`)
           }
         } 
         catch (error) {

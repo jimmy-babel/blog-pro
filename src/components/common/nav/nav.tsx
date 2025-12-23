@@ -8,6 +8,8 @@ import Avatar from "@/components/common/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
 import { MoonOutlined,SunOutlined } from '@ant-design/icons';
 import './nav.css';
+import { supabase } from '@/lib/supabase'
+
 type NavItem = { name: string; key: string; url?: string; type?: string };
 type Props = {
   isPlace?:boolean,
@@ -49,6 +51,9 @@ const Nav = ({navList}: Props) => {
     }
     if(user?.isBlogger){
       extra.push({ key: "admin", name: "后台管理", url: `admin` });
+    }
+    if(user?.isLogin){
+      extra.push({ key: "logout", name: "退出登录", url: `/auth`, type: "from" });
     }
     console.log('nav useAppSelector watch',user,navList,extra);
     setList([...(navList || []),...extra]);
@@ -111,6 +116,28 @@ const Nav = ({navList}: Props) => {
       window.removeEventListener('scroll', handleScroll); // 清理事件监听器
     };
   }, [showBg]);
+
+  const menuClick = (item:NavItem)=>{
+    // const jimmy = async ()=>{
+    //   const { data, error } = await supabase.auth.updateUser({
+    //     password: "LoveRui0909" // 需满足密码强度要求
+    //   });
+    //   console.log('res',data,error);
+    //   if (error) {
+    //     console.error("修改失败：", error.message);
+    //   } else {
+    //     console.log("密码修改成功");
+    //   }
+    //   return data;
+    // }
+    // jimmy();
+    // return
+    
+    if(item.key == 'logout'){
+      dispatch({ type: "user/clearUserInfo" });
+    }
+    jumpAction(item.url||"",{type:item.type||"blog_auto"});
+  }
   
   const toggleTheme = (curType:string)=>{
     //console.log('toggleTheme',curType,resolvedTheme);
@@ -128,7 +155,7 @@ const Nav = ({navList}: Props) => {
             {list?.map((item, index) => (
               <div className="px-2.5" key={index}>
                 <div className={`transition-all duration-300 ${selectedKeys == item.key?'scale-[1.2]':''}`}>
-                  <div className={`cursor-pointer anim-hover-y ${selectedKeys == item.key?'text-line':''}`} onClick={()=>jumpAction(item.url||"",{type:item.type||"blog_auto"})}>{item.name}</div>
+                  <div className={`cursor-pointer anim-hover-y ${selectedKeys == item.key?'text-line':''}`} onClick={()=>menuClick(item)}>{item.name}</div>
                 </div>
               </div>
             ))}

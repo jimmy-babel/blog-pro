@@ -1,7 +1,7 @@
 'use client';
 import { useRouter,usePathname} from "next/navigation"; // 公开路径导入
 import { useRef } from "react";
-import { cookieGet } from "@/utils/cookies-set";
+import { cookieGet,cookieSet } from "@/utils/cookies-set";
 interface ExtraType {
   type?:string
 }
@@ -34,16 +34,26 @@ export function useCheckUser({loginJump=false}:{loginJump?:boolean} = {}){
   const {jumpAction} = useJumpAction();
   const checkUser = async (blogger?:string) => {
     try{
+      const account = blogger || window.__NEXT_ACCOUNT__ || localStorage.getItem('account') || ""
       const userInfo = cookieGet('userInfo');
-      console.log('缓存userInfo',userInfo);
-      if(userInfo){
+      const lastDomain = cookieGet('lastDomain');
+      if(userInfo && (lastDomain == account)){
+        console.log('缓存userInfo',userInfo);
         return {data:userInfo}
       }
-      const account = window.__NEXT_ACCOUNT__||localStorage.getItem('account') || ""
-      const response = await fetch(`/api/login/check?blogger=${blogger||account||''}`);
+      const response = await fetch(`/api/login/check?blogger=${account||''}`);
       const {data,msg,error} = await response.json();
       if (response.ok) { // 已登陆
         if(data?.isLogin){
+          if(!lastDomain || lastDomain != account){
+            cookieSet('lastDomain', account||'');
+          }
+          if(data?.userInfo){
+            cookieSet("userInfo",data);
+          }
+          if(data?.userInfo?.user_token){
+            cookieSet("token",data?.userInfo?.user_token||"");
+          }
           return {data,msg,error};
         }
       }

@@ -326,21 +326,21 @@ const MoodRecord = (props: Props) => {
             </div>
             
             {/* 日历头部 */}
-            <div className="flex justify-between items-center mb-4 bg-gray-800 text-white p-3 rounded-lg">
+            <div className="flex justify-between items-center mb-4 bg-gray-800 text-white p-4  pl-5 pr-5 rounded-lg">
               <button
                 onClick={prevMonth}
-                className="text-xl hover:bg-gray-700 cursor-pointer p-2 rounded-full transition-colors"
+                className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
               >
-                &lt;
+                <div className="w-[30%] h-[30%] rotate-[-45deg] ml-1 border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div>
               </button>
               <h3 className="text-xl font-semibold">
                 {currentDate.format("YYYY年MM月")}
               </h3>
               <button
                 onClick={nextMonth}
-                className="text-xl hover:bg-gray-700 cursor-pointer p-2 rounded-full transition-colors"
+                className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
               >
-                &gt;
+                <div className="w-[30%] h-[30%] rotate-[135deg] border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div>
               </button>
             </div>
 
