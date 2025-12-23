@@ -7,7 +7,7 @@ type Props = {
 const ThemeProviderCmpt = ({ children }: Props) => {
   const [isMounted, setIsMounted] = useState(false);
   
-  // 确保在客户端挂载后再渲染主题，避免服务端和客户端不匹配
+  // 确保在客户端挂载后再渲染主题，避免服务端和客户端不匹配造成水合失败
   useEffect(() => {
     setIsMounted(true);
   }, []);

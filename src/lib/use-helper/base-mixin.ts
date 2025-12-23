@@ -1,7 +1,7 @@
 'use client';
 import { useRouter,usePathname} from "next/navigation"; // 公开路径导入
 import { useRef } from "react";
-
+import { cookieGet } from "@/utils/cookies-set";
 interface ExtraType {
   type?:string
 }
@@ -34,6 +34,11 @@ export function useCheckUser({loginJump=false}:{loginJump?:boolean} = {}){
   const {jumpAction} = useJumpAction();
   const checkUser = async (blogger?:string) => {
     try{
+      const userInfo = cookieGet('userInfo');
+      console.log('缓存userInfo',userInfo);
+      if(userInfo){
+        return {data:userInfo}
+      }
       const account = window.__NEXT_ACCOUNT__||localStorage.getItem('account') || ""
       const response = await fetch(`/api/login/check?blogger=${blogger||account||''}`);
       const {data,msg,error} = await response.json();

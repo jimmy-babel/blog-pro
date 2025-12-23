@@ -1,9 +1,9 @@
 'use client';
 import React, { useState,useEffect, useRef } from "react";
 import { usePathname } from 'next/navigation';
-import {useJumpAction} from "@/lib/use-helper/base-mixin";
+import {useJumpAction,useCheckUser} from "@/lib/use-helper/base-mixin";
 // import { useAuth } from "@/contexts/AuthContext";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector,useAppDispatch } from "@/redux/hooks";
 import Avatar from "@/components/common/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
 import { MoonOutlined,SunOutlined } from '@ant-design/icons';
@@ -19,12 +19,58 @@ const Nav = ({navList}: Props) => {
   const [list , setList] = useState<NavItem[]>(navList||[]);
   const showBgRef = useRef(showBg);
   const {jumpAction} = useJumpAction();
+  const {checkUser} = useCheckUser();
   const { resolvedTheme, setTheme } = useTheme();
   const [selectedKeys, setSelectedKeys] = useState<string>(""); 
   const pathname = usePathname();
   // const { isLogin, isBlogger, updateAuth } = useAuth();
   const user = useAppSelector((state) => state.user);
   const [blogger,setBlogger] = useState<string>("");
+  const dispatch = useAppDispatch();
+  console.log('进来 Nav 组件');
+
+  useEffect(() => {
+    setBlogger(window.__NEXT_ACCOUNT__ || "");
+  }, []);
+
+  useEffect(() => {
+    console.log('进来 useEffect checkUser',checkUser);
+    checkUser().then((res) => {
+      if(res?.data){
+        dispatch({ type: "user/init", payload:res?.data});
+      }
+    });
+  }, []);
+  
+  useEffect(()=>{
+    let extra = [];
+    if(!user?.isLogin){
+      extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
+    }
+    if(user?.isBlogger){
+      extra.push({ key: "admin", name: "后台管理", url: `admin` });
+    }
+    console.log('nav useAppSelector watch',user,navList,extra);
+    setList([...(navList || []),...extra]);
+  },[user])
+  
+  // 根据登录状态更新导航列表
+  // useEffect(() => {
+  //   //console.log('useAuth watch',isLogin,'isBlogger',isBlogger);
+  //   let extra = [];
+  //   if(!isLogin){
+  //     extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
+  //   }
+  //   if(isBlogger){
+  //     extra.push({ key: "admin", name: "后台管理", url: `admin` });
+  //   }
+  //   setList([...(navList || []),...extra]);
+  // }, [navList, isLogin, isBlogger]);
+  
+  // useEffect(() => {
+  //   updateAuth();
+  // }, []);
+
   useEffect(() => {
     // console.log(pathname,'pathname');
     if (!pathname) return;
@@ -44,44 +90,11 @@ const Nav = ({navList}: Props) => {
     setSelectedKeys(matchedKey || "");
   }, [pathname,list]);
 
-  useEffect(() => {
-    setBlogger(window.__NEXT_ACCOUNT__ || "");
-  }, []);
-
   // 给scroll闭包函数使用showBgRef.current
   useEffect(() => {
     showBgRef.current = showBg;
   }, [showBg]);
 
-  // 根据登录状态更新导航列表
-  // useEffect(() => {
-  //   //console.log('useAuth watch',isLogin,'isBlogger',isBlogger);
-  //   let extra = [];
-  //   if(!isLogin){
-  //     extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
-  //   }
-  //   if(isBlogger){
-  //     extra.push({ key: "admin", name: "后台管理", url: `admin` });
-  //   }
-  //   setList([...(navList || []),...extra]);
-  // }, [navList, isLogin, isBlogger]);
-  
-  // useEffect(() => {
-  //   updateAuth();
-  // }, []);
-
-  useEffect(()=>{
-    console.log('useAppSelector watch',user);
-    let extra = [];
-    if(!user?.isLogin){
-      extra.push({ key: "login", name: "登录", url: `/auth`, type: "from" });
-    }
-    if(user?.isBlogger){
-      extra.push({ key: "admin", name: "后台管理", url: `admin` });
-    }
-    setList([...(navList || []),...extra]);
-  },[user])
-  
   useEffect(() => {
     const handleScroll = () => {
       const currentShowBg = showBgRef.current;

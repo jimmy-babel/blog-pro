@@ -2,7 +2,12 @@ import cookies from 'js-cookie';
 
 export const cookieGet = (key: string) => {
   if (typeof window === 'undefined') return "";
-  return cookies.get(key);
+  let parseValue = cookies.get(key);
+  if(!parseValue) return "";
+  try{
+    parseValue = JSON.parse(parseValue);
+  }catch(e){}
+  return parseValue;
 };
 
 export const cookieSet = (key: string,value: any) => {
