@@ -340,7 +340,7 @@ const MoodRecord = (props: Props) => {
                 onClick={nextMonth}
                 className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
               >
-                <div className="w-[30%] h-[30%] rotate-[135deg] border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div>
+                <div className="w-[30%] h-[30%] mr-0.5 rotate-[135deg] border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div>
               </button>
             </div>
 

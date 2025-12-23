@@ -22,6 +22,7 @@ interface ImageUploaderRef {
   // clearFiles: () => void; // 新增：清空文件列表方法
 }
 
+
 const ImageUploader = forwardRef<ImageUploaderRef, Props>(
   function ImageUploaderContent( // 具名函数
     { defaultFileList = DEFAULT_FILE_LIST, multiple = false, maxCount = 1, uploadBtnText = "上传图片" },
@@ -227,6 +228,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       if (!file.url && !file.preview && file.originFileObj) {
         file.preview = await getBase64(file.originFileObj as FileType);
       }
+      console.log('预览',file.url);
       setPreviewImage(file.url || (file.preview as string));
       setPreviewOpen(true);
     };
@@ -339,6 +341,8 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
         {/* 预览图片 */}
         {previewImage && (
           <Image
+            width={200}
+            height={200}
             wrapperStyle={{ display: 'none' }}
             preview={{
               visible: previewOpen,
