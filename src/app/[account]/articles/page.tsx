@@ -8,11 +8,18 @@ type Props = {
 };
 // PAGE 文章列表
 export default async function Articles({ params }: Props) {
-  // const { account } = React.use(params);
   const { account } = await params;
   const res : ResData<ArticlesInfo[]> = await getArticlesList({ blogger: account, platform: 'web' });
-  const filterType = "articles";
-  const apiParams = `?blogger=${account}`;
+  
+  // // 优化写法（并行获取）
+  // const paramsPromise = params;
+  // const { account } = await paramsPromise;
+  // const resPromise = getArticlesList({ blogger: account, platform: 'web' });
+  // const res : ResData<ArticlesInfo[]> = await resPromise;
+
+  // const filterType = "articles";
+  // const apiParams = `?blogger=${account}`;
+
   const articles = res.data || [];
   // const [loading, setLoading] = useState(true);
   //console.log("PAGE--Articles", account,articles);

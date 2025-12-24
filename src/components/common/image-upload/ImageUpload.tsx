@@ -282,14 +282,14 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     };
 
     // 预览图片
-    const handlePreview = async (file: UploadFile) => {
-      if (!file.url && !file.preview && file.originFileObj) {
-        file.preview = await getBase64(file.originFileObj as FileType);
-      }
-      console.log("预览", file.url);
-      setPreviewImage(file.url || (file.preview as string));
-      setPreviewOpen(true);
-    };
+    // const handlePreview = async (file: UploadFile) => {
+    //   if (!file.url && !file.preview && file.originFileObj) {
+    //     file.preview = await getBase64(file.originFileObj as FileType);
+    //   }
+    //   console.log("预览", file.url);
+    //   setPreviewImage(file.url || (file.preview as string));
+    //   setPreviewOpen(true);
+    // };
 
     const openPreview = (file: UploadFile) => {
       // if (previewTriggerRef.current) {
@@ -416,25 +416,26 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
                     <div className="w-[102px] h-[102px] p-1.5 box-border border-1 border-gray-300 rounded-[8px]">
                       <div className="relative aspect-square w-full h-full group">
                         <div
-                          className={`hover-box absolute z-1 top-0 right-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.7)] cursor-pointer opacity-0 transition-opacity duration-250 ease-in-out group-hover:opacity-100`}
+                          className={`hover-box gap-2 absolute z-1 top-0 right-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.7)] cursor-pointer opacity-0 transition-opacity duration-250 ease-in-out group-hover:opacity-100`}
                           onClick={(e) => e.stopPropagation()}
                         >
                           <EyeOutlined
                             onClick={() => openPreview(file)}
-                            style={{ color: "#fff" }}
+                            style={{ color: "#fff",fontSize:"18px" }}
                           />
                           <DeleteOutlined
                             onClick={(e) => handleRemove(e, file.uid)}
-                            style={{ color: "#fff" }}
+                            style={{ color: "#fff",fontSize:"18px" }}
                           />
                         </div>
-                        <PhotoView src={file.url}>
+                        <PhotoView 
+                          src={cloudinaryLoader({ src: file.url || file.preview || "", width: 1920, quality: 85 })}
+                        >
                           <Image
                             ref={(el) => {
                               previewTriggerRef.current[file.uid] = el;
                             }}
                             loader={cloudinaryLoader}
-                            // src={(file.url + "?" + (Math.random()*10).toFixed(2)) || file.preview || ''}
                             src={file.url || file.preview || ""}
                             alt={file.name || ""}
                             fill
@@ -455,7 +456,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
         </PhotoProvider>
 
         {/* 预览图片 */}
-        {previewImage && (
+        {/* {previewImage && (
           <AntImage
             width={200}
             height={200}
@@ -467,7 +468,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
             }}
             src={previewImage}
           />
-        )}
+        )} */}
       </>
     );
   }
