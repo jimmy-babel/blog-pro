@@ -126,7 +126,7 @@ const LifeStyles = (props: Props) => {
                           <PhotoView src={item.url}>
                             <Image
                               loader={cloudinaryLoader}
-                              src={item.url || ""}
+                              src={item.url + "?" + (Math.random()*10).toFixed(2) || ""}
                               alt=""
                               fill
                               sizes="160px"

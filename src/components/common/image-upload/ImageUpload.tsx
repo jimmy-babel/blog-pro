@@ -1,20 +1,38 @@
-'use client';
-import { Upload, Button, message, Image, GetProp, UploadFile, UploadProps } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { useEffect, useState, useRef, useImperativeHandle, forwardRef, memo } from 'react';
+"use client";
+import {
+  Upload,
+  Button,
+  message,
+  Image as AntImage,
+  GetProp,
+  UploadFile,
+  UploadProps,
+} from "antd";
+import { DeleteOutlined, PlusOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+  memo,
+} from "react";
+import { PhotoView, PhotoProvider } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
+import Image from "next/image";
 
 type Props = {
   defaultFileList?: Array<UploadFile>;
   // onFinish?: (value: Array<UploadFile>) => void;
   multiple?: boolean; // 新增：是否允许多选，默认false（单选）
   maxCount?: number; // 新增：最大文件数量限制，默认无限制
-  uploadBtnText?:string
+  uploadBtnText?: string;
 };
 
 // 默认值移到组件外部，避免每次渲染创建新数组
 const DEFAULT_FILE_LIST: Array<UploadFile> = [];
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 interface ImageUploaderRef {
   uploadPendingFiles: () => Promise<Array<UploadFile>>;
@@ -22,24 +40,30 @@ interface ImageUploaderRef {
   // clearFiles: () => void; // 新增：清空文件列表方法
 }
 
-
 const ImageUploader = forwardRef<ImageUploaderRef, Props>(
   function ImageUploaderContent( // 具名函数
-    { defaultFileList = DEFAULT_FILE_LIST, multiple = false, maxCount = 1, uploadBtnText = "上传图片" },
+    {
+      defaultFileList = DEFAULT_FILE_LIST,
+      multiple = false,
+      maxCount = 1,
+      uploadBtnText = "上传图片",
+    },
     ref
   ) {
     const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
+    const [previewImage, setPreviewImage] = useState("");
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const pendingFilesRef = useRef<Map<string, File>>(new Map());
+    // const previewTriggerRef = useRef<HTMLImageElement>(null);
+    const previewTriggerRef = useRef<Record<string, HTMLDivElement | null>>({});
 
     // 初始化默认文件列表
     useEffect(() => {
-      const initializedFiles = defaultFileList.map(item => ({
+      const initializedFiles = defaultFileList.map((item) => ({
         uid: `${item.uid || Date.now()}`,
-        name: item.name || '未知文件',
+        name: item.name || "未知文件",
         url: item.url,
-        status: 'done' as const,
+        status: "done" as const,
         percent: 100,
       }));
       setFileList(initializedFiles);
@@ -108,7 +132,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     //     if (!multiple && fileList.length === 0) {
     //       setFileList([]);
     //     }
-        
+
     //   } else if (file.status === 'done') {
     //     // 上传成功
     //     // message.success(`文件 ${file.name} 上传成功`);
@@ -146,27 +170,37 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     };
 
     // 2. 移除 beforeUpload，仅保留 onChange 处理所有逻辑
-    const handleChange: UploadProps['onChange'] = ({ file, fileList }) => {
-      const curFile = fileList.find(item => item.uid === file.uid);
+    const handleChange: UploadProps["onChange"] = ({ file, fileList }) => {
+      const curFile = fileList.find((item) => item.uid === file.uid);
       const originFile = curFile?.originFileObj as File | undefined;
-      
-      if (file.status === 'removed') {
+
+      if (file.status === "removed") {
         pendingFilesRef.current.delete(file.uid);
         setFileList(fileList);
-      }else{
-        if(!originFile){
+      } else {
+        if (!originFile) {
           return;
-        }
-        else if (!validateFile(originFile)) {
+        } else if (!validateFile(originFile)) {
           // 从 fileList 中移除校验失败的文件
-          const filteredList = fileList.filter(f => f.uid !== file.uid);
+          const filteredList = fileList.filter((f) => f.uid !== file.uid);
           setFileList(filteredList);
           return;
-        }else{
+        } else {
           pendingFilesRef.current.set(file.uid, originFile);
           const previewUrl = URL.createObjectURL(originFile);
           // 更新文件列表（添加预览 URL 等信息）
-          setFileList(n=>n.concat([{uid:file.uid,url:previewUrl,name:file.name,percent:0,preview: previewUrl, status: 'done'}]));
+          setFileList((n) =>
+            n.concat([
+              {
+                uid: file.uid,
+                url: previewUrl,
+                name: file.name,
+                percent: 0,
+                preview: previewUrl,
+                status: "done",
+              },
+            ])
+          );
         }
       }
 
@@ -199,9 +233,9 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       //   const previewUrl = URL.createObjectURL(originFile);
 
       //   // 更新文件列表（添加预览 URL 等信息）
-      //   const updatedList = fileList.map(f => 
-      //     f.uid === file.uid 
-      //       ? { ...f, preview: previewUrl, status: 'uploading' as const } 
+      //   const updatedList = fileList.map(f =>
+      //     f.uid === file.uid
+      //       ? { ...f, preview: previewUrl, status: 'uploading' as const }
       //       : f
       //   );
       //   setFileList(updatedList);
@@ -223,14 +257,48 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       // onFinish(trimData(fileList));
     };
 
+    // Cloudinary图片优化loader
+    const cloudinaryLoader = ({
+      src = "",
+      width = 160,
+      quality = 85,
+    }: {
+      src: string;
+      width: number;
+      quality?: number;
+    }) => {
+      // 如果是本地预览URL，直接返回
+      if (src.startsWith("blob:") || src.startsWith("data:")) {
+        return src;
+      }
+      // 提取Cloudinary图片的public_id
+      const publicId = src.split("/").pop();
+      // 拼接Cloudinary变换参数
+      const transformations = ["f_auto", `w_${width}`, `q_${quality}`].join(
+        ","
+      );
+      // 生成最终URL
+      return `https://res.cloudinary.com/dhfjn2vxf/image/upload/${transformations}/${publicId}`;
+    };
+
     // 预览图片
     const handlePreview = async (file: UploadFile) => {
       if (!file.url && !file.preview && file.originFileObj) {
         file.preview = await getBase64(file.originFileObj as FileType);
       }
-      console.log('预览',file.url);
+      console.log("预览", file.url);
       setPreviewImage(file.url || (file.preview as string));
       setPreviewOpen(true);
+    };
+
+    const openPreview = (file: UploadFile) => {
+      // if (previewTriggerRef.current) {
+      //   previewTriggerRef.current.click(); // 核心：模拟点击触发预览
+      // }
+      const targetRef = previewTriggerRef.current[file.uid];
+      if (targetRef) {
+        targetRef.click(); // 模拟点击，触发该file的预览
+      }
     };
 
     // 生成base64预览
@@ -252,39 +320,39 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       // 批量上传
       const uploadPromises = pendingFiles.map(async ([uid, file]) => {
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append("file", file);
 
-        const response = await fetch('/api/upload', {
-          method: 'POST',
+        const response = await fetch("/api/upload", {
+          method: "POST",
           body: formData,
         });
 
         if (!response.ok) throw new Error(`文件 ${file.name} 上传失败`);
         const result = await response.json();
-        
+
         return {
           uid,
           name: file.name,
           url: result.data.url,
-          status: 'done' as const,
+          status: "done" as const,
           percent: 100,
         };
       });
 
       try {
         const uploadedFiles = await Promise.all(uploadPromises);
-        
-        const updatedFileList = fileList.map(file => {
-          const uploaded = uploadedFiles.find(f => f.uid === file.uid);
+
+        const updatedFileList = fileList.map((file) => {
+          const uploaded = uploadedFiles.find((f) => f.uid === file.uid);
           return uploaded || file;
         });
-        
+
         setFileList(updatedFileList);
         pendingFilesRef.current.clear();
         return updatedFileList;
       } catch (error) {
         //console.error('上传失败：', error);
-        message.error('文件上传失败，请重试');
+        message.error("文件上传失败，请重试");
         throw error;
       }
     };
@@ -314,7 +382,8 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     }));
 
     // 上传按钮显示逻辑：单选且有文件时隐藏，多选/未达上限时显示
-    const showUploadBtn = !isMaxReached() && (multiple || fileList.length === 0);
+    const showUploadBtn =
+      !isMaxReached() && (multiple || fileList.length === 0);
 
     const UploadBtn = (
       <div>
@@ -323,31 +392,78 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       </div>
     );
 
+    const handleRemove = (e: React.MouseEvent, uid: string) => {
+      e.stopPropagation();
+      setFileList(fileList.filter((file) => file.uid !== uid));
+    };
+
     return (
       <>
-        <Upload
-          beforeUpload={()=>false}
-          onChange={handleChange}
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={handlePreview}
-          showUploadList={{ showRemoveIcon: true, showPreviewIcon: true }}
-          multiple={multiple} // 绑定多选属性
-          // disabled={isMaxReached()} // 达到上限时禁用上传
-        >
-          {showUploadBtn ? UploadBtn : null}
-        </Upload>
+        <PhotoProvider loop={true} maskOpacity={0.9}>
+          <Upload
+            beforeUpload={() => false}
+            onChange={handleChange}
+            listType="picture-card"
+            fileList={fileList}
+            // onPreview={handlePreview}
+            showUploadList={{ showRemoveIcon: true, showPreviewIcon: false }} // 隐藏默认预览图标
+            multiple={multiple}
+            itemRender={(originNode, file) => {
+              // 自定义图片渲染
+              if (file.status === "done" || file.status === "uploading") {
+                return (
+                  <div className="ant-upload-list-item-card-cover">
+                    <div className="w-[102px] h-[102px] p-1.5 box-border border-1 border-gray-300 rounded-[8px]">
+                      <div className="relative aspect-square w-full h-full group">
+                        <div
+                          className={`hover-box absolute z-1 top-0 right-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.7)] cursor-pointer opacity-0 transition-opacity duration-250 ease-in-out group-hover:opacity-100`}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <EyeOutlined
+                            onClick={() => openPreview(file)}
+                            style={{ color: "#fff" }}
+                          />
+                          <DeleteOutlined
+                            onClick={(e) => handleRemove(e, file.uid)}
+                            style={{ color: "#fff" }}
+                          />
+                        </div>
+                        <PhotoView src={file.url}>
+                          <Image
+                            ref={(el) => {
+                              previewTriggerRef.current[file.uid] = el;
+                            }}
+                            loader={cloudinaryLoader}
+                            // src={(file.url + "?" + (Math.random()*10).toFixed(2)) || file.preview || ''}
+                            src={file.url || file.preview || ""}
+                            alt={file.name || ""}
+                            fill
+                            sizes="160px"
+                            className="w-full h-full object-cover"
+                          />
+                        </PhotoView>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+              return originNode;
+            }}
+          >
+            {showUploadBtn ? UploadBtn : null}
+          </Upload>
+        </PhotoProvider>
 
         {/* 预览图片 */}
         {previewImage && (
-          <Image
+          <AntImage
             width={200}
             height={200}
-            wrapperStyle={{ display: 'none' }}
+            wrapperStyle={{ display: "none" }}
             preview={{
               visible: previewOpen,
               onVisibleChange: (visible) => setPreviewOpen(visible),
-              afterOpenChange: (visible) => !visible && setPreviewImage(''),
+              afterOpenChange: (visible) => !visible && setPreviewImage(""),
             }}
             src={previewImage}
           />
@@ -356,5 +472,5 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     );
   }
 );
-ImageUploader.displayName = 'ImageUploader';
+ImageUploader.displayName = "ImageUploader";
 export default memo(ImageUploader);
