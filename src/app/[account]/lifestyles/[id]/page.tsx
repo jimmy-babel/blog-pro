@@ -106,7 +106,7 @@ const LifeStyles = (props: Props) => {
                     <div className="list anim-hover-scale-sm rounded-2xl box-shadow-reverse text-2xs  cursor-pointer">
                       <div className="album-box">
                         <div className="cover-box aspect-square relative">
-                          <PhotoView src={item.url}>
+                          <PhotoView src={ImageLoader.cloudinary({ src: item.url || "", width: 1920})}>
                             <Image
                               loader={ImageLoader.cloudinary}
                               src={item.url || ""}
