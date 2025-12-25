@@ -6,7 +6,7 @@ import {
   ReadOutlined,
   SunOutlined,
   UserOutlined,
-  
+  HomeOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
@@ -19,6 +19,7 @@ type Props = {}
 type MenuItem = Required<MenuProps>['items'][number];
 
 const items: MenuItem[] = [
+  { key: 'admin', icon: <HomeOutlined style={{ fontSize: '18px'}}  />, label: '首页' },
   { key: 'admin/userInfo', icon: <UserOutlined style={{ fontSize: '18px'}}  />, label: '我的信息管理' },
   { key: 'admin/articles', icon: <ReadOutlined style={{ fontSize: '18px'}} />, label: '博客文章管理' },
   { key: 'admin/lifestyles', icon: <SunOutlined style={{ fontSize: '18px'}} />, label: '生活手记管理' },
@@ -35,13 +36,20 @@ export default function Nav(props: Props){
     checkUser({loginJump:true})
   }, []);
   useEffect(() => {
-    //console.log(pathname,'pathname');
+    console.log(pathname,'pathname');
     if (!pathname) return;
     // 匹配规则：路由包含Menu的key（处理路由带后缀的情况，如 /admin/articles/1 也高亮 admin/articles）
-    const matchedKey = (items.find((item:MenuItem) => 
-      pathname.includes((item && item.key) as string)
+    const matchedKey = (items.find((item:MenuItem) => {
+      
+      if(item && item.key == 'admin' && pathname?.split('/').length == 3){
+        return true;
+      }else if(item && item.key != 'admin'){
+        return pathname.includes((item && item.key) as string)
+      }
+      return false;
+    }
     )?.key) as string | undefined;
-    //console.log('matchedKey',matchedKey);
+    console.log('matchedKey',matchedKey);
     setSelectedKeys(matchedKey ? [matchedKey] : []);
   }, [pathname]);
   // const toggleCollapsed = () => {

@@ -7,6 +7,8 @@ import { useJumpAction } from "@/lib/hooks/base-hooks";
 import { article } from "@/supabase/supabase";
 import AntdSelect from "@/components/common/custom-antd/Select";
 import type { Delta } from "quill";
+import Loading from "@/components/common/loading/loading";
+
 // interface ImageUploaderRef {
 //   uploadPendingFiles: () => Promise<Array<UploadFile>>;
 // }
@@ -145,6 +147,7 @@ export default function ArticleEdit({ params }: Props) {
 
   return (
     <div className="bg-gray-50 h-full overflow-y-scroll">
+      {loading && <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><Loading></Loading></div>}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
@@ -300,7 +303,8 @@ export default function ArticleEdit({ params }: Props) {
                 disabled={loading}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {article.published ? "发布文章" : "保存草稿"}
+                保存
+                {/* {article.published ? "发布文章" : "保存草稿"} */}
               </Button>
             </div>
           </form>

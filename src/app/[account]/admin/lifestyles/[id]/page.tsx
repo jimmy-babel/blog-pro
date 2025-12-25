@@ -6,7 +6,7 @@ import { useJumpAction } from "@/lib/hooks/base-hooks";
 import { life_styles } from "@/supabase/supabase";
 import ImageUploader from "@/components/common/image-upload/ImageUpload";
 import Cascader from "@/components/common/custom-antd/Cascader"
-
+import Loading from "@/components/common/loading/loading";
 interface listItem {
   uid: string;
   name: string;
@@ -107,11 +107,11 @@ export default function LifeStylesEdit({ params }: Props) {
       const { data, msg, error } = await response.json();
       //console.log("api: admin/lifestyles-edit then", data, msg, error);
       message.success(msg||"保存成功");
-      // if (data > 0) {
-      //   setTimeout(() => {
-      //     jumpAction("admin/lifestyles");
-      //   }, 500);
-      // }
+      if (Number(id) == 0 && data > 0) {
+        setTimeout(() => {
+          backAction();
+        }, 500);
+      }
     } catch (error) {
       message.error(`保存失败: ${error}`);
     } finally {
@@ -121,6 +121,7 @@ export default function LifeStylesEdit({ params }: Props) {
 
   return (
     <div className="bg-gray-50 h-full overflow-y-scroll">
+      {loading && <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><Loading></Loading></div>}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
@@ -276,7 +277,8 @@ export default function LifeStylesEdit({ params }: Props) {
                 disabled={loading}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {lifestyles.published ? "发布手记": "保存草稿"}
+                保存
+                {/* {lifestyles.published ? "发布手记": "保存草稿"} */}
                 {/* {loading
                   ? "保存中..."
                   : lifestyles.published

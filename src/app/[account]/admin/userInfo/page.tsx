@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Card, Button, UploadFile, message } from "antd";
 import ImageUploader from "@/components/common/image-upload/ImageUpload";
+import Loading from "@/components/common/loading/loading";
 
 type Props = {};
 type Blogger = {
@@ -26,7 +27,7 @@ const UserInfo = (props: Props) => {
   const [bloggerInfo, setBloggerInfo] = useState<Blogger>({});
   const uploadAvatarRef = useRef<ImageUploaderRef>(null);
   const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //console.log("提交表单数据:", bloggerInfo);
@@ -56,6 +57,9 @@ const UserInfo = (props: Props) => {
       }
       setBloggerInfo((data?.data || {}) as Blogger);
     } catch (error) {
+      //console.error("获取博主信息时出错:", error);
+    } finally {
+      setLoading(false);
     }
   }
   async function updateInfo() {
@@ -82,6 +86,7 @@ const UserInfo = (props: Props) => {
   }
   return (
     <div className="user-info-box">
+      {loading && <div className="absolute z-1 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"><Loading></Loading></div>}
       <form onSubmit={handleSubmit} className="p-10">
         <div className="gap-y-8 flex flex-col">
           <Card
