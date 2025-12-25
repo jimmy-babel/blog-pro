@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/supabase/supabase";
 import dayjs from "dayjs";
 import { ArticlesInfo, ResData, FAILRES, SUCCESSRES } from "@/types";
 interface Props {
@@ -90,7 +90,7 @@ export async function getArticlesList(
           updated_at: dayjs(article.updated_at).format("YYYY-MM-DD HH:mm:ss"),
         };
       }) || [];
-    console.log("-----------API getArticlesList", result);
+    // console.log("-----------API getArticlesList", result);
     return { ...SUCCESSRES.ARRAY, data: result || [] };
   } catch (error) {
     //console.error("API getArticlesList", error);

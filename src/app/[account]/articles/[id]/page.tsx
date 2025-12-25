@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import { useEffect, useState } from 'react'
-import {article,Blogger} from '@/lib/supabase';
+import {article,Blogger} from '@/supabase/supabase';
 import {UserOutlined,CalendarOutlined,EyeOutlined} from '@ant-design/icons';
 import RichTextRender from "@/components/common/rich-text-render/RichTextRender";
 import Loading from "@/components/common/loading/loading";

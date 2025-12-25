@@ -18,7 +18,7 @@ export const cookieSet = (key: string,value: any) => {
   }else{
     parseValue = value;
   }
-  console.log('cookieSet',key, parseValue);
+  // console.log('cookieSet',key, parseValue);
   cookies.set(key, parseValue, { expires: 7 });
 };
 

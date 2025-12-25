@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/supabase/supabase';
 import { BloggerInfo,ResData,FAILRES,SUCCESSRES} from '@/types';
 
 // 抽离获取博主信息的核心逻辑

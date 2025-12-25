@@ -4,7 +4,7 @@ import { useRouter,useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import HeaderContent from '@/components/auth/header-content';
 // import { useAuth } from "@/contexts/AuthContext";
-import {cookieGet, cookieSet, cookieRemove} from '@/utils/cookies-set';
+import {cookieSet} from '@/utils/cookies-set';
 import {useAppDispatch} from '@/redux/hooks';
 
 export default function Auth() {
@@ -18,12 +18,12 @@ export default function Auth() {
   const [account, setAccount] = useState("");
   const [inited, setInited] = useState(false);
   const router = useRouter()
-  const [fromPath, setFromPath] = useState('');
+  // const [fromPath, setFromPath] = useState('');
   // const { updateAuth } = useAuth();
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setFromPath(searchParams.get('from') || '');
+      // setFromPath(searchParams.get('from') || '');
       const nextAccount = window.__NEXT_ACCOUNT__ || localStorage.getItem('account') || '';
       setAccount(nextAccount);
       setInited(true);
@@ -55,7 +55,7 @@ export default function Auth() {
             },
           });
           const { data, msg, error } = await response.json();
-          console.log("api: login/sign-in then", data, msg, error);
+          // console.log("api: login/sign-in then", data, msg, error);
           if (error) {
             setMessage(`登录失败: ${msg}`);
             setLoading(false);
@@ -66,10 +66,6 @@ export default function Auth() {
               cookieSet("userInfo",customData);
               cookieSet("lastDomain",account);
               dispatch({ type: "user/init", payload:customData||null});
-              // dispatch({ type: "user/setUserInfo", payload:customData?.userInfo||{}});
-              // dispatch({ type: 'user/changeLoginStatus', payload: !!customData?.isLogin });
-              // dispatch({ type: "user/setBloggerInfo", payload:customData?.bloggerInfo||{}});
-              // dispatch({ type: 'user/changeBloggerStatus', payload: !!customData?.isBlogger });
             }
             setMessage('登录成功！');
             setIsLogin(true);

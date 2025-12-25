@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/supabase/supabase";
 import { NextResponse } from "next/server";
 import dayjs from "dayjs";
 

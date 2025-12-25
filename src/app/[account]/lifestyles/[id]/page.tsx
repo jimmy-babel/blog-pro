@@ -1,8 +1,8 @@
 "use client";
 // import  from 'react';
 import React, { useEffect, useState } from "react";
-import { life_styles, Blogger } from "@/lib/supabase";
-import { useJumpAction } from "@/lib/use-helper/base-mixin";
+import { life_styles, Blogger } from "@/supabase/supabase";
+import { ImageLoader } from "@/lib/mixins/base-mixin";
 import Image from "next/image";
 import { UserOutlined, CalendarOutlined, EyeOutlined } from "@ant-design/icons";
 import { PhotoView, PhotoProvider } from "react-photo-view";
@@ -60,23 +60,6 @@ const LifeStyles = (props: Props) => {
       setLoading(false);
     }
   };
-
-  const cloudinaryLoader = ({
-    src = "",
-    width = 110,
-    quality = 85,
-  }: {
-    src: string;
-    width: number;
-    quality?: number;
-  }) => {
-    // 提取Cloudinary图片的public_id（即路径中最后的文件名部分）
-    const publicId = src.split("/").pop();
-    // 拼接Cloudinary支持的变换参数（路径格式）
-    const transformations = ["f_auto", `w_${width}`, `q_${quality}`].join(",");
-    // 生成最终URL
-    return `https://res.cloudinary.com/dhfjn2vxf/image/upload/${transformations}/${publicId}`;
-  };
   if (loading) {
     return (
       <Loading></Loading>
@@ -125,7 +108,7 @@ const LifeStyles = (props: Props) => {
                         <div className="cover-box aspect-square relative">
                           <PhotoView src={item.url}>
                             <Image
-                              loader={cloudinaryLoader}
+                              loader={ImageLoader.cloudinary}
                               src={item.url + "?" + (Math.random()*10).toFixed(2) || ""}
                               alt=""
                               fill

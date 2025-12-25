@@ -26,6 +26,7 @@ const UserInfo = (props: Props) => {
   const [bloggerInfo, setBloggerInfo] = useState<Blogger>({});
   const uploadAvatarRef = useRef<ImageUploaderRef>(null);
   const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
+  const [loading, setLoading] = useState(false);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //console.log("提交表单数据:", bloggerInfo);
@@ -53,14 +54,13 @@ const UserInfo = (props: Props) => {
           },
         ]);
       }
-      //console.log("获取博主信息:", data);
       setBloggerInfo((data?.data || {}) as Blogger);
     } catch (error) {
-      //console.error("获取博主信息时出错:", error);
     }
   }
   async function updateInfo() {
     try {
+      setLoading(true);
       const uploadAvatar = await uploadAvatarRef.current?.uploadPendingFiles();
       const res = await fetch(`/api/blogger/blogger-info-edit`, {
         method: "POST",
@@ -72,10 +72,12 @@ const UserInfo = (props: Props) => {
       });
       const {msg} = await res.json();
       //console.log("更新成功:", data);
-      message.success(msg || "更新成功");
+      message.success(msg || "保存成功");
     } catch (error) {
       //console.error("更新博主信息时出错:", error);
-      message.error("更新失败");
+      message.error("保存失败");
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -225,6 +227,8 @@ const UserInfo = (props: Props) => {
 
           <div className="flex justify-end">
             <Button
+              loading={loading}
+              disabled={loading}
               type="primary"
               htmlType="submit"
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"

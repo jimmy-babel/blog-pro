@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/supabase/supabase';
 import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   try {
@@ -20,11 +20,11 @@ export async function POST(req: Request) {
     if (error) {
       throw error;
     }
-    return NextResponse.json({ data, msg: '更新成功' }, { status: 200 });
+    return NextResponse.json({ data, msg: '保存成功' }, { status: 200 });
 
 
   } catch (error) {
-    //console.error('更新博主信息时出错:', error);
+    //console.error('保存博主信息时出错:', error);
     return NextResponse.json({ msg: '服务器内部错误',error }, { status: 500 });
   }
 }

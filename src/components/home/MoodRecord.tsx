@@ -178,7 +178,7 @@ const MoodRecord = (props: Props) => {
   // }, []);
 
   useEffect(()=>{
-    console.log('watch user moodRecord',user);
+    // console.log('watch user moodRecord',user);
     if(user?.isBlogger){
       setIsBlogger(true);
       getMoodRecords().then((records) => setMoodRecords(records))

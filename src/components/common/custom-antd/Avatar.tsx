@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // import { UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
-import { Blogger } from '@/lib/supabase';
+import { Blogger } from '@/supabase/supabase';
 
 type Props = {
   size?:number | 'large' | 'small',

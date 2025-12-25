@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useRef, forwardRef, useImperativeHandle, useState, memo } from 'react';
-import {useUploadTemp} from "@/lib/use-helper/base-mixin";
+import {useUploadTemp} from "@/lib/hooks/upload-hooks";
 import Quill from 'quill';
 import type { Blot } from 'parchment';
 

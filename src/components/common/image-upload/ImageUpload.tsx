@@ -20,6 +20,7 @@ import {
 import { PhotoView, PhotoProvider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import Image from "next/image";
+import { ImageLoader } from "@/lib/mixins/base-mixin";
 
 type Props = {
   defaultFileList?: Array<UploadFile>;
@@ -257,29 +258,6 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       // onFinish(trimData(fileList));
     };
 
-    // Cloudinary图片优化loader
-    const cloudinaryLoader = ({
-      src = "",
-      width = 160,
-      quality = 85,
-    }: {
-      src: string;
-      width: number;
-      quality?: number;
-    }) => {
-      // 如果是本地预览URL，直接返回
-      if (src.startsWith("blob:") || src.startsWith("data:")) {
-        return src;
-      }
-      // 提取Cloudinary图片的public_id
-      const publicId = src.split("/").pop();
-      // 拼接Cloudinary变换参数
-      const transformations = ["f_auto", `w_${width}`, `q_${quality}`].join(
-        ","
-      );
-      // 生成最终URL
-      return `https://res.cloudinary.com/dhfjn2vxf/image/upload/${transformations}/${publicId}`;
-    };
 
     // 预览图片
     // const handlePreview = async (file: UploadFile) => {
@@ -429,13 +407,13 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
                           />
                         </div>
                         <PhotoView 
-                          src={cloudinaryLoader({ src: file.url || file.preview || "", width: 1920, quality: 85 })}
+                          src={ImageLoader.cloudinary({ src: file.url || file.preview || "", width: 1920})}
                         >
                           <Image
                             ref={(el) => {
                               previewTriggerRef.current[file.uid] = el;
                             }}
-                            loader={cloudinaryLoader}
+                            loader={ImageLoader.cloudinary}
                             src={file.url || file.preview || ""}
                             alt={file.name || ""}
                             fill

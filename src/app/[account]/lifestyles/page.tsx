@@ -1,6 +1,6 @@
 // "use client";
 // import React, { useEffect, useState } from "react";
-import { life_styles } from "@/lib/supabase";
+import { life_styles } from "@/supabase/supabase";
 import Loading from "@/components/common/loading/loading";
 import Cascader from "@/components/common/custom-antd/Cascader";
 import List from "@/app/[account]/lifestyles/components/list";

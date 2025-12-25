@@ -10,8 +10,10 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
-import {useJumpAction} from "@/lib/use-helper/base-mixin";
+import {useJumpAction} from "@/lib/hooks/base-hooks";
 import { usePathname } from 'next/navigation';
+import { useCheckUser } from "@/lib/hooks/base-hooks";
+
 import "./nav.css"
 type Props = {}
 type MenuItem = Required<MenuProps>['items'][number];
@@ -22,10 +24,16 @@ const items: MenuItem[] = [
   { key: 'admin/lifestyles', icon: <SunOutlined style={{ fontSize: '18px'}} />, label: '生活手记管理' },
 ];
 export default function Nav(props: Props){
+  console.log("admin nav");
   // const [collapsed, setCollapsed] = useState(false);
   const {jumpAction} = useJumpAction();
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const pathname = usePathname();
+  const {checkUser} = useCheckUser();
+  useEffect(() => {
+    // console.log('进来 useEffect checkUser',checkUser);
+    checkUser({loginJump:true})
+  }, []);
   useEffect(() => {
     //console.log(pathname,'pathname');
     if (!pathname) return;

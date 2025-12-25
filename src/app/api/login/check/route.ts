@@ -62,7 +62,7 @@ export async function GET(req: Request) {
     // }
     let user = data?.user;
     if (user) {
-      console.log('supabase.auth.getUser1',user);
+      // console.log('supabase.auth.getUser1',user);
       // 获取用户配置信息
       const { data: userInfoArr , error } = await supabase
         .from('users')
@@ -80,7 +80,7 @@ export async function GET(req: Request) {
       }
       return NextResponse.json({ data: { isLogin: true, isBlogger:!!(blogger == bloggerInfo?.domain),userInfo,bloggerInfo } }, { status: 200 });
     } else {
-      console.log('supabase.auth.getUser2',user);
+      // console.log('supabase.auth.getUser2',user);
       //console.log('getUser 没有登录');
       return NextResponse.json({ data: { isLogin: false }, error:supabaseError }, { status: 200 });
     }

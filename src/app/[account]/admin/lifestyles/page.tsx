@@ -1,15 +1,15 @@
 "use client";
 import React from "react";
 import { useEffect, useState, useRef } from "react";
-import { life_styles } from "@/lib/supabase";
-import { useJumpAction, useCheckUser } from "@/lib/use-helper/base-mixin";
+import { life_styles } from "@/supabase/supabase";
+import { useJumpAction, useCheckUser } from "@/lib/hooks/base-hooks";
 import type { TableColumnsType, TableProps } from "antd";
 import Image from "next/image";
 import { Table, Switch, Button, Space } from "antd";
 import SearchBox from "@/components/common/search-box/SearchBox";
 import Loading from "@/components/common/loading/loading";
 import Cascader from "@/components/common/custom-antd/Cascader";
-
+import { ImageLoader } from "@/lib/mixins/base-mixin";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
 };
@@ -21,12 +21,10 @@ export default function LifeStyles({ params }: Props) {
   );
   const [loading, setLoading] = useState(true);
   const { jumpAction } = useJumpAction();
-  const { checkUser } = useCheckUser({ loginJump: true });
   const [searchText, setSearchText] = useState<string>("");
   const [apiParams, setApiParams] = useState<any>(null);
   const [setType, setSetType] = useState<"lifestyles" | undefined>(undefined);
   const [selectData, setSelectData] = useState<number[]>([]);
-  const [userInfo, setUserInfo] = useState<any>(null);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [tableHeight, setTableHeight] = useState(400);
 
@@ -34,23 +32,6 @@ export default function LifeStyles({ params }: Props) {
   const onChange = (id:number,checked: boolean) => {
     //console.log(`switch to ${checked}`);
     updateInfo(id,checked);
-  };
-  // 自定义Cloudinary Loader
-  const cloudinaryLoader = ({
-    src = "",
-    width = 110,
-    quality = 100,
-  }: {
-    src: string;
-    width: number;
-    quality?: number;
-  }) => {
-    // 提取Cloudinary图片的public_id（即路径中最后的文件名部分）
-    const publicId = src.split("/").pop();
-    // 拼接Cloudinary支持的变换参数（路径格式）
-    const transformations = ["f_auto", `w_${width}`, `q_${quality}`].join(",");
-    // 生成最终URL
-    return `https://res.cloudinary.com/dhfjn2vxf/image/upload/${transformations}/${publicId}`;
   };
   
   async function updateInfo(id:number,published:boolean){
@@ -88,7 +69,7 @@ export default function LifeStyles({ params }: Props) {
       render: (row: life_styles) => (
         <div>
           <Image
-            loader={cloudinaryLoader}
+            loader={ImageLoader.cloudinary}
             src={row.cover_img || ""}
             alt="COVER"
             width={110}
@@ -155,34 +136,14 @@ export default function LifeStyles({ params }: Props) {
   ];
   //console.log("PAGE ADMIN lifestyles", account);
 
-  // 查询登录状态+拿生活手记列表数据
   useEffect(() => {
-    let mounted = true;
-    const init = async () => {
-      try {
-        const res = await checkUser();
-        if (!mounted) return;
-        setUserInfo(res.data?.userInfo);
-      } catch (error) {
-        //console.error("初始化时出错:", error);
-      }
-    };
-    init();
-    return () => {
-      //console.log("销毁");
-      mounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!userInfo) return;
-    setApiParams(`?userId=${userInfo?.id}&search=${searchText}`);
+    setApiParams(`?blogger=${account}&search=${searchText}`);
     setSetType("lifestyles");
     const loadData = async () => {
       await fetchlifeStylesList();
     };
     loadData();
-  }, [userInfo]);
+  }, []);
 
   // 监听容器高度变化，更新表格高度
   const updateTableHeight = () => {
@@ -223,13 +184,10 @@ export default function LifeStyles({ params }: Props) {
 
   // 获取生活手记数据并关联作者信息
   const fetchlifeStylesList = async () => {
-    if(!userInfo?.id) return;
     try {
       //console.log("api: get-life_styles-list", searchText, userInfo.id);
       const response = await fetch(
-        `/api/lifestyles/get-lifestyles-list?blogger=${account}&userId=${
-          userInfo.id
-        }&search=${searchText}&labelId=${selectData.join(",")}`
+        `/api/lifestyles/get-lifestyles-list?blogger=${account}&search=${searchText}&labelId=${selectData.join(",")}`
       );
 
       const result = await response.json();
@@ -251,6 +209,7 @@ export default function LifeStyles({ params }: Props) {
   useEffect(() => {
     fetchlifeStylesList();
   }, [selectData]);
+  
   if (loading) {
     return <Loading></Loading>;
   }
@@ -291,6 +250,7 @@ export default function LifeStyles({ params }: Props) {
       </div>
       <div className="flex-1 overflow-hidden min-h-0" ref={tableContainerRef}>
         <Table<life_styles>
+          // loading={loading}
           className="h-full"
           scroll={{ y: tableHeight }}
           rowKey="id"

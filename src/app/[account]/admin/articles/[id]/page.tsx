@@ -3,15 +3,19 @@ import { useRef, useState, useEffect } from "react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Button,UploadFile } from "antd";
-import { useJumpAction, useCheckUser } from "@/lib/use-helper/base-mixin";
-import { article } from "@/lib/supabase";
-import ImageUploader from "@/components/common/image-upload/ImageUpload";
+import { useJumpAction } from "@/lib/hooks/base-hooks";
+import { article } from "@/supabase/supabase";
 import AntdSelect from "@/components/common/custom-antd/Select";
-import Loading from "@/components/common/loading/loading";
 import type { Delta } from "quill";
-interface ImageUploaderRef {
-  uploadPendingFiles: () => Promise<Array<UploadFile>>;
-}
+// interface ImageUploaderRef {
+//   uploadPendingFiles: () => Promise<Array<UploadFile>>;
+// }
+// interface listItem {
+//   uid: string;
+//   name: string;
+//   url?: string;
+// }
+
 interface QuillEditorRef {
   // 获取 Delta 格式内容（推荐）
   getDeltaContent: () => Delta | null;
@@ -22,79 +26,47 @@ interface QuillEditorRef {
 
   tempUrlsUpload: () => any;
 }
-interface listItem {
-  uid: string;
-  name: string;
-  url?: string;
-}
 type Props = {
   params: Promise<{ account: string; id: string }>; //动态路由 [account] 对应的参数
 };
+
 // PAGE ADMIN 文章详情
 export default function ArticleEdit({ params }: Props) {
   const { account, id } = React.use(params);
   const { jumpAction } = useJumpAction();
-  const { checkUser } = useCheckUser({ loginJump: true });
   const [article, setArticle] = useState<article>({} as article);
   const [loading, setLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState<any>(null);
   const [message, setMessage] = useState("");
   const router = useRouter();
   const editorRef = useRef<QuillEditorRef>(null);
-  const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
-  const [QuillEditor, setQuillEditor] =
-    useState<React.ComponentType<any> | null>(null);
+  const [QuillEditor, setQuillEditor] = useState<React.ComponentType<any> | null>(null);
   const [apiParams, setApiParams] = useState<any>(null);
-  const [filterType, setFilterType] = useState<"articles" | undefined>(
-    undefined
-  );
+  const [filterType, setFilterType] = useState<"articles" | undefined>(undefined);
   const [selectData, setSelectData] = useState<number[]>([]);
-  const uploadCoverRef = useRef<ImageUploaderRef>(null);
-
+  // const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
+  // const uploadCoverRef = useRef<ImageUploaderRef>(null);
   //console.log("PAGE ADMIN ArticleDetail", article);
 
   const loadQuillEditor = async () => {
     const quillModule = await import("@/components/common/quill/Quill");
     setQuillEditor(quillModule.default); // 假设组件默认导出
   };
-
-  // 初始化
+  
   useEffect(() => {
-    let mounted = true;
-    const init = async () => {
-      try {
-        loadQuillEditor();
-        const res = await checkUser();
-        if (!mounted) return;
-        setUserInfo(res?.data?.userInfo);
-      } catch (error) {
-        //console.error("初始化时出错:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    init();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-    
-  useEffect(() => {
-    if (!userInfo) return;
-    // setApiParams(`?userId=${userInfo?.id}&search=`);
+    loadQuillEditor();
     setApiParams(`?blogger=${window.__NEXT_ACCOUNT__}&id=${Number(id)}`);
     setFilterType("articles");
     const init = async () => {
       await loadData();
     };
     init();
-  }, [userInfo]);
+  }, []);
 
   // 加载文章
   const loadData = async () => {
     try {
       if (id == "0") return;
+      setLoading(true);
       //console.log("api: get-article-detail");
       const response = await fetch(
         `/api/articles/get-article-detail?blogger=${window.__NEXT_ACCOUNT__}&id=${Number(id)}`
@@ -104,11 +76,11 @@ export default function ArticleEdit({ params }: Props) {
       if (response.ok) {
         let data = result.data;
         if (data) {
-          if(data.cover_img){
-            setDefaultFileList([
-              { uid: data.id, url: data.cover_img, name: `name-${data.id}` },
-            ]);
-          }
+          // if(data.cover_img){
+          //   setDefaultFileList([
+          //     { uid: data.id, url: data.cover_img, name: `name-${data.id}` },
+          //   ]);
+          // }
           setSelectData(data.groupsId?.length > 0 ? data.groupsId.map((item:any)=>item.id) : [0]);
           setArticle(data);
         }
@@ -117,6 +89,8 @@ export default function ArticleEdit({ params }: Props) {
       }
     } catch (error) {
       //console.error("获取文章时出错:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -130,9 +104,9 @@ export default function ArticleEdit({ params }: Props) {
     // //console.log("uploadCover", uploadCover);
     //console.log("deltaContent", deltaContent);
     //console.log("handleSubmit", htmlContent);
-    if (!userInfo?.id) return;
     setMessage("");
     try {
+      setLoading(true);
       let { title = "", excerpt = "", published = false } = article;
       let params = {
         id: Number(id),
@@ -141,7 +115,7 @@ export default function ArticleEdit({ params }: Props) {
         published,
         content: htmlContent || "",
         delta_data: (deltaContent && JSON.stringify(deltaContent)) || "",
-        user_id: userInfo?.id,
+        blogger: window.__NEXT_ACCOUNT__,
         cover_img: "",
         // cover_img: uploadCover?.[0]?.url || article.cover_img || "",
         groupsId: selectData || [],
@@ -164,18 +138,14 @@ export default function ArticleEdit({ params }: Props) {
       }
     } catch (error) {
       setMessage(`发布失败: ${error}`);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if(loading){
-    return (
-      <Loading></Loading>
-    )
-  }
-
   return (
     <div className="bg-gray-50 h-full overflow-y-scroll">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             {id === "0" ? "添加" : "编辑"}文章
@@ -302,7 +272,7 @@ export default function ArticleEdit({ params }: Props) {
             </div>
 
             {/* 消息提示 */}
-            {message && (
+            {/* {message && (
               <div
                 className={`p-3 rounded-md text-sm ${
                   message.includes("成功")
@@ -312,7 +282,7 @@ export default function ArticleEdit({ params }: Props) {
               >
                 {message}
               </div>
-            )}
+            )} */}
 
             {/* 按钮组 */}
             <div className="flex justify-end">
@@ -326,14 +296,11 @@ export default function ArticleEdit({ params }: Props) {
               <Button
                 type="primary"
                 htmlType="submit"
+                loading={loading}
                 disabled={loading}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading
-                  ? "发布中..."
-                  : article.published
-                  ? "发布文章"
-                  : "保存草稿"}
+                {article.published ? "发布文章" : "保存草稿"}
               </Button>
             </div>
           </form>

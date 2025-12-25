@@ -1,14 +1,14 @@
 'use client';
 import React, { useState,useEffect, useRef } from "react";
 import { usePathname } from 'next/navigation';
-import {useJumpAction,useCheckUser} from "@/lib/use-helper/base-mixin";
-// import { useAuth } from "@/contexts/AuthContext";
+import {useJumpAction,useCheckUser} from "@/lib/hooks/base-hooks";
 import { useAppSelector,useAppDispatch } from "@/redux/hooks";
 import Avatar from "@/components/common/custom-antd/Avatar";
 import { useTheme } from 'next-themes';
 import { MoonOutlined,SunOutlined } from '@ant-design/icons';
 import './nav.css';
-import { supabase } from '@/lib/supabase'
+// import { useAuth } from "@/contexts/AuthContext";
+// import { supabase } from '@/supabase/supabase'
 
 type NavItem = { name: string; key: string; url?: string; type?: string };
 type Props = {
@@ -29,14 +29,13 @@ const Nav = ({navList}: Props) => {
   const user = useAppSelector((state) => state.user);
   const [blogger,setBlogger] = useState<string>("");
   const dispatch = useAppDispatch();
-  console.log('进来 Nav 组件');
 
   useEffect(() => {
     setBlogger(window.__NEXT_ACCOUNT__ || "");
   }, []);
 
   useEffect(() => {
-    console.log('进来 useEffect checkUser',checkUser);
+    // console.log('进来 useEffect checkUser',checkUser);
     checkUser().then((res) => {
       if(res?.data){
         dispatch({ type: "user/init", payload:res?.data});
@@ -55,7 +54,7 @@ const Nav = ({navList}: Props) => {
     if(user?.isLogin){
       extra.push({ key: "logout", name: "退出登录", url: `/auth`, type: "from" });
     }
-    console.log('nav useAppSelector watch',user,navList,extra);
+    // console.log('nav useAppSelector watch',user,navList,extra);
     setList([...(navList || []),...extra]);
   },[user])
   
@@ -118,19 +117,13 @@ const Nav = ({navList}: Props) => {
   }, [showBg]);
 
   const menuClick = (item:NavItem)=>{
-    // const jimmy = async ()=>{
+    // const updatePwd = async ()=>{
     //   const { data, error } = await supabase.auth.updateUser({
-    //     password: "LoveRui0909" // 需满足密码强度要求
+    //     password: "" // 修改密码
     //   });
     //   console.log('res',data,error);
-    //   if (error) {
-    //     console.error("修改失败：", error.message);
-    //   } else {
-    //     console.log("密码修改成功");
-    //   }
-    //   return data;
     // }
-    // jimmy();
+    // updatePwd();
     // return
     
     if(item.key == 'logout'){

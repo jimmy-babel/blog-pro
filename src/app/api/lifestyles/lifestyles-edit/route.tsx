@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/supabase/supabase";
 import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
@@ -9,11 +9,23 @@ export async function POST(req: Request) {
       photos,
       excerpt,
       published,
-      user_id,
+      blogger,
       labelIds,
     } = await req.json();
-    // //console.log('photos',photos);
-    //console.log('labelIds',labelIds);
+    // 获取userId
+    const { data: bloggerInfo, error: bloggerError } = await supabase
+      .from("bloggers")
+      .select("users(id)")
+      .eq("domain", blogger)
+      .limit(1);
+    if (bloggerError) {
+      return NextResponse.json(
+        { msg: "获取作者信息时出错", error: bloggerError },
+        { status: 500 }
+      );
+    }
+    let users: any = bloggerInfo?.[0]?.users || {};
+    const user_id = users?.id || "";
     let [relationsIds, sub_relationsIds] = [[] as number[], [] as number[]];
     labelIds.forEach((item: any, index: number) => {
       if (Array.isArray(item)) {
@@ -203,7 +215,7 @@ export async function POST(req: Request) {
         }
       }
       return NextResponse.json(
-        { data: data?.[0]?.id, msg: "生活手记编辑成功" },
+        { data: data?.[0]?.id, msg: "保存成功" },
         { status: 200 }
       );
     }

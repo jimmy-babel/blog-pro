@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState, useCallback, useRef } from 'react'
-import {article} from '@/lib/supabase';
-import {useJumpAction} from "@/lib/use-helper/base-mixin"
+import {article} from '@/supabase/supabase';
+import {useJumpAction} from "@/lib/hooks/base-hooks"
 import PageScroll from "@/components/common/page-scroll/PageScroll";
 import { ArticlesInfo } from "@/types";
 type Props = {

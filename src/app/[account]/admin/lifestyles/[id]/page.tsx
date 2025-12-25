@@ -1,13 +1,11 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import React from "react";
-import { useRouter } from "next/navigation";
-import { Button,UploadFile } from "antd";
-import { useJumpAction,useCheckUser } from "@/lib/use-helper/base-mixin";
-import { life_styles } from "@/lib/supabase";
+import { Button,UploadFile,message } from "antd";
+import { useJumpAction } from "@/lib/hooks/base-hooks";
+import { life_styles } from "@/supabase/supabase";
 import ImageUploader from "@/components/common/image-upload/ImageUpload";
 import Cascader from "@/components/common/custom-antd/Cascader"
-import Loading from "@/components/common/loading/loading";
 
 interface listItem {
   uid: string;
@@ -23,12 +21,9 @@ interface ImageUploaderRef {
 // PAGE ADMIN 生活手记详情
 export default function LifeStylesEdit({ params }: Props) {
   const { account, id } = React.use(params);
-  const { jumpAction,backAction } = useJumpAction();
-  const { checkUser } = useCheckUser({ loginJump: true });
+  const { backAction } = useJumpAction();
   const [lifestyles, setLifeStyles] = useState<life_styles>({} as life_styles);
   const [loading, setLoading] = useState(true);
-  const [userInfo, setUserInfo] = useState<any>(null);
-  const [message, setMessage] = useState("");
   const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
   const [defaultPhotosList, setDefaultPhotosList] = useState<listItem[]>([]);
   const [apiParams, setApiParams] = useState<any>(null);
@@ -40,40 +35,20 @@ export default function LifeStylesEdit({ params }: Props) {
   const uploadPhotosRef = useRef<ImageUploaderRef>(null);
 
   //console.log("PAGE ADMIN LifeStylesEdit", lifestyles);
-
-   useEffect(() => {
-      let mounted = true
-      const init = async () => {
-        try {
-          const res = await checkUser();
-          if(!mounted)return;
-          setUserInfo(res.data?.userInfo);
-          //console.log('checkuser then',res);
-        } catch (error) {
-          //console.error('初始化时出错:', error)
-        }
-      }
-      init();
-      return () => {
-        //console.log('销毁');
-        mounted = false
-      }
-    }, [])
-  
-    useEffect(()=>{
-      if(!userInfo)return
-      setApiParams(`?userId=${userInfo?.id}`);
-      setSetType("lifestyles");
-      const loadData = async ()=>{
-        await getDetail();
-      };
-      loadData();
-    },[userInfo])
+  useEffect(()=>{
+    setApiParams(`?blogger=${account}`);
+    setSetType("lifestyles");
+    const loadData = async ()=>{
+      await getDetail();
+    };
+    loadData();
+  },[])
 
   // 加载手记
   const getDetail = async () => {
     try {
       if (id == "0") return;
+      setLoading(true);
       //console.log("api: get-lifestyles-detail");
       const response = await fetch(
         `/api/lifestyles/get-lifestyles-detail?blogger=${account}&id=${Number(id)}`
@@ -96,7 +71,6 @@ export default function LifeStylesEdit({ params }: Props) {
     } catch (error) {
       //console.error("获取手记时出错:", error);
     } finally {
-      //console.log('finally');
       setLoading(false);
     }
   };
@@ -108,8 +82,7 @@ export default function LifeStylesEdit({ params }: Props) {
     const uploadPhotos = await uploadPhotosRef.current?.uploadPendingFiles();
     //console.log("uploadCover", uploadCover);
     //console.log("uploadPhotos", uploadPhotos);
-    if (!userInfo?.id) return;
-    setMessage("");
+    setLoading(true);
     try {
       let { title = "", excerpt = "", published = false } = lifestyles;
       let params = {
@@ -117,7 +90,8 @@ export default function LifeStylesEdit({ params }: Props) {
         title,
         excerpt: excerpt || "",
         published,
-        user_id: userInfo?.id,
+        blogger: account,
+        // user_id: userInfo?.id,
         cover_img: uploadCover?.[0]?.url || lifestyles.cover_img || "",
         photos: uploadPhotos || [],
         labelIds: selectData || [],
@@ -132,26 +106,22 @@ export default function LifeStylesEdit({ params }: Props) {
       });
       const { data, msg, error } = await response.json();
       //console.log("api: admin/lifestyles-edit then", data, msg, error);
-      setMessage(msg);
-      if (data > 0) {
-        setTimeout(() => {
-          jumpAction("admin/lifestyles");
-        }, 500);
-      }
+      message.success(msg||"保存成功");
+      // if (data > 0) {
+      //   setTimeout(() => {
+      //     jumpAction("admin/lifestyles");
+      //   }, 500);
+      // }
     } catch (error) {
-      setMessage(`发布失败: ${error}`);
+      message.error(`保存失败: ${error}`);
+    } finally {
+      setLoading(false);
     }
   };
 
-  if(loading){
-    return (
-      <Loading></Loading>
-    )
-  }
-
   return (
     <div className="bg-gray-50 h-full overflow-y-scroll">
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             {id === "0" ? "添加" : "编辑"}手记
@@ -278,7 +248,7 @@ export default function LifeStylesEdit({ params }: Props) {
             </div>
 
             {/* 消息提示 */}
-            {message && (
+            {/* {message && (
               <div
                 className={`p-3 rounded-md text-sm ${
                   message.includes("成功")
@@ -288,7 +258,7 @@ export default function LifeStylesEdit({ params }: Props) {
               >
                 {message}
               </div>
-            )}
+            )} */}
 
             {/* 按钮组 */}
             <div className="flex justify-end">
@@ -300,16 +270,18 @@ export default function LifeStylesEdit({ params }: Props) {
                 取消
               </Button>
               <Button
+                loading={loading}
                 type="primary"
                 htmlType="submit"
                 disabled={loading}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading
-                  ? "发布中..."
+                {lifestyles.published ? "发布手记": "保存草稿"}
+                {/* {loading
+                  ? "保存中..."
                   : lifestyles.published
                   ? "发布手记"
-                  : "保存草稿"}
+                  : "保存草稿"} */}
               </Button>
             </div>
           </form>

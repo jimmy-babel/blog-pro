@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
-import { useCheckUser } from "@/lib/use-helper/base-mixin";
+import { useCheckUser } from "@/lib/hooks/base-hooks";
 
 // 定义Context类型
 type AuthContextType = {

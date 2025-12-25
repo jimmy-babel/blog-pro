@@ -1,7 +1,8 @@
 "use client"
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { life_styles } from "@/lib/supabase";
-import { useJumpAction } from "@/lib/use-helper/base-mixin";
+import { life_styles } from "@/supabase/supabase";
+import { useJumpAction } from "@/lib/hooks/base-hooks";
+import { ImageLoader } from "@/lib/mixins/base-mixin";
 import PageScroll from "@/components/common/page-scroll/PageScroll";
 import Image from "next/image";
 import {LifeStylesInfo,ResData} from "@/types"
@@ -9,23 +10,6 @@ import {LifeStylesInfo,ResData} from "@/types"
 type Props = {
   listData: Array<LifeStylesInfo>;
   onScrollEnd?: () => void; // 滚动到底部的回调函数
-};
-
-const cloudinaryLoader = ({
-  src = "",
-  width = 110,
-  quality = 85,
-}: {
-  src: string;
-  width: number;
-  quality?: number;
-}) => {
-  // 提取Cloudinary图片的public_id（即路径中最后的文件名部分）
-  const publicId = src.split("/").pop();
-  // 拼接Cloudinary支持的变换参数（路径格式）
-  const transformations = ["f_auto", `w_${width}`, `q_${quality}`].join(",");
-  // 生成最终URL
-  return `https://res.cloudinary.com/dhfjn2vxf/image/upload/${transformations}/${publicId}`;
 };
 
 const List = (props: Props) => {
@@ -47,7 +31,7 @@ const List = (props: Props) => {
                 <div className="cover-box aspect-square relative">
                   {item.cover_img && (
                     <Image
-                      loader={cloudinaryLoader}
+                      loader={ImageLoader.cloudinary}
                       src={item.cover_img || ""}
                       alt=""
                       fill

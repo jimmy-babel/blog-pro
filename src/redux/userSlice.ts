@@ -54,7 +54,7 @@ const userSlice = createSlice({
         },
         // 清除用户信息
         clearUserInfo: (state, {payload}) => {
-            console.log('clearUserInfo');
+            // console.log('clearUserInfo');
             cookieRemove("token");
             cookieRemove("userInfo");
             state.isLogin = false;

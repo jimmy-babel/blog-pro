@@ -1,4 +1,4 @@
- import { supabase } from "@/lib/supabase";
+ import { supabase } from "@/supabase/supabase";
 import dayjs from "dayjs";
 import { LifeStylesInfo, ResData, FAILRES, SUCCESSRES } from "@/types";
 
