@@ -1,4 +1,4 @@
- import { supabase } from "@/supabase/supabase";
+import { supabase } from "@/supabase/supabase";
 import dayjs from "dayjs";
 import { LifeStylesInfo, ResData, FAILRES, SUCCESSRES } from "@/types";
 
@@ -60,10 +60,26 @@ export async function getLifeStylesList(
         .select("*,life_styles_to_label!inner(label_id)", { count: "exact" })
         .eq("life_styles_to_label.label_id", labelIdArray[0]);
     } else {
-      query = query.select("*,life_styles_label!inner(id, name),life_styles_sub_label!inner(id,name)", { count: "exact" });
-      // query = query.select("*,life_styles_to_label!inner(label_id,life_styles_label!inner(id, name)),life_styles_to_sub_label!inner(sub_label_id)", { count: "exact" });
+      // query = query.select(`
+      //   *,
+      //   life_styles_to_label!inner(
+      //     label_id,
+      //     life_styles_label!inner(
+      //       id,
+      //       name
+      //     )
+      //   ),
+      //   life_styles_to_sub_label!inner(
+      //     sub_label_id,
+      //     life_styles_sub_label!inner(
+      //       id,
+      //       name
+      //     )
+      //   )
+      // `);
+      query = query.select("*,life_styles_label!inner(id, name),life_styles_sub_label!inner(id,name)", { count: "exact" }); //不行再试试上面的
     }
-    if(platform == 'web'){
+    if (platform == "web") {
       query = query.eq("published", true);
     }
     query = query
@@ -71,19 +87,26 @@ export async function getLifeStylesList(
       .eq("is_deleted", 0)
       .ilike("title", `%${search || ""}%`)
       .order("sort_time", { ascending: false })
-      .order('id', { ascending: false });
+      .order("id", { ascending: false });
     const { data: lifeStylesData, error: lifeStylesError, count } = await query;
 
     if (lifeStylesError) {
       return FAILRES.ARRAY;
     }
 
-    const result = lifeStylesData?.map((item) => ({
-      ...item,
-      created_at: item.created_at ? dayjs(item.created_at).format("YYYY-MM-DD HH:mm") : "",
-      updated_at: item.updated_at ? dayjs(item.updated_at).format("YYYY-MM-DD HH:mm") : "",
-      sort_time: item.sort_time ? dayjs(item.sort_time).format("YYYY-MM-DD") : "",
-    })) || [];
+    const result =
+      lifeStylesData?.map((item) => ({
+        ...item,
+        created_at: item.created_at
+          ? dayjs(item.created_at).format("YYYY-MM-DD HH:mm")
+          : "",
+        updated_at: item.updated_at
+          ? dayjs(item.updated_at).format("YYYY-MM-DD HH:mm")
+          : "",
+        sort_time: item.sort_time
+          ? dayjs(item.sort_time).format("YYYY-MM-DD")
+          : "",
+      })) || [];
 
     return { ...SUCCESSRES.ARRAY, data: result || [] };
   } catch (error) {
