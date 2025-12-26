@@ -318,85 +318,90 @@ const MoodRecord = (props: Props) => {
   return (
     <>
       {isBlogger && (
-        <div className="anim-op-y w-full p-4 flex justify-center items-start gap-10">
+        <div className="anim-op-y w-full p-4 pr-20 flex justify-center items-start gap-10">
 
           <div className="calendar min-w-[448px]">
-            <div className="text-center h-12">
-              <h2 className="text-2xl font-bold">每日小记(仅自己可见)</h2>
+            <div className="text-center h-10">
+              <h2 className="text-xl font-bold bg-clip-text bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-transparent">每日小记 (仅自己可见)</h2>
             </div>
-            
-            {/* 日历头部 */}
-            <div className="flex justify-between items-center mb-4 bg-gray-800 text-white p-4  pl-5 pr-5 rounded-lg">
-              <button
-                onClick={prevMonth}
-                className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
-              >
-                <div className="w-[30%] h-[30%] rotate-[-45deg] ml-1 border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div>
-              </button>
-              <h3 className="text-xl font-semibold">
-                {currentDate.format("YYYY年MM月")}
-              </h3>
-              <button
-                onClick={nextMonth}
-                className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
-              >
-                <div className="w-[30%] h-[30%] mr-0.5 rotate-[135deg] border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div>
-              </button>
-            </div>
-
-            {/* 星期几标签 */}
-            <div className="grid grid-cols-7 gap-2 mb-2">
-              {weekDays.map((day) => (
-                <div
-                  key={day}
-                  className="text-center text-sm font-medium text-gray-600"
+            {/* <div className="shadow-[0_0_20px_rgba(127,127,127,0.3)] rounded-lg"> */}
+            <div className="pb-15">
+              {/* 日历头部 */}
+              {/* <div className="flex justify-between items-center mb-4 bg-gray-800 text-white p-4  pl-5 pr-5 rounded-lg"> */}
+              <div className="flex justify-between items-center mb-3 bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-white p-4  pl-5 pr-5 rounded-lg">
+                <button
+                  onClick={prevMonth}
+                  className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
                 >
-                  {day}
-                </div>
-              ))}
-            </div>
+                  <div className="w-[30%] h-[30%] rotate-[-45deg] ml-1 border-t-2 border-l-2 border-t-[rgba(99,102,241,0.55)] border-l-[rgba(99,102,241,0.55)]"></div>
+                  {/* <div className="w-[30%] h-[30%] rotate-[-45deg] ml-1 border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div> */}
+                </button>
+                <h3 className="text-xl font-semibold">
+                  {currentDate.format("YYYY年MM月")}
+                </h3>
+                <button
+                  onClick={nextMonth}
+                  className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
+                >
+                  <div className="w-[30%] h-[30%] mr-0.5 rotate-[135deg] border-t-2 border-l-2 border-t-[rgba(20,184,166,0.5)] border-l-[rgba(20,184,166,0.5)]"></div>
+                </button>
+              </div>
 
-            {/* 日历网格 */}
-            <div className="grid grid-cols-7 gap-2">
-              {calendarData.map((day, index) => {
-                const mood = getMoodForDate(day.fullDate);
-                const isSelected = selectedDate === day.fullDate;
-                const isCurrentMonth = day.month === "current";
-                const today = moment().format("YYYY-MM-DD");
-                const isFutureDate = day.fullDate > today;
-                const isClickable = isCurrentMonth && !isFutureDate;
-
-                return (
+              {/* 星期几标签 */}
+              <div className="grid grid-cols-7 gap-2 mb-3">
+                {weekDays.map((day) => (
                   <div
-                    key={index}
-                    onClick={() =>
-                      handleDateClick(day.fullDate, isCurrentMonth, mood)
-                    }
-                    className={`
-                        aspect-square rounded-lg flex flex-col items-center justify-center transition-all duration-200
-                        ${isCurrentMonth
-                          ? "bg-gray-800 text-white hover:bg-gray-700"
-                          : "bg-gray-100 text-gray-400 cursor-default"
-                        }
-                        ${isClickable ? "cursor-pointer" : ""}
-                        ${isSelected ? "ring-3 ring-yellow-400 scale-105" : ""}
-                      `}
+                    key={day}
+                    className="text-center text-md font-bold bg-clip-text bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-transparent"
                   >
-                    <div className="text-sm">{day.date}</div>
-                    {mood && <div className="text-2xl">{mood.emoji}</div>}
-                    {/* 显示红点标记 */}
-                    {isClickable && !mood && (
-                      <div className="w-1 h-1 bg-red-500 rounded-full mt-1"></div>
-                    )}
+                    {day}
                   </div>
-                );
-              })}
+                ))}
+              </div>
+
+              {/* 日历网格 */}
+              <div className="grid grid-cols-7 gap-2">
+                {calendarData.map((day, index) => {
+                  const mood = getMoodForDate(day.fullDate);
+                  const isSelected = selectedDate === day.fullDate;
+                  const isCurrentMonth = day.month === "current";
+                  const today = moment().format("YYYY-MM-DD");
+                  const isFutureDate = day.fullDate > today;
+                  const isClickable = isCurrentMonth && !isFutureDate;
+
+                  return (
+                    <div
+                      key={index}
+                      onClick={() =>
+                        handleDateClick(day.fullDate, isCurrentMonth, mood)
+                      }
+                      className={`
+                          aspect-square rounded-lg flex flex-col items-center justify-center transition-all duration-200
+                          ${isCurrentMonth
+                            // ? "bg-gray-800 text-white hover:bg-gray-700"
+                            ? "bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-white hover:bg-gray-700"
+                            : "bg-gray-100 text-gray-400 cursor-default"
+                          }
+                          ${isClickable ? "cursor-pointer" : ""}
+                          ${isSelected ? "ring-3 ring-yellow-400 scale-105" : ""}
+                        `}
+                    >
+                      <div className="text-sm font-bold">{day.date}</div>
+                      {mood && <div className="text-2xl">{mood.emoji}</div>}
+                      {/* 显示红点标记 */}
+                      {isClickable && !mood && (
+                        <div className="w-1 h-1 bg-red-500 rounded-full mt-1"></div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* 显示选中日期的数据 */}
           {(
-            <div className={`recored-item mt-12 bg-gray-800 rounded-md pl-6 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px] ${curDayData?.date ? 'visible' : 'invisible'}`}>
+            <div className={`recored-item shadow-[0_0_10px_rgba(127,127,127,0.3)] mt-10 bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] rounded-md pl-6 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px] ${curDayData?.date ? 'visible' : 'invisible'}`}>
               <div className="text-2xl mb-3 text-center">
                 {moment(curDayData?.date).format("YYYY-MM-DD")}{" "}
                 {curDayData?.emoji || ""}
