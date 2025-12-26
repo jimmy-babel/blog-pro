@@ -60,7 +60,8 @@ export async function getLifeStylesList(
         .select("*,life_styles_to_label!inner(label_id)", { count: "exact" })
         .eq("life_styles_to_label.label_id", labelIdArray[0]);
     } else {
-      query = query.select("*", { count: "exact" });
+      query = query.select("*,life_styles_label!inner(id, name),life_styles_sub_label!inner(id,name)", { count: "exact" });
+      // query = query.select("*,life_styles_to_label!inner(label_id,life_styles_label!inner(id, name)),life_styles_to_sub_label!inner(sub_label_id)", { count: "exact" });
     }
     if(platform == 'web'){
       query = query.eq("published", true);

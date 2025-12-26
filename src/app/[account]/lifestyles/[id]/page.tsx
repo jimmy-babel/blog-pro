@@ -88,7 +88,7 @@ const LifeStyles = (props: Props) => {
       </div>
       <div className="m-auto">
         <div className="title text-xl text-bold anim-op-y">{lifeStyles.title}</div>
-        <div className="excerpt text-gray-400 pt-4 pb-8 anim-op-y">
+        <div className="excerpt text-gray-500 pt-4 pb-5 anim-op-y">
           {lifeStyles.excerpt}
         </div>
         <div className="album-box">

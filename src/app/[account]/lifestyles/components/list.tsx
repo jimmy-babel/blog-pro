@@ -16,6 +16,7 @@ const List = (props: Props) => {
   const { listData, onScrollEnd } = props;
   const { jumpAction } = useJumpAction();
   const [listBox, setListBox] = useState<React.ReactNode>(null);
+  console.log('listData',listData);
   useEffect(() => {
     setListBox(
       // <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-15 gap-y-12 w-full pt-8 pb-8">
@@ -43,9 +44,21 @@ const List = (props: Props) => {
                 <div className="p-4 border-t border-color">
                   <div>{item.title}</div>
                   <div className="text-xs text-gray-400 pt-1">
-                    {item.created_at}
+                    {item.sort_time}
                   </div>
-                  <div className="text-[15px] pt-2">查看相册</div>
+                  <div className='flex items-center leading-8 text-gray-500 text-sm gap-2'>
+                    {item.life_styles_label?.map((label) => (
+                      <span key={label.id} >
+                        #{label.name}
+                      </span>
+                    ))}
+                    {item.life_styles_sub_label?.map((label) => (
+                      <span key={label.id} className='flex items-center leading-8 text-gray-500 text-sm'>
+                        #{label.name}
+                      </span>
+                    ))}
+                  </div>
+                  {/* <div className="text-[14px] pt-2">查看相册</div> */}
                 </div>
               </div>
             </div>

@@ -49,6 +49,9 @@ export interface LifeStylesInfo {
   updated_at?: string;
   photos?: life_styles_photos[]
   labelIds?: (life_styles_label|life_styles_sub_label)[]
+  life_styles_label?: life_styles_label[]
+  life_styles_sub_label?: life_styles_sub_label[]
+  sort_time?: string
 }
 
 
