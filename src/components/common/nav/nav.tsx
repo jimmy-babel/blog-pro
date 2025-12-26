@@ -163,8 +163,10 @@ const Nav = ({navList}: Props) => {
   return (
     <>
       <div className={`nav-box sticky z-[10] left-0 top-0 w-full h-[var(--nav-bar-height)]`}>
-        <div className="anim-op-y flex justify-between items-center relative h-full w-full pl-5 pr-5 z-[2]">
-          <Avatar size={40} src={avatar_url || ""}></Avatar>
+        <div className="anim-op-y flex justify-between items-center relative h-full w-full pl-10 pr-10 z-[2]">
+          <div className="cursor-pointer" onClick={()=>menuClick(list[0])}>
+            <Avatar size={55} src={avatar_url || ""}></Avatar>
+          </div>
           {/* {curAccount.toUpperCase()?<div>
             {userProfile?.full_name.toUpperCase() != curAccount.toUpperCase() ? <div>WELCOME {curAccount.toUpperCase()} BLOG</div> : <div>Hello,{userProfile.full_name}</div>}
           </div>:null} */}

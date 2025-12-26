@@ -37,7 +37,7 @@ const App: React.FC<Props> = (props:Props) => {
       }
     }
   // return <Avatar size={size} shape={shape} src={src || bloggerInfo?.avatar_url || (!loading&&"/avatar.png") || ""} />
-  return <Avatar size={size} shape={shape} src={src || ""} />
+  return <Avatar className='anim-hover-scale' size={size} shape={shape} src={src || ""} />
 }
 
 export default App;
