@@ -41,7 +41,7 @@ const List = (props: Props) => {
                     />
                   )}
                 </div>
-                <div className="p-4 border-t border-color">
+                <div className="pt-3 pb-3 pl-4 pr-4 border-t border-color">
                   <div>{item.title}</div>
                   <div className="text-xs text-gray-400 pt-1">
                     {item.sort_time}

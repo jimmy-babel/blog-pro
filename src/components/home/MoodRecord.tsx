@@ -402,7 +402,7 @@ const MoodRecord = (props: Props) => {
                 {curDayData?.emoji || ""}
               </div>
               <div className="text-md">
-                <pre>
+                <pre className="whitespace-pre-wrap break-all">
                   {curDayData?.note || ""}
                 </pre>
               </div>

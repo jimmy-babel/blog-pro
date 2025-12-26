@@ -89,7 +89,9 @@ const LifeStyles = (props: Props) => {
       <div className="m-auto">
         <div className="title text-xl text-bold anim-op-y">{lifeStyles.title}</div>
         <div className="excerpt text-gray-500 pt-4 pb-5 anim-op-y">
-          {lifeStyles.excerpt}
+          <pre className="whitespace-pre-wrap break-all">
+            {lifeStyles.excerpt}
+          </pre>
         </div>
         <div className="album-box">
           {/* <div className="grid grid-cols-3 gap-3 w-full min-w-[400px] max-w-[500px]"> */}
