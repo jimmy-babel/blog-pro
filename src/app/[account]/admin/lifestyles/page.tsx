@@ -74,13 +74,14 @@ export default function LifeStyles({ params }: Props) {
       dataIndex: "sort_time",
       key: "sort_time",
       align: "center",
+      width: 150,
     },
     {
       title: "封面",
       align: "center",
       key: "id",
       render: (row: life_styles) => (
-        <div>
+        <div className="flex justify-center">
           <Image
             loader={ImageLoader.cloudinary}
             src={row.cover_img || ""}
