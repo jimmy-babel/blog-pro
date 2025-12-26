@@ -401,7 +401,7 @@ const MoodRecord = (props: Props) => {
 
           {/* 显示选中日期的数据 */}
           {(
-            <div className={`recored-item shadow-[0_0_10px_rgba(127,127,127,0.3)] mt-10 bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] rounded-md pl-6 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px] ${curDayData?.date ? 'visible' : 'invisible'}`}>
+            <div className={`recored-item shadow-[0_0_10px_rgba(127,127,127,0.3)] mt-10 bg-[linear-gradient(45deg,rgba(99,102,241,0.7),rgba(20,184,166,0.5))] rounded-md pl-6 pr-4 pt-4 pb-8 text-white flex-1 relative max-w-[448px] ${curDayData?.date ? 'visible' : 'invisible'}`}>
               <div className="text-2xl mb-3 text-center">
                 {moment(curDayData?.date).format("YYYY-MM-DD")}{" "}
                 {curDayData?.emoji || ""}
