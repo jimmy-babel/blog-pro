@@ -322,18 +322,18 @@ const MoodRecord = (props: Props) => {
 
           <div className="calendar min-w-[448px]">
             <div className="text-center h-10">
-              <h2 className="text-xl font-bold bg-clip-text bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-transparent">每日小记 (仅自己可见)</h2>
+              <h2 className="text-xl font-bold bg-clip-text bg-[linear-gradient(45deg,rgba(99,102,241,0.7),rgba(20,184,166,0.5))] text-transparent">每日小记 (仅自己可见)</h2>
             </div>
             {/* <div className="shadow-[0_0_20px_rgba(127,127,127,0.3)] rounded-lg"> */}
             <div className="pb-15">
               {/* 日历头部 */}
               {/* <div className="flex justify-between items-center mb-4 bg-gray-800 text-white p-4  pl-5 pr-5 rounded-lg"> */}
-              <div className="flex justify-between items-center mb-3 bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-white p-4  pl-5 pr-5 rounded-lg">
+              <div className="flex justify-between items-center mb-3 bg-[linear-gradient(45deg,rgba(99,102,241,0.7),rgba(20,184,166,0.5))] text-white p-4  pl-5 pr-5 rounded-lg">
                 <button
                   onClick={prevMonth}
                   className="flex justify-center items-center w-[35px] h-[35px] bg-white text-gray-700 cursor-pointer rounded-full transition-colors"
                 >
-                  <div className="w-[30%] h-[30%] rotate-[-45deg] ml-1 border-t-2 border-l-2 border-t-[rgba(99,102,241,0.55)] border-l-[rgba(99,102,241,0.55)]"></div>
+                  <div className="w-[30%] h-[30%] rotate-[-45deg] ml-1 border-t-2 border-l-2 border-t-[rgba(99,102,241,0.7)] border-l-[rgba(99,102,241,0.7)]"></div>
                   {/* <div className="w-[30%] h-[30%] rotate-[-45deg] ml-1 border-t-2 border-l-2 border-t-gray-700 border-l-gray-700"></div> */}
                 </button>
                 <h3 className="text-xl font-semibold">
@@ -352,7 +352,7 @@ const MoodRecord = (props: Props) => {
                 {weekDays.map((day) => (
                   <div
                     key={day}
-                    className="text-center text-md font-bold bg-clip-text bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-transparent"
+                    className="text-center text-md font-bold bg-clip-text bg-[linear-gradient(45deg,rgba(99,102,241,0.7),rgba(20,184,166,0.5))] text-transparent"
                   >
                     {day}
                   </div>
@@ -379,7 +379,7 @@ const MoodRecord = (props: Props) => {
                           aspect-square rounded-lg flex flex-col items-center justify-center transition-all duration-200
                           ${isCurrentMonth
                             // ? "bg-gray-800 text-white hover:bg-gray-700"
-                            ? "bg-[linear-gradient(45deg,rgba(99,102,241,0.55),rgba(20,184,166,0.5))] text-white hover:bg-gray-700"
+                            ? "bg-[linear-gradient(45deg,rgba(99,102,241,0.7),rgba(20,184,166,0.5))] text-white hover:bg-gray-700"
                             : "bg-gray-100 text-gray-400 cursor-default"
                           }
                           ${isClickable ? "cursor-pointer" : ""}
