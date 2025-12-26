@@ -66,19 +66,25 @@ export async function GET(req: Request) {
       // 获取用户配置信息
       const { data: userInfoArr , error } = await supabase
         .from('users')
-        .select('id, user_name, email, user_token,bloggerInfo:bloggers(id,user_id,domain,avatar_url)')
+        .select('user_name,user_token,bloggers(domain)')
+        // .select('id, user_name, email, user_token,bloggerInfo:bloggers(id,user_id,domain,avatar_url)')
         .eq('user_id', user.id)
         .eq('bloggers.domain', blogger)
         .limit(1);
-      const userInfo = userInfoArr?.[0];
-      let bloggerInfo = userInfo?.bloggerInfo?.[0] || {} as {id:string,user_id:string,domain:string,avatar_url:string};
+      let userInfo = (userInfoArr?.[0]) as {user_name:string,user_token:string,bloggers?:{domain:string}[]}; //确保bloggers是可选属性
       if (error) {
         return NextResponse.json({ msg: '获取用户信息出错', error }, { status: 500 });
       }
       if(!userInfo){
         return NextResponse.json({ msg: '用户信息不存在', error }, { status: 500 });
       }
-      return NextResponse.json({ data: { isLogin: true, isBlogger:!!(blogger == bloggerInfo?.domain),userInfo,bloggerInfo } }, { status: 200 });
+      let domain = userInfo?.bloggers?.[0]?.domain || '';
+
+      // let bloggerInfo = userInfo?.bloggers?.[0] || {} as {id:string,user_id:string,domain:string,avatar_url:string};
+      // return NextResponse.json({ data: { isLogin: true, isBlogger:!!(blogger == bloggerInfo?.domain),userInfo,bloggerInfo } }, { status: 200 });
+
+      delete userInfo.bloggers; // delete 删除的属性可选必须
+      return NextResponse.json({ data: { isLogin: true, isBlogger:!!(blogger == domain),userInfo } }, { status: 200 });
     } else {
       // console.log('supabase.auth.getUser2',user);
       //console.log('getUser 没有登录');

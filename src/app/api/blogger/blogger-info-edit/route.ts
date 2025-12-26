@@ -4,7 +4,7 @@ export async function POST(req: Request) {
   try {
     const {user_name="",introduce1="",introduce2="",motto1="",motto2="",blogger="",avatar_url=""} = await req.json();
     if(!blogger){
-      return NextResponse.json({ error: '参数缺失' }, { status: 400 });
+      return NextResponse.json({ error: '参数缺失',code:-1 }, { status: 400 });
     }
     const { data, error } = await supabase
       .from('bloggers')
@@ -20,11 +20,11 @@ export async function POST(req: Request) {
     if (error) {
       throw error;
     }
-    return NextResponse.json({ data, msg: '保存成功' }, { status: 200 });
+    return NextResponse.json({ data, msg: '保存成功',code:1 }, { status: 200 });
 
 
   } catch (error) {
     //console.error('保存博主信息时出错:', error);
-    return NextResponse.json({ msg: '服务器内部错误',error }, { status: 500 });
+    return NextResponse.json({ msg: '服务器内部错误',error,code:-1}, { status: 500 });
   }
 }

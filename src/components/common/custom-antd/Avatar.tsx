@@ -36,7 +36,8 @@ const App: React.FC<Props> = (props:Props) => {
         setLoading(false);
       }
     }
-  return <Avatar size={size} shape={shape} src={src || bloggerInfo?.avatar_url || (!loading&&"/avatar.png") || ""} />
+  // return <Avatar size={size} shape={shape} src={src || bloggerInfo?.avatar_url || (!loading&&"/avatar.png") || ""} />
+  return <Avatar size={size} shape={shape} src={src || ""} />
 }
 
 export default App;

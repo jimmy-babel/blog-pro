@@ -13,11 +13,11 @@ type Props = {
 }
 // PAGE ADMIN 文章列表
 export default function Articles({params}:Props){
-  const {account} = React.use(params);
+  // const {account} = React.use(params);
   const [articles, setArticles] = useState<article[]>([] as article[])
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [tableHeight, setTableHeight] = useState(800);
-  const [tableWidth, setTableWidth] = useState(1000);
+  // const [tableWidth, setTableWidth] = useState(1000);
   const [loading, setLoading] = useState(true)
   const {jumpAction} = useJumpAction();
   const [searchText,setSearchText] = useState<string>("");
@@ -26,6 +26,7 @@ export default function Articles({params}:Props){
   const [filterType, setFilterType] = useState<"articles" | undefined>(
     undefined
   );
+  const [inited, setInited] = useState(false);
   //console.log('PAGE ADMIN Articles',account,articles,searchText);
   const onChange = (id: number,checked: boolean) => {
     //console.log(`switch to ${checked}`);
@@ -113,7 +114,7 @@ export default function Articles({params}:Props){
     if (tableContainerRef.current) {
       // console.log('tableContainerRef.current.clientHeight',tableContainerRef.current.clientHeight);
       // console.log('tableContainerRef.current.clientWidth',tableContainerRef.current.clientWidth,tableContainerRef.current);
-      setTableWidth((tableContainerRef.current.clientWidth) - 20);
+      // setTableWidth((tableContainerRef.current.clientWidth) - 20);
       // 设置表格高度为容器高度减去一些边距
       setTableHeight((tableContainerRef.current.clientHeight) - 64 - 55);
     }
@@ -131,14 +132,16 @@ export default function Articles({params}:Props){
     
     // 清理函数
     return () => {
-      console.log('cleanup tableContainerRef.current.clientHeight');
+      //console.log('cleanup tableContainerRef.current.clientHeight');
       cancelAnimationFrame(timer);
       window.removeEventListener('resize', updateTableHeight);
     };
   }, []);
 
   useEffect(() => {
-    fetchArticleList();
+    if(inited){
+      fetchArticleList();
+    }
   }, [selectData]);
   // 数据加载完成后更新高度
   useEffect(() => {
@@ -175,6 +178,7 @@ export default function Articles({params}:Props){
     } catch (error) {
       setArticles([]);
     } finally {
+      setInited(true);
       setLoading(false);
     }
   };
@@ -210,7 +214,8 @@ export default function Articles({params}:Props){
       <div className='flex-1 min-h-0' ref={tableContainerRef}>
         <Table<article>
           className="h-full"
-          scroll={{x:tableWidth,y: tableHeight}} //set-layout.tsx不overflow-hidden就不能横向滚动 暂时不改
+          scroll={{y: tableHeight}} //set-layout.tsx不overflow-hidden就不能横向滚动 暂时不改
+          // scroll={{x:tableWidth,y: tableHeight}} //set-layout.tsx不overflow-hidden就不能横向滚动 暂时不改
           pagination={{
             pageSize: 15,
             total: articles.length,

@@ -1,4 +1,5 @@
 import { supabase } from "@/supabase/supabase";
+import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
@@ -11,6 +12,7 @@ export async function POST(req: Request) {
       published,
       blogger,
       labelIds,
+      sort_time,
     } = await req.json();
     // 获取userId
     const { data: bloggerInfo, error: bloggerError } = await supabase
@@ -51,7 +53,7 @@ export async function POST(req: Request) {
     if (!id || id === 0) { //新增
       const { data, error } = await supabase
         .from("life_styles")
-        .insert({ title, cover_img, excerpt, published, user_id })
+        .insert({ title, cover_img, excerpt, published, user_id, sort_time: sort_time || dayjs().format("YYYY-MM-DD") })
         .select();
       if (error) {
         return NextResponse.json(
@@ -120,7 +122,7 @@ export async function POST(req: Request) {
     } else { //编辑
       const { data, error } = await supabase
         .from("life_styles")
-        .update({ title, cover_img, excerpt, published })
+        .update({ title, cover_img, excerpt, published, sort_time })
         .eq("id", id)
         .select();
       if (error) {

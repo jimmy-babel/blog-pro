@@ -1,6 +1,7 @@
 'use client';
 import { useRouter,usePathname} from "next/navigation"; // 公开路径导入
 import { cookieGet,cookieSet } from "@/utils/cookies-set";
+import { useAppDispatch } from "@/redux/hooks";
 interface ExtraType {
   type?:string
 }
@@ -31,25 +32,28 @@ export function useJumpAction(){
 // 封装 检测登录状态+返回用户信息
 export function useCheckUser(){
   const {jumpAction} = useJumpAction();
+  const dispatch = useAppDispatch();
   // const checkUser = async (blogger?:string,loginJump?:boolean) => {
-  const checkUser = async ({blogger="",loginJump=false}:{blogger?:string,loginJump?:boolean} = {}) => {
+  const checkUser = async ({blogger="",loginJump=false,isRefresh=false}:{blogger?:string,loginJump?:boolean,isRefresh?:boolean} = {}) => {
     try{
       const account = blogger || window.__NEXT_ACCOUNT__ || localStorage.getItem('account') || ""
       const userInfo = cookieGet('userInfo');
       const lastDomain = cookieGet('lastDomain');
-      if(userInfo && (lastDomain == account)){
-        // console.log('缓存userInfo',userInfo);
+      if(userInfo && (lastDomain == account) && !isRefresh){
+        //console.log('checkUser 缓存userInfo',userInfo);
         return {data:userInfo}
       }
       const response = await fetch(`/api/login/check?blogger=${account||''}`);
       const {data,msg,error} = await response.json();
       if (response.ok) { // 已登陆
+        //console.log("checkUser",data,msg,error);
         if(data?.isLogin){
           if(!lastDomain || lastDomain != account){
             cookieSet('lastDomain', account||'');
           }
           if(data?.userInfo){
             cookieSet("userInfo",data);
+            dispatch({ type: "user/init", payload:data});
           }
           if(data?.userInfo?.user_token){
             cookieSet("token",data?.userInfo?.user_token||"");

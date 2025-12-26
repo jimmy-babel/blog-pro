@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Card, Button, UploadFile, message } from "antd";
 import ImageUploader from "@/components/common/image-upload/ImageUpload";
 import Loading from "@/components/common/loading/loading";
+// import { useCheckUser } from "@/lib/hooks/base-hooks";
+import { useAppDispatch } from "@/redux/hooks";
 
 type Props = {};
 type Blogger = {
@@ -28,6 +30,8 @@ const UserInfo = (props: Props) => {
   const uploadAvatarRef = useRef<ImageUploaderRef>(null);
   const [defaultFileList, setDefaultFileList] = useState<listItem[]>([]);
   const [loading, setLoading] = useState(true);
+  // const {checkUser} = useCheckUser();
+  const dispatch = useAppDispatch();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //console.log("提交表单数据:", bloggerInfo);
@@ -66,17 +70,27 @@ const UserInfo = (props: Props) => {
     try {
       setLoading(true);
       const uploadAvatar = await uploadAvatarRef.current?.uploadPendingFiles();
+      const newBloggerInfo = {
+        ...bloggerInfo,
+        avatar_url: uploadAvatar?.[0]?.url || "",
+      }
       const res = await fetch(`/api/blogger/blogger-info-edit`, {
         method: "POST",
         body: JSON.stringify({
-          ...bloggerInfo,
-          avatar_url: uploadAvatar?.[0]?.url || "",
+          ...newBloggerInfo,
           blogger: window.__NEXT_ACCOUNT__ || "",
         }),
       });
-      const {msg} = await res.json();
+      const {code,msg} = await res.json();
       //console.log("更新成功:", data);
-      message.success(msg || "保存成功");
+      if(code === 1){
+        message.success(msg || "保存成功");
+        dispatch({ type: "curBlogger/setCurBloggerInfo", payload:newBloggerInfo});
+        return true;
+      }else{
+        message.error(msg || "保存失败");
+        return false;
+      }
     } catch (error) {
       //console.error("更新博主信息时出错:", error);
       message.error("保存失败");

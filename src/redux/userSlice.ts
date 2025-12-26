@@ -9,18 +9,18 @@ import {cookieRemove} from "@/utils/cookies-set";
 //   }
 // );
 
-export type User = {
-    isLogin: boolean;
-    userInfo: UserInfo
-}
-export type UserInfo = {
-    id?: string;
-    nickname?: string;
-    email?: string;
-    avatar: string | null;
-    createdAt?: string;
-    oauthProvider: string | null;
-};
+// export type User = {
+//     isLogin: boolean;
+//     userInfo: UserInfo
+// }
+// export type UserInfo = {
+//     id?: string;
+//     nickname?: string;
+//     email?: string;
+//     avatar: string | null;
+//     createdAt?: string;
+//     oauthProvider: string | null;
+// };
 
 const userSlice = createSlice({
     name: 'user',
@@ -28,23 +28,23 @@ const userSlice = createSlice({
         isLogin: false,
         userInfo: {},
         isBlogger: false,
-        bloggerInfo:{},
+        // bloggerInfo:{},
     },
     reducers: {
         init(state, {payload}){
             if(payload){
-                state.isLogin = payload?.isLogin || false;
-                state.userInfo = payload?.userInfo || {};
-                state.isBlogger = payload?.isBlogger || false;
-                state.bloggerInfo = payload?.bloggerInfo || {};
+                state.isLogin = payload?.isLogin || false; //是否登录
+                state.userInfo = payload?.userInfo || {};  //用户信息
+                state.isBlogger = payload?.isBlogger || false; //自己是否是博主
+                // state.bloggerInfo = payload?.bloggerInfo || {}; //自己对应的博主信息
             }
         },
         setUserInfo: (state, {payload}) => {
             state.userInfo = payload;
         },
-        setBloggerInfo: (state, {payload}) => {
-            state.bloggerInfo = payload;
-        },
+        // setBloggerInfo: (state, {payload}) => {
+        //     state.bloggerInfo = payload;
+        // },
         // 修改用户登录状态
         changeLoginStatus: (state, {payload}) => {
             state.isLogin = payload;
@@ -60,7 +60,7 @@ const userSlice = createSlice({
             state.isLogin = false;
             state.isBlogger = false;
             state.userInfo = {}
-            state.bloggerInfo = {};
+            // state.bloggerInfo = {};
         },
     },
 });

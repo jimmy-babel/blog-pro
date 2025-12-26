@@ -1,12 +1,14 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import React from "react";
-import { Button,UploadFile,message } from "antd";
+import { Button,UploadFile,message,DatePicker, Space } from "antd";
+import type { DatePickerProps } from 'antd';
 import { useJumpAction } from "@/lib/hooks/base-hooks";
 import { life_styles } from "@/supabase/supabase";
 import ImageUploader from "@/components/common/image-upload/ImageUpload";
 import Cascader from "@/components/common/custom-antd/Cascader"
 import Loading from "@/components/common/loading/loading";
+import dayjs from "dayjs";
 interface listItem {
   uid: string;
   name: string;
@@ -18,6 +20,8 @@ type Props = {
 interface ImageUploaderRef {
   uploadPendingFiles: () => Promise<Array<UploadFile>>;
 }
+const dateFormat = "YYYY-MM-DD";
+const today = dayjs();
 // PAGE ADMIN 生活手记详情
 export default function LifeStylesEdit({ params }: Props) {
   const { account, id } = React.use(params);
@@ -33,10 +37,10 @@ export default function LifeStylesEdit({ params }: Props) {
   const [selectData, setSelectData] = useState<number[]>([]);
   const uploadCoverRef = useRef<ImageUploaderRef>(null);
   const uploadPhotosRef = useRef<ImageUploaderRef>(null);
-
+  const [inited, setInited] = useState(false);
   //console.log("PAGE ADMIN LifeStylesEdit", lifestyles);
   useEffect(()=>{
-    setApiParams(`?blogger=${account}`);
+    setApiParams(`?blogger=${window.__NEXT_ACCOUNT__}`);
     setSetType("lifestyles");
     const loadData = async ()=>{
       await getDetail();
@@ -51,7 +55,7 @@ export default function LifeStylesEdit({ params }: Props) {
       setLoading(true);
       //console.log("api: get-lifestyles-detail");
       const response = await fetch(
-        `/api/lifestyles/get-lifestyles-detail?blogger=${account}&id=${Number(id)}`
+        `/api/lifestyles/get-lifestyles-detail?blogger=${window.__NEXT_ACCOUNT__}&id=${Number(id)}`
       );
       const result = await response.json();
       //console.log("api: /blog/get-lifestyles-detail then", result);
@@ -71,6 +75,7 @@ export default function LifeStylesEdit({ params }: Props) {
     } catch (error) {
       //console.error("获取手记时出错:", error);
     } finally {
+      setInited(true);
       setLoading(false);
     }
   };
@@ -90,11 +95,12 @@ export default function LifeStylesEdit({ params }: Props) {
         title,
         excerpt: excerpt || "",
         published,
-        blogger: account,
+        blogger: window.__NEXT_ACCOUNT__,
         // user_id: userInfo?.id,
         cover_img: uploadCover?.[0]?.url || lifestyles.cover_img || "",
         photos: uploadPhotos || [],
         labelIds: selectData || [],
+        sort_time: lifestyles.sort_time || "",
       };
       //console.log("api: admin/lifestyles-edit", params);
       const response = await fetch(`/api/lifestyles/lifestyles-edit`, {
@@ -118,6 +124,15 @@ export default function LifeStylesEdit({ params }: Props) {
       setLoading(false);
     }
   };
+
+  const dateOnChange: DatePickerProps['onChange'] = (date, dateString) => {
+    //console.log('dateOnChange',date, dateString,date?.format(dateFormat));
+    setLifeStyles((item) => ({
+      ...item,
+      sort_time: date?.format(dateFormat) || "",
+    }))
+  };
+
 
   return (
     <div className="bg-gray-50 h-full overflow-y-scroll">
@@ -195,6 +210,25 @@ export default function LifeStylesEdit({ params }: Props) {
                   setSelectData={setSelectData}
                 ></Cascader>
               </div>
+            </div>
+            {/* 排序时间 */}
+            <div>
+              <label
+                htmlFor="published"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                排序日期
+              </label>
+              {
+                (id == '0' || inited) ? 
+                <DatePicker 
+                  defaultValue={dayjs(lifestyles.sort_time || today, dateFormat)}
+                  format={dateFormat}
+                  placeholder="请选择日期"
+                  onChange={dateOnChange} />
+                :
+                null
+              }
             </div>
             {/* 封面 */}
             <div>

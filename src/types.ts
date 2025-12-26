@@ -138,6 +138,11 @@ const SUCCESSRES = {
     data: [],
     msg: ApiMsg.SUCCESS,
   },
+  NUMBER: {
+    code: ApiCode.SUCCESS,
+    data: 0,
+    msg: ApiMsg.SUCCESS,
+  },
   NULL: {
     code: ApiCode.SUCCESS,
     data: null,

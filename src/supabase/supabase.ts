@@ -91,6 +91,7 @@ export interface life_styles {
   updated_at: string
   photos?: life_styles_photos[]
   labelIds?: (life_styles_label|life_styles_sub_label)[]
+  sort_time?: string
 }
 
 export interface life_styles_photos {

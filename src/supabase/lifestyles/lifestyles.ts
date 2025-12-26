@@ -67,9 +67,10 @@ export async function getLifeStylesList(
     }
     query = query
       .eq("user_id", userId) // 筛选博主的文章
+      .eq("is_deleted", 0)
       .ilike("title", `%${search || ""}%`)
-      .order("created_at", { ascending: false });
-
+      .order("sort_time", { ascending: false })
+      .order('id', { ascending: false });
     const { data: lifeStylesData, error: lifeStylesError, count } = await query;
 
     if (lifeStylesError) {
@@ -78,8 +79,9 @@ export async function getLifeStylesList(
 
     const result = lifeStylesData?.map((item) => ({
       ...item,
-      created_at: item.created_at ? dayjs(item.created_at).format("YYYY-MM-DD HH:mm:ss") : "",
-      updated_at: item.updated_at ? dayjs(item.updated_at).format("YYYY-MM-DD HH:mm:ss") : "",
+      created_at: item.created_at ? dayjs(item.created_at).format("YYYY-MM-DD HH:mm") : "",
+      updated_at: item.updated_at ? dayjs(item.updated_at).format("YYYY-MM-DD HH:mm") : "",
+      sort_time: item.sort_time ? dayjs(item.sort_time).format("YYYY-MM-DD") : "",
     })) || [];
 
     return { ...SUCCESSRES.ARRAY, data: result || [] };

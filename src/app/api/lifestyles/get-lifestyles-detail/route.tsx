@@ -128,13 +128,19 @@ export async function GET(req: Request) {
           created_at:
             (lifeStylesData?.created_at &&
               dayjs(lifeStylesData?.created_at).format(
-                "YYYY-MM-DD HH:mm:ss"
+                "YYYY-MM-DD HH:mm"
               )) ||
             "",
           updated_at:
             (lifeStylesData?.updated_at &&
               dayjs(lifeStylesData?.updated_at).format(
-                "YYYY-MM-DD HH:mm:ss"
+                "YYYY-MM-DD HH:mm"
+              )) ||
+            "",
+          sort_time:
+            (lifeStylesData?.sort_time &&
+              dayjs(lifeStylesData?.sort_time).format(
+                "YYYY-MM-DD"
               )) ||
             "",
           labelIds,

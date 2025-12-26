@@ -8,7 +8,6 @@ import { useTheme } from 'next-themes';
 import { MoonOutlined,SunOutlined } from '@ant-design/icons';
 import './nav.css';
 // import { useAuth } from "@/contexts/AuthContext";
-// import { supabase } from '@/supabase/supabase'
 
 type NavItem = { name: string; key: string; url?: string; type?: string };
 type Props = {
@@ -27,21 +26,46 @@ const Nav = ({navList}: Props) => {
   const pathname = usePathname();
   // const { isLogin, isBlogger, updateAuth } = useAuth();
   const user = useAppSelector((state) => state.user);
-  const [blogger,setBlogger] = useState<string>("");
+  const curBlogger = useAppSelector((state) => state.curBlogger);
   const dispatch = useAppDispatch();
+  const [avatar_url,setAvatar_url] = useState<string>("");
+  const [inited,setInited] = useState<boolean>(false);
 
   useEffect(() => {
-    setBlogger(window.__NEXT_ACCOUNT__ || "");
-  }, []);
-
-  useEffect(() => {
-    // console.log('进来 useEffect checkUser',checkUser);
-    checkUser().then((res) => {
+    checkUser()
+    .then((res) => {
       if(res?.data){
         dispatch({ type: "user/init", payload:res?.data});
       }
     });
   }, []);
+
+  useEffect(() => {
+    getBloggerInfo();
+    async function getBloggerInfo(){
+      try{
+        const res = await fetch(
+          `/api/blogger/get-blogger-info?blogger=${window.__NEXT_ACCOUNT__}`,
+          {
+            method: "GET",
+          }
+        );
+        const data = await res.json();
+        setAvatar_url((data?.data || {}).avatar_url || "/avatar.png");
+      }catch(error){
+        setAvatar_url("");
+      } finally{
+        setInited(true);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if(inited){
+      const curBloggerInfo = curBlogger?.curBloggerInfo as any;
+      setAvatar_url(curBloggerInfo?.avatar_url || "/avatar.png");
+    }
+  }, [curBlogger]);
   
   useEffect(()=>{
     let extra = [];
@@ -140,7 +164,7 @@ const Nav = ({navList}: Props) => {
     <>
       <div className={`nav-box sticky z-[10] left-0 top-0 w-full h-[var(--nav-bar-height)]`}>
         <div className="anim-op-y flex justify-between items-center relative h-full w-full pl-5 pr-5 z-[2]">
-          <Avatar size={40} blogger={blogger || ""}></Avatar>
+          <Avatar size={40} src={avatar_url || ""}></Avatar>
           {/* {curAccount.toUpperCase()?<div>
             {userProfile?.full_name.toUpperCase() != curAccount.toUpperCase() ? <div>WELCOME {curAccount.toUpperCase()} BLOG</div> : <div>Hello,{userProfile.full_name}</div>}
           </div>:null} */}

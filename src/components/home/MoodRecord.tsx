@@ -401,7 +401,11 @@ const MoodRecord = (props: Props) => {
                 {moment(curDayData?.date).format("YYYY-MM-DD")}{" "}
                 {curDayData?.emoji || ""}
               </div>
-              <div className="text-md">{curDayData?.note || ""}</div>
+              <div className="text-md">
+                <pre>
+                  {curDayData?.note || ""}
+                </pre>
+              </div>
               <EditOutlined
                 className="absolute top-5.5 right-7 text-white text-xl cursor-pointer"
                 onClick={() =>

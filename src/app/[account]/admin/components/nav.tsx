@@ -25,7 +25,6 @@ const items: MenuItem[] = [
   { key: 'admin/lifestyles', icon: <SunOutlined style={{ fontSize: '18px'}} />, label: '生活手记管理' },
 ];
 export default function Nav(props: Props){
-  console.log("admin nav");
   // const [collapsed, setCollapsed] = useState(false);
   const {jumpAction} = useJumpAction();
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
@@ -36,7 +35,7 @@ export default function Nav(props: Props){
     checkUser({loginJump:true})
   }, []);
   useEffect(() => {
-    console.log(pathname,'pathname');
+    //console.log(pathname,'pathname');
     if (!pathname) return;
     // 匹配规则：路由包含Menu的key（处理路由带后缀的情况，如 /admin/articles/1 也高亮 admin/articles）
     const matchedKey = (items.find((item:MenuItem) => {
@@ -49,7 +48,7 @@ export default function Nav(props: Props){
       return false;
     }
     )?.key) as string | undefined;
-    console.log('matchedKey',matchedKey);
+    //console.log('matchedKey',matchedKey);
     setSelectedKeys(matchedKey ? [matchedKey] : []);
   }, [pathname]);
   // const toggleCollapsed = () => {

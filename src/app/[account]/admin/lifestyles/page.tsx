@@ -5,17 +5,18 @@ import { life_styles } from "@/supabase/supabase";
 import { useJumpAction, useCheckUser } from "@/lib/hooks/base-hooks";
 import type { TableColumnsType, TableProps } from "antd";
 import Image from "next/image";
-import { Table, Switch, Button, Space } from "antd";
+import { Table, Switch, Button, Space, message } from "antd";
 import SearchBox from "@/components/common/search-box/SearchBox";
 import Loading from "@/components/common/loading/loading";
 import Cascader from "@/components/common/custom-antd/Cascader";
 import { ImageLoader } from "@/lib/mixins/base-mixin";
+import { ResData } from "@/types";
 type Props = {
   params: Promise<{ account: string }>; //动态路由 [account] 对应的参数
 };
 // PAGE ADMIN 生活手记列表
 export default function LifeStyles({ params }: Props) {
-  const { account } = React.use(params);
+  // const { account } = React.use(params);
   const [lifestyles, setLifestyles] = useState<life_styles[]>(
     [] as life_styles[]
   );
@@ -27,15 +28,17 @@ export default function LifeStyles({ params }: Props) {
   const [selectData, setSelectData] = useState<number[]>([]);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [tableHeight, setTableHeight] = useState(400);
-
+  const [inited, setInited] = useState(false);
+  const [btnloading, setBtnLoading] = useState(false);
   //console.log("PAGE ADMIN LifeStyles", account, lifestyles, searchText);
-  const onChange = (id:number,checked: boolean) => {
+  const publishedOnChange = (id:number,checked: boolean) => {
     //console.log(`switch to ${checked}`);
     updateInfo(id,checked);
   };
   
   async function updateInfo(id:number,published:boolean){
     try{
+      setBtnLoading(true);
       const res = await fetch(
         `/api/lifestyles/lifestyles-publish-edit`,
         {
@@ -53,6 +56,8 @@ export default function LifeStyles({ params }: Props) {
       }
     }catch(error){
       //console.error('更新状态时出错:', error);
+    }finally{
+      setBtnLoading(false);
     }
   }
 
@@ -62,9 +67,17 @@ export default function LifeStyles({ params }: Props) {
       dataIndex: "id",
       key: "id",
       align: "center",
+      width: 80,
+    },
+    {
+      title: "日期",
+      dataIndex: "sort_time",
+      key: "sort_time",
+      align: "center",
     },
     {
       title: "封面",
+      align: "center",
       key: "id",
       render: (row: life_styles) => (
         <div>
@@ -100,7 +113,7 @@ export default function LifeStyles({ params }: Props) {
           checkedChildren="开"
           unCheckedChildren="关"
           checked={!!row.published}
-          onChange={(checked)=>onChange(row.id,checked)}
+          onChange={(checked)=>publishedOnChange(row.id,checked)}
         />
       ),
     },
@@ -110,18 +123,30 @@ export default function LifeStyles({ params }: Props) {
       key: "created_at",
       align: "center",
     },
-    {
-      title: "最后修改时间",
-      dataIndex: "updated_at",
-      key: "updated_at",
-      align: "center",
-    },
+    // {
+    //   title: "最后修改时间",
+    //   dataIndex: "updated_at",
+    //   key: "updated_at",
+    //   align: "center",
+    // },
     {
       title: "操作",
       key: "action",
       align: "center",
       render: (row: life_styles) => (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center gap-4">
+          <Button
+            loading={btnloading}
+            disabled={btnloading}
+            style={{ marginLeft: 0 }}
+            size="small"
+            variant="solid"
+            // type="primary"
+            color="danger" 
+            onClick={() => deleteTap(row.id)}
+          >
+            删除
+          </Button>
           <Button
             style={{ marginLeft: 0 }}
             size="small"
@@ -134,10 +159,34 @@ export default function LifeStyles({ params }: Props) {
       ),
     },
   ];
-  //console.log("PAGE ADMIN lifestyles", account);
 
+  const deleteTap = async (id: number) => {
+    try {
+      setBtnLoading(true);
+      const res = await fetch(
+        `/api/lifestyles/lifestyles-delete`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            id,
+          }),
+        }
+      );
+      const res_del : ResData<number> = await res.json();
+      //console.log('删除结果:', res_del);
+      if (res_del.code == 1) {
+        fetchlifeStylesList();
+      }else{
+        message.error(res_del.msg||"删除失败");
+      }
+    } catch (error) {
+      //console.error('删除时出错:', error);
+    }finally{
+      setBtnLoading(false);
+    }
+  }
   useEffect(() => {
-    setApiParams(`?blogger=${account}&search=${searchText}`);
+    setApiParams(`?blogger=${window.__NEXT_ACCOUNT__}&search=${searchText}`);
     setSetType("lifestyles");
     const loadData = async () => {
       await fetchlifeStylesList();
@@ -187,11 +236,11 @@ export default function LifeStyles({ params }: Props) {
     try {
       //console.log("api: get-life_styles-list", searchText, userInfo.id);
       const response = await fetch(
-        `/api/lifestyles/get-lifestyles-list?blogger=${account}&search=${searchText}&labelId=${selectData.join(",")}`
+        `/api/lifestyles/get-lifestyles-list?blogger=${window.__NEXT_ACCOUNT__}&search=${searchText}&labelId=${selectData.join(",")}`
       );
 
       const result = await response.json();
-      //console.log("api: /blog/get-lifestyles-list then", result, response);
+      // console.log("api: /blog/get-lifestyles-list then", result, response);
       if (response.ok) {
         setLifestyles(result.data);
       } else {
@@ -202,12 +251,14 @@ export default function LifeStyles({ params }: Props) {
       //console.error("获取生活手记时出错:", error);
       setLifestyles([]);
     } finally {
-      //console.log("finally");
+      setInited(true);
       setLoading(false);
     }
   };
   useEffect(() => {
-    fetchlifeStylesList();
+    if(inited){
+      fetchlifeStylesList();
+    }
   }, [selectData]);
   
   if (loading) {
