@@ -124,8 +124,9 @@ const MoodRecord = (props: Props) => {
     const daysInMonth = currentDate.daysInMonth();
     //跨年的处理，上个月是11月
     const prevMonth = month === 0 ? 11 : month - 1;
+    const prevYear = month === 0 ? year - 1 : year;
     // 获取上月有多少天
-    const daysInPrevMonth = moment([year, prevMonth, 1]).daysInMonth(); //获取上月有多少天
+    const daysInPrevMonth = moment([prevYear, prevMonth, 1]).daysInMonth(); //获取上月有多少天
     const calendar = []; // 存储日历数据的数组
     // console.log(
     //   "日历显示跨月份天数：",
@@ -139,7 +140,7 @@ const MoodRecord = (props: Props) => {
       calendar.push({
         date,
         month: "prev",
-        fullDate: moment([year, prevMonth, date]).format("YYYY-MM-DD"),
+        fullDate: moment([prevYear, prevMonth, date]).format("YYYY-MM-DD"),
       });
     }
 
@@ -188,6 +189,7 @@ const MoodRecord = (props: Props) => {
 
   // 获取某天的心情记录
   const getMoodForDate = (date: string): MoodRecordType | null => {
+    console.log('getMoodForDate',date,calendarData,moodRecords);
     const record = moodRecords.find((record) => record.date === date);
     return record || null;
   };
