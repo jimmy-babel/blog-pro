@@ -62,22 +62,22 @@ export async function getLifeStylesList(
     } else {
       // query = query.select(`
       //   *,
-      //   life_styles_to_label!inner(
+      //   life_styles_to_label!left(
       //     label_id,
-      //     life_styles_label!inner(
+      //     life_styles_label!left(
       //       id,
       //       name
       //     )
       //   ),
-      //   life_styles_to_sub_label!inner(
+      //   life_styles_to_sub_label!left(
       //     sub_label_id,
-      //     life_styles_sub_label!inner(
+      //     life_styles_sub_label!left(
       //       id,
       //       name
       //     )
       //   )
       // `);
-      query = query.select("*,life_styles_label!inner(id, name),life_styles_sub_label!inner(id,name)", { count: "exact" }); //不行再试试上面的
+      query = query.select("*,life_styles_label!left(id, name),life_styles_sub_label!left(id,name)", { count: "exact" }); //不行再试试上面的
     }
     if (platform == "web") {
       query = query.eq("published", true);

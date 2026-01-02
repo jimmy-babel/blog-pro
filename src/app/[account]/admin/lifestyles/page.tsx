@@ -29,7 +29,7 @@ export default function LifeStyles({ params }: Props) {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [tableHeight, setTableHeight] = useState(400);
   const [inited, setInited] = useState(false);
-  const [btnloading, setBtnLoading] = useState(false);
+  const [btnloading, setBtnLoading] = useState<{[key: number]: boolean}>({});
   //console.log("PAGE ADMIN LifeStyles", account, lifestyles, searchText);
   const publishedOnChange = (id:number,checked: boolean) => {
     //console.log(`switch to ${checked}`);
@@ -38,7 +38,6 @@ export default function LifeStyles({ params }: Props) {
   
   async function updateInfo(id:number,published:boolean){
     try{
-      setBtnLoading(true);
       const res = await fetch(
         `/api/lifestyles/lifestyles-publish-edit`,
         {
@@ -56,8 +55,6 @@ export default function LifeStyles({ params }: Props) {
       }
     }catch(error){
       //console.error('更新状态时出错:', error);
-    }finally{
-      setBtnLoading(false);
     }
   }
 
@@ -137,8 +134,8 @@ export default function LifeStyles({ params }: Props) {
       render: (row: life_styles) => (
         <div className="flex justify-center items-center gap-4">
           <Button
-            loading={btnloading}
-            disabled={btnloading}
+            loading={btnloading[row.id]}
+            disabled={btnloading[row.id]}
             style={{ marginLeft: 0 }}
             size="small"
             variant="solid"
@@ -163,7 +160,7 @@ export default function LifeStyles({ params }: Props) {
 
   const deleteTap = async (id: number) => {
     try {
-      setBtnLoading(true);
+      setBtnLoading(prev => ({ ...prev, [id]: true }));
       const res = await fetch(
         `/api/lifestyles/lifestyles-delete`,
         {
@@ -183,7 +180,7 @@ export default function LifeStyles({ params }: Props) {
     } catch (error) {
       //console.error('删除时出错:', error);
     }finally{
-      setBtnLoading(false);
+      setBtnLoading(prev => ({ ...prev, [id]: false }));
     }
   }
   useEffect(() => {

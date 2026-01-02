@@ -28,6 +28,8 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
+    const name = formData.get('name') as string | null; // 接收前端传来的文件名
+    console.log('前端传来的文件名:', name);
     if (!file) {
       return NextResponse.json({ error: '未获取到文件' }, { status: 400 });
     }
@@ -55,6 +57,8 @@ export async function POST(req: NextRequest) {
     const uploadResult = await uploadStreamToCloudinary(stream, {
       resource_type: resourceType,
       preset: preset,
+      display_name: name || "file", // 显示文件名
+      // public_id: , // 唯一id  同id可将原图替换
     });
     //console.log('服务器上传',uploadResult);
     // 4. 返回结果（此时 uploadResult 包含 secure_url）

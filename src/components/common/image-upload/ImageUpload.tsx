@@ -174,7 +174,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
     const handleChange: UploadProps["onChange"] = ({ file, fileList }) => {
       const curFile = fileList.find((item) => item.uid === file.uid);
       const originFile = curFile?.originFileObj as File | undefined;
-
+      console.log('handleChange', file, fileList);
       if (file.status === "removed") {
         pendingFilesRef.current.delete(file.uid);
         setFileList(fileList);
@@ -299,6 +299,7 @@ const ImageUploader = forwardRef<ImageUploaderRef, Props>(
       const uploadPromises = pendingFiles.map(async ([uid, file]) => {
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("name", file.name); // 把文件名传给后端
 
         const response = await fetch("/api/upload", {
           method: "POST",

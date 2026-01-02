@@ -6,6 +6,7 @@ export async function GET(req: Request) {
     const blogger = url.searchParams.get("blogger");
     const search = url.searchParams.get("search");
     const labelId = url.searchParams.get("labelId");
+    const platform = url.searchParams.get("platform");
     if (!blogger) {
       return NextResponse.json({ error: "缺少 blogger 参数" }, { status: 400 });
     }
@@ -13,7 +14,8 @@ export async function GET(req: Request) {
     const result = await getLifeStylesList({
       blogger,
       search: search || undefined,
-      labelId: labelId || undefined
+      labelId: labelId || undefined,
+      platform: platform || undefined
     });
 
     return NextResponse.json(result, { status: 200 });
