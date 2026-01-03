@@ -189,7 +189,6 @@ const MoodRecord = (props: Props) => {
 
   // 获取某天的心情记录
   const getMoodForDate = (date: string): MoodRecordType | null => {
-    console.log('getMoodForDate',date,calendarData,moodRecords);
     const record = moodRecords.find((record) => record.date === date);
     return record || null;
   };
